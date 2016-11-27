@@ -5,7 +5,7 @@ Rails.application.routes.draw do
       resources :accounts
 
       # 登陆登出
-      resources :session, only: [:create, :delete]
+      resources :session, only: [:create, :destory]
     end
   end
 end
