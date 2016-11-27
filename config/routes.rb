@@ -5,7 +5,8 @@ Rails.application.routes.draw do
       resources :accounts
 
       # 登陆登出
-      resources :session, only: [:create, :destory]
+      post 'login', to: 'session#login'
+      post 'logout', to: 'session#logout'
     end
   end
 end
