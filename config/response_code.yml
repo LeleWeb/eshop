@@ -3,7 +3,7 @@ defaults: &defaults
     OK:
       code: 0
       message: successful
-    FAILD:
+    FAILED:
       code: -1
       message: failed
 
