@@ -1,10 +1,11 @@
 defaults: &defaults
-  OK:
-    code: 0
-    message: successful
-  FAILD:
-    code: -1
-    message: failed
+  COMMON:
+    OK:
+      code: 0
+      message: successful
+    FAILD:
+      code: -1
+      message: failed
 
 development:
   <<: *defaults
