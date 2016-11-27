@@ -3,7 +3,9 @@ class Api::V1::AccountsController < ApplicationController
 
   # GET /accounts
   def index
-    @accounts = Account.all
+    # @accounts = Account.all
+
+    @accounts = AccountsService.new.get_accounts
 
     render json: @accounts
   end
