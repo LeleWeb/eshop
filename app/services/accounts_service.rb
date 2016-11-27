@@ -1,6 +1,4 @@
 class AccountsService < BaseService
-  before_action :set_account
-
   def get_accounts
     CommonService.response_format(ResponseCode.COMMON.OK, Account.all)
   end
@@ -33,13 +31,6 @@ class AccountsService < BaseService
   def destroy_account(id)
     Account.find(id).destroy
     CommonService.response_format(ResponseCode.COMMON.OK)
-  end
-
-  private
-  # Use callbacks to share common setup or constraints between actions.
-  def set_account
-    # @account = Account.find(params[:id])
-    puts "zwtest"
   end
 
 end
