@@ -1,5 +1,5 @@
 class AccountsService < BaseService
   def get_accounts
-    Account.all
+    CommonService.response_format(ResponseCode.COMMON, Account.all)
   end
 end
