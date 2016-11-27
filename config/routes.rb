@@ -3,6 +3,9 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :accounts
+
+      # 登陆登出
+      resources :session, only: [:create, :delete]
     end
   end
 end
