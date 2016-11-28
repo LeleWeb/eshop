@@ -9,12 +9,10 @@
 accounts = Account.create([
                         {
                             mobile_number: '18161803333',
-                            email: '111@qq.com',
-                            password: '1234'
+                            email: '111@qq.com'
                         },
                         {
                             mobile_number: '18161801111',
-                            email: '111@qq.com',
-                            password: '12345'
+                            email: '111@qq.com'
                         }
                     ])
