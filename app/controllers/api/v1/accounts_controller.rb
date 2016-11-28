@@ -1,4 +1,4 @@
-class Api::V1::AccountsController < ApplicationController
+class Api::V1::AccountsController < Api::V1::BaseController
   # GET /accounts
   def index
     render json: AccountsService.new.get_accounts
