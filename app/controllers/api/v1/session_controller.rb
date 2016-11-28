@@ -1,14 +1,14 @@
 class Api::V1::SessionController < ApplicationController
   # POST /session
   def login
-    session[:sid] = 'zhangweiid'
-    puts session[:sid]
+    cookie[:sid] = 'zhangweiid'
+    puts cookie[:sid]
     render json: SessionService.new.login(session_params)
   end
 
   # DELETE /session
   def logout
-    puts session[:sid]
+    puts cookie[:sid]
     render json: SessionService.new.logout(session[:sid])
   end
 
