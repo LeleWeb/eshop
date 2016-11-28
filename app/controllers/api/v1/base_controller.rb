@@ -5,7 +5,7 @@ class Api::V1::BaseController < ApplicationController
 
   def authenticate_user!
     p '@'*10
-    p request.headers
+    p request.headers['Content-Type'], request.headers['Authorization'], request.headers['mobile_number']
     token, options = ActionController::HttpAuthentication::Token.token_and_options(request)
 
     mobile_number = options.blank?? nil : options[:mobile_number]
