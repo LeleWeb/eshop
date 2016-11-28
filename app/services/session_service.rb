@@ -3,7 +3,7 @@ class SessionService < BaseService
     CommonService.response_format(ResponseCode.COMMON.OK)
   end
 
-  def logout(sid)
+  def logout
     CommonService.response_format(ResponseCode.COMMON.OK, sid)
   end
 
