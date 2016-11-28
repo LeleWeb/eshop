@@ -10,7 +10,7 @@ class Api::V1::BaseController < ApplicationController
     account = mobile_number && Account.find_by(mobile_number: mobile_number)
 p token, account.authentication_token
     if account && ActiveSupport::SecurityUtils.secure_compare(account.authentication_token, token)
-      self.current_user = user
+      self.current_user = account
     else
       return unauthenticated!
     end
