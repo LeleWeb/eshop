@@ -4,6 +4,8 @@ class Api::V1::BaseController < ApplicationController
   before_action :authenticate_user!, except: [ :index, :show, :login ]
 
   def authenticate_user!
+    p '@'*10
+    p request
     token, options = ActionController::HttpAuthentication::Token.token_and_options(request)
 
     mobile_number = options.blank?? nil : options[:mobile_number]
