@@ -5,3 +5,16 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+accounts = Account.create([
+                        {
+                            mobile_number: '18161803333',
+                            email: '111@qq.com',
+                            password: '1234'
+                        },
+                        {
+                            mobile_number: '18161801111',
+                            email: '111@qq.com',
+                            password: '12345'
+                        }
+                    ])

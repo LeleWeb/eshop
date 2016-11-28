@@ -1,6 +1,8 @@
 class Account < ApplicationRecord
   has_secure_password
-  
+
+  attr_accessor :current_user
+
   before_create :generate_authentication_token
 
   def generate_authentication_token
