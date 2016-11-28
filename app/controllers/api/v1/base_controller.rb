@@ -1,6 +1,8 @@
 class Api::V1::BaseController < ApplicationController
   attr_accessor :current_user
 
+  before_action :authenticate_user!
+
   def authenticate_user!
     token, options = ActionController::HttpAuthentication::Token.token_and_options(request)
 
