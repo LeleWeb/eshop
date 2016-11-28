@@ -7,9 +7,9 @@ class Api::V1::BaseController < ApplicationController
     token, options = ActionController::HttpAuthentication::Token.token_and_options(request)
     p token, options
     mobile_number = options.blank?? nil : options[:mobile_number]
-    user = mobile_number && User.find_by(mobile_number: mobile_number)
-
-    if user && ActiveSupport::SecurityUtils.secure_compare(user.authentication_token, token)
+    account = mobile_number && Account.find_by(mobile_number: mobile_number)
+p token, account.authentication_token
+    if account && ActiveSupport::SecurityUtils.secure_compare(account.authentication_token, token)
       self.current_user = user
     else
       return unauthenticated!
