@@ -19,6 +19,8 @@ class AccountsService < BaseService
   end
 
   def update_account(id, account_params)
+    p id,account_params
+    byebug
     account = Account.find(id)
     if account.update(account_params)
       CommonService.response_format(ResponseCode.COMMON.OK, account)
