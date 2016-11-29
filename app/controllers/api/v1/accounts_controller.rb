@@ -16,8 +16,8 @@ class Api::V1::AccountsController < Api::V1::BaseController
 
   # PATCH/PUT /accounts/1
   def update
-    p '1'*10,params,
-    p '2'*10,account_params
+    p '1111',params,
+    p '2222',account_params
     byebug
     authorize Account.find(params[:id])
     render json: AccountsService.new.update_account(params[:id], account_params)
