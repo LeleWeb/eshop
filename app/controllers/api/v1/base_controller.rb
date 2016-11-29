@@ -1,6 +1,18 @@
 class Api::V1::BaseController < ApplicationController
+  # Pundit
+  include Pundit
+
   attr_accessor :current_user
 
+  # 统一在此捕获Pundit异常，并处理。
+  rescue_from Pundit::NotAuthorizedError, with: :deny_access
+
+  def deny_access
+    ResponseCode.COMMON.FAILED['message'] = 'NotAuthorizedError!'
+    render json: CommonService.response_format(ResponseCode.COMMON.FAILED)
+  end
+
+  # API鉴权
   before_action :authenticate_user!, except: [ :index, :show, :login ]
 
   def authenticate_user!
