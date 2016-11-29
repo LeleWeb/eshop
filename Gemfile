@@ -37,3 +37,6 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # Settingslogic
 gem 'settingslogic'
+
+# User Pundit authorization system.
+gem "pundit"
