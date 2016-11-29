@@ -16,6 +16,7 @@ class Api::V1::AccountsController < Api::V1::BaseController
 
   # PATCH/PUT /accounts/1
   def update
+    authorize Account.find(params[:id])
     render json: AccountsService.new.update_account(params[:id], account_params)
   end
 
