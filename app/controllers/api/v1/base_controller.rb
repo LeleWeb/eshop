@@ -15,4 +15,10 @@ class Api::V1::BaseController < ApplicationController
     end
 
   end
+
+  def unauthenticated!
+    ResponseCode.COMMON.FAILED.message = 'HTTP Token Authentication Failed!'
+    render json: CommonService.response_format(ResponseCode.COMMON.FAILED)
+  end
+
 end
