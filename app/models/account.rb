@@ -1,7 +1,7 @@
 class Account < ApplicationRecord
   has_secure_password
 
-  before_create :generate_authentication_token
+  # before_create :generate_authentication_token
 
   def generate_authentication_token
     loop do
