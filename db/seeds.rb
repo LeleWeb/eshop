@@ -40,7 +40,7 @@ roles = Role.create([
 
 # 账户角色设置
 accounts.each do |account|
-  AccountsRole.create({account_id: account.id, Role.find_by(name: 'customer').id})
-  AccountsRole.create({account_id: account.id, Role.find_by(name: 'store').id})
-  AccountsRole.create({account_id: account.id, Role.find_by(name: 'administrator').id})
+  AccountsRole.create(account_id: account.id, role_id: Role.find_by(name: 'customer').id)
+  AccountsRole.create(account_id: account.id, role_id: Role.find_by(name: 'store').id)
+  AccountsRole.create(account_id: account.id, role_id: Role.find_by(name: 'administrator').id)
 end
