@@ -20,7 +20,6 @@ class AccountsService < BaseService
 
   def update_account(id, account_params)
     p 'a'*10,id,account_params
-    byebug
     account = Account.find(id)
     if account.update(account_params)
       CommonService.response_format(ResponseCode.COMMON.OK, account)
