@@ -9,6 +9,7 @@ class AccountPolicy < ApplicationPolicy
 
   def update?
     # return true if user.admin?
+    p '@'*10, user
     return true if record.id == user.id
   end
 
