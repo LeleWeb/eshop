@@ -7,7 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 # 账户种子数据
-accounts = Account.create([
+account = Account.create([
                         {
                             mobile_number: '18161803190',
                             email: '719048757@qq.com'
@@ -28,4 +28,11 @@ roles = Role.create([
                             name: 'administrator',
                             remark: '系统管理员角色'
                         }
+                    ])
+
+# 账户角色设置
+AccountsRole.create([
+                        {account_id: account.id, Role.find_by(name: 'customer').id},
+                        {account_id: account.id, Role.find_by(name: 'store').id},
+                        {account_id: account.id, Role.find_by(name: 'administrator').id}
                     ])
