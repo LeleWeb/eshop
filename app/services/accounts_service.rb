@@ -23,7 +23,7 @@ class AccountsService < BaseService
     if account.update(account_params)
       CommonService.response_format(ResponseCode.COMMON.OK, account)
     else
-      ResponseCode.COMMON.FAILED.message = account.errors
+      ResponseCode.COMMON.FAILED['message'] = account.errors
       CommonService.response_format(ResponseCode.COMMON.FAILED)
     end
   end
