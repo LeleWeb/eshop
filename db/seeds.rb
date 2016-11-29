@@ -13,7 +13,7 @@ accounts = Account.create([
                             email: '719048757@qq.com'
                         },
                         {
-                            mobile_number: '18161803190',
+                            mobile_number: '18717373045',
                             email: '514079588@qq.com'
                         },
                         {
