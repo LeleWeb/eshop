@@ -35,5 +35,7 @@ module Eshop
       end
     end
 
+    config.autoload_paths << Rails.root.join('app/policies')
+
   end
 end
