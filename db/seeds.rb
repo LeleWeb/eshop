@@ -6,13 +6,26 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+# 账户种子数据
 accounts = Account.create([
                         {
-                            mobile_number: '18161803333',
-                            email: '111@qq.com'
+                            mobile_number: '18161803190',
+                            email: '719048757@qq.com'
+                        }
+                    ])
+
+# 账户角色种子数据
+roles = Role.create([
+                        {
+                            name: 'customer',
+                            remark: '消费者角色'
                         },
                         {
-                            mobile_number: '18161801111',
-                            email: '111@qq.com'
+                            name: 'store',
+                            remark: '商家角色'
+                        },
+                        {
+                            name: 'administrator',
+                            remark: '系统管理员角色'
                         }
                     ])
