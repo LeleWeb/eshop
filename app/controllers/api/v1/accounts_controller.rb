@@ -28,6 +28,6 @@ class Api::V1::AccountsController < Api::V1::BaseController
   private
   # Only allow a trusted parameter "white list" through.
   def account_params
-    params.fetch(:account, {})
+    params.require(:account).permit(:uuid, :mobile_number, :email, :password)
   end
 end
