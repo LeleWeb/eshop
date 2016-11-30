@@ -1,0 +1,2 @@
+class StoresCommodity < ApplicationRecord
+end
