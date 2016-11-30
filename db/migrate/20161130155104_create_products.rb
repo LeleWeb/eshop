@@ -13,7 +13,7 @@ class CreateProducts < ActiveRecord::Migration[5.0]
       t.integer :type
       t.boolean :is_deleted
       t.string :remark, :limit => 255
-      t.datatime :deleted_at
+      t.datetime :deleted_at
       t.timestamps
     end
   end
