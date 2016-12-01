@@ -81,8 +81,9 @@ detail_items = DetailItem.create([
                                      { name: "尺寸" }
                                 ])
 
+sproduct = product[0]
 # 创建产品详情
-product[0].product_details.create([
+sproduct.product_details.create([
                                    { detail_item_id: detail_items[0].id, content: "小米"},
                                    { detail_item_id: detail_items[1].id, content: "5.5寸"}
                                ])
@@ -90,8 +91,8 @@ product[0].product_details.create([
 # 图片资源
 
 # 订单
-store.orders.create(product_id: product.id,
-                    unit_price: product.price,
+store.orders.create(product_id: sproduct.id,
+                    unit_price: sproduct.price,
                     amount: 10,
                     status: 0,
                     total_price: 19990.0,
@@ -99,8 +100,8 @@ store.orders.create(product_id: product.id,
                     seller_type: "Store",
                     estimate: 0)
 
-customer.orders.create(product_id: product.id,
-                      unit_price: product.price,
+customer.orders.create(product_id: sproduct.id,
+                      unit_price: sproduct.price,
                       amount: 10,
                       status: 0,
                       total_price: 19990.0,
@@ -109,5 +110,5 @@ customer.orders.create(product_id: product.id,
                       estimate: 0)
 
 # 购物车
-customer.shopping_carts.create(product_id: product.id,
+customer.shopping_carts.create(product_id: sproduct.id,
                                amount: 10)
