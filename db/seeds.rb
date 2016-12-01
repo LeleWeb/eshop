@@ -82,10 +82,7 @@ detail_items = DetailItem.create([
                                 ])
 
 # 创建产品详情
-product.product_details.create([
-                                   { detail_item_id: detail_items[0].id, content: "小米"},
-                                   { detail_item_id: detail_items[1].id, content: "5.5寸"}
-                               ])
+product.product_details.create({ detail_item_id: detail_items[0].id, content: "小米"})
 
 # 图片资源
 
