@@ -44,3 +44,30 @@ accounts.each do |account|
   AccountsRole.create(account_id: account.id, role_id: Role.find_by(name: 'store').id)
   AccountsRole.create(account_id: account.id, role_id: Role.find_by(name: 'administrator').id)
 end
+
+account = accounts.first
+
+# 创建消费者
+account.create_customer(mobile_number: "18161803190",
+                        nick_name: "bluesky",
+                        real_name: "张伟",
+                        gender: "男",
+                        age: 30,
+                        address: "西安市高新区",
+                        is_wechat_focus: true,
+                        level: 0,
+                        integral: 0)
+
+# 创建商家
+
+# 创建产品
+
+# 创建产品详情
+
+# 产品详情项
+
+# 图片资源
+
+# 订单
+
+# 购物车
