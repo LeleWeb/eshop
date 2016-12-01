@@ -61,7 +61,7 @@ customer = account.create_customer(mobile_number: "18161803190",
 # 创建商家
 store = account.create_store(name: "环球捕手",
                      description: "微商城",
-                     type: 1,
+                     # type: 1,
                      address: "西安高新",
                      mobile_number: "18112345678")
 
