@@ -32,7 +32,7 @@ class Api::V1::AccountsController < Api::V1::BaseController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_account
-    @account = Account.find(@account)
+    @account = Account.find(params[:id])
   end
 
   # Only allow a trusted parameter "white list" through.
