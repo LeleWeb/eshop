@@ -40,3 +40,6 @@ gem 'settingslogic'
 
 # User Pundit authorization system.
 gem "pundit"
+
+# Awesome Nested Set
+gem 'awesome_nested_set'
