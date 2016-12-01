@@ -10,7 +10,7 @@ class CreateProducts < ActiveRecord::Migration[5.0]
       t.float :price
       t.float :real_price
       t.integer :status
-      t.integer :type
+      t.integer :property
       t.boolean :is_deleted
       t.string :remark, :limit => 255
       t.datetime :deleted_at
