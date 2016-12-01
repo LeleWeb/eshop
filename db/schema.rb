@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161130155845) do
+ActiveRecord::Schema.define(version: 20161201103345) do
 
   create_table "accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "uuid",                 limit: 32
@@ -87,6 +87,17 @@ ActiveRecord::Schema.define(version: 20161130155845) do
     t.datetime "updated_at",                null: false
   end
 
+  create_table "product_details", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "product_id"
+    t.integer  "detail_item_id"
+    t.string   "content",        limit: 50
+    t.boolean  "is_deleted"
+    t.string   "remark"
+    t.datetime "deleted_at"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
   create_table "products", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "uuid",        limit: 32
     t.integer  "store_id"
@@ -97,12 +108,21 @@ ActiveRecord::Schema.define(version: 20161130155845) do
     t.float    "price",       limit: 24
     t.float    "real_price",  limit: 24
     t.integer  "status"
-    t.integer  "type"
+    t.integer  "property"
     t.boolean  "is_deleted"
     t.string   "remark"
     t.datetime "deleted_at"
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+  end
+
+  create_table "products_stores", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "store_id"
+    t.integer  "product_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_products_stores_on_product_id", using: :btree
+    t.index ["store_id"], name: "index_products_stores_on_store_id", using: :btree
   end
 
   create_table "roles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -120,6 +140,8 @@ ActiveRecord::Schema.define(version: 20161130155845) do
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "owner_id"
+    t.string   "owner_type"
   end
 
   create_table "stores", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -132,13 +154,6 @@ ActiveRecord::Schema.define(version: 20161130155845) do
     t.string   "remark"
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
-  end
-
-  create_table "stores_products", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "product_id"
-    t.integer  "store_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
 end
