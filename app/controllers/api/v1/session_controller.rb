@@ -6,7 +6,7 @@ class Api::V1::SessionController < Api::V1::BaseController
 
   # DELETE /session
   def logout
-    render json: SessionService.new.logout
+    render json: SessionService.new.logout(current_user)
   end
 
   private

@@ -15,4 +15,9 @@ class Account < ApplicationRecord
     save
   end
 
+  def destory_auth_token!
+    self.authentication_token = ''
+    self.save
+  end
+
 end
