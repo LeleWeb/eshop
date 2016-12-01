@@ -1,4 +1,6 @@
 class Api::V1::AccountsController < Api::V1::BaseController
+  before_action :set_account, only: [:show, :update, :destroy]
+
   # GET /accounts
   def index
     render json: AccountsService.new.get_accounts
@@ -6,7 +8,8 @@ class Api::V1::AccountsController < Api::V1::BaseController
 
   # GET /accounts/1
   def show
-    render json: AccountsService.new.get_account(params[:id])
+    authorize @account
+    render json: AccountsService.new.get_account(@account)
   end
 
   # POST /accounts
@@ -16,16 +19,22 @@ class Api::V1::AccountsController < Api::V1::BaseController
 
   # PATCH/PUT /accounts/1
   def update
-    authorize Account.find(params[:id])
-    render json: AccountsService.new.update_account(params[:id], account_params)
+    authorize @account
+    render json: AccountsService.new.update_account(@account, account_params)
   end
 
   # DELETE /accounts/1
   def destroy
-    render json: AccountsService.new.destory_account(params[:id])
+    authorize @account
+    render json: AccountsService.new.destory_account(@account)
   end
 
   private
+  # Use callbacks to share common setup or constraints between actions.
+  def set_account
+    @account = Account.find(@account)
+  end
+
   # Only allow a trusted parameter "white list" through.
   def account_params
     params.require(:account).permit(:uuid, :mobile_number, :email, :password)

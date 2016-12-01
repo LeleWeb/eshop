@@ -3,8 +3,8 @@ class AccountsService < BaseService
     CommonService.response_format(ResponseCode.COMMON.OK, Account.all)
   end
 
-  def get_account(id)
-    CommonService.response_format(ResponseCode.COMMON.OK, Account.find(id))
+  def get_account(account)
+    CommonService.response_format(ResponseCode.COMMON.OK, account)
   end
 
   def create_account(account_params)
@@ -18,8 +18,7 @@ class AccountsService < BaseService
     end
   end
 
-  def update_account(id, account_params)
-    account = Account.find(id)
+  def update_account(account, account_params)
     if account.update(account_params)
       CommonService.response_format(ResponseCode.COMMON.OK, account)
     else
@@ -28,8 +27,8 @@ class AccountsService < BaseService
     end
   end
 
-  def destory_account(id)
-    Account.find(id).destroy
+  def destory_account(account)
+    account.destroy
     CommonService.response_format(ResponseCode.COMMON.OK)
   end
 
