@@ -14,4 +14,5 @@ class Account < ApplicationRecord
     generate_authentication_token
     save
   end
+
 end

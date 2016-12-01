@@ -28,7 +28,7 @@ class AccountsService < BaseService
     end
   end
 
-  def destroy_account(id)
+  def destory_account(id)
     Account.find(id).destroy
     CommonService.response_format(ResponseCode.COMMON.OK)
   end
