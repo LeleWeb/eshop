@@ -8,6 +8,8 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :categories
+
       # 登陆登出
       post 'login', to: 'session#login'
       post 'logout', to: 'session#logout'
