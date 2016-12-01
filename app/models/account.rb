@@ -2,6 +2,8 @@ class Account < ApplicationRecord
   has_secure_password
 
   has_and_belongs_to_many :roles
+  has_one :customer
+  has_one :store
 
   before_create :generate_authentication_token
 
