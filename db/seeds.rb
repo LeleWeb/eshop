@@ -72,7 +72,7 @@ product = store.products.create([{name: "小米4",
                                    stock: 100,
                                    price: 1999.0,
                                    real_price: 999.12,
-                                   state: 0}
+                                   status: 0}
                                  ])
 
 # 产品详情项
