@@ -1,4 +1,4 @@
-class CategoryPolicy
+class CategoryPolicy < ApplicationPolicy
   def show?
     return true
   end
