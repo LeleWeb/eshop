@@ -32,7 +32,7 @@ class Api::V1::CategoriesController < Api::V1::BaseController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_category
-    @category = Account.find(params[:id])
+    @category = Category.find(params[:id])
   end
 
   # Only allow a trusted parameter "white list" through.
