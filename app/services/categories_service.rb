@@ -3,8 +3,8 @@ class CategoriesService < BaseService
     CommonService.response_format(ResponseCode.COMMON.OK, Account.all)
   end
 
-  def get_category(account)
-    CommonService.response_format(ResponseCode.COMMON.OK, account)
+  def get_category(category)
+    CommonService.response_format(ResponseCode.COMMON.OK, category.self_and_descendants)
   end
 
   def create_category(category_params)
