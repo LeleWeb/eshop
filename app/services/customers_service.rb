@@ -8,18 +8,18 @@ class CustomersService < BaseService
   end
 
   def create_customer(customer_params)
-    customer = Customer.create!(:name => customer_params[:name])
+    customer = Customer.new(customer_params)
 
-    if category_params[:type] == 'child'
-      parent_category = Category.find(category_params[:parent_id])
-      category.move_to_child_of(parent_category)
+    if customer.save
+      CommonService.response_format(ResponseCode.COMMON.OK, customer)
+    else
+      ResponseCode.COMMON.FAILED.message = customer.errors
+      CommonService.response_format(ResponseCode.COMMON.FAILED)
     end
-
-    CommonService.response_format(ResponseCode.COMMON.OK, category)
   end
 
   def update_customer(customer, customer_params)
-    if customer.update(account_params)
+    if customer.update(customer_params)
       CommonService.response_format(ResponseCode.COMMON.OK, customer)
     else
       ResponseCode.COMMON.FAILED['message'] = customer.errors
