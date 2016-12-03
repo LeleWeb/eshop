@@ -1,5 +1,6 @@
 class Api::V1::CustomersController < Api::V1::BaseController
   before_action :set_customer, only: [:show, :update, :destroy]
+  before_action :set_account
 
   # GET /accounts
   def index
@@ -14,7 +15,7 @@ class Api::V1::CustomersController < Api::V1::BaseController
 
   # POST /accounts
   def create
-    render json: CustomersService.new.create_customer(customer_params)
+    render json: CustomersService.new.create_customer(@account, customer_params)
   end
 
   # PATCH/PUT /accounts/1
@@ -30,6 +31,10 @@ class Api::V1::CustomersController < Api::V1::BaseController
   end
 
   private
+  def set_account
+    @account = Account.find(params[:account_id])
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_customer
     @customer = Customer.find(params[:id])

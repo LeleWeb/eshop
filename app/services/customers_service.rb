@@ -7,8 +7,8 @@ class CustomersService < BaseService
     CommonService.response_format(ResponseCode.COMMON.OK, customer)
   end
 
-  def create_customer(customer_params)
-    customer = Customer.new(customer_params)
+  def create_customer(account, customer_params)
+    customer = account.build_customer(customer_params)
 
     if customer.save
       CommonService.response_format(ResponseCode.COMMON.OK, customer)
