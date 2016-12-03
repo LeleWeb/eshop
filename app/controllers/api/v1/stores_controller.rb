@@ -3,30 +3,30 @@ class Api::V1::StoresController < Api::V1::BaseController
 
   # GET /accounts
   def index
-    render json: CustomersService.new.get_stores
+    render json: StoresService.new.get_stores
   end
 
   # GET /accounts/1
   def show
     authorize @store
-    render json: CustomersService.new.get_store(@store)
+    render json: StoresService.new.get_store(@store)
   end
 
   # POST /accounts
   def create
-    render json: CustomersService.new.create_store(@account, store_params)
+    render json: StoresService.new.create_store(@account, store_params)
   end
 
   # PATCH/PUT /accounts/1
   def update
     authorize @store
-    render json: CustomersService.new.update_store(@store, store_params)
+    render json: StoresService.new.update_store(@store, store_params)
   end
 
   # DELETE /accounts/1
   def destroy
     authorize @store
-    render json: CustomersService.new.destory_store(@store)
+    render json: StoresService.new.destory_store(@store)
   end
 
   private
