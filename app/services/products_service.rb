@@ -8,7 +8,7 @@ class ProductsService < BaseService
   end
 
   def create_product(store, product_params)
-    product = store.build_products(product_params)
+    product = store.products.build(product_params)
 
     if product.save
       CommonService.response_format(ResponseCode.COMMON.OK, product)
