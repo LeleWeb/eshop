@@ -16,7 +16,6 @@ class Api::V1::ProductsController < Api::V1::BaseController
 
   # POST /accounts
   def create
-    authorize @product
     render json: ProductsService.new.create_product(@store, product_params)
   end
 
