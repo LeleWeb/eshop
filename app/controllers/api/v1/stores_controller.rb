@@ -14,7 +14,7 @@ class Api::V1::StoresController < Api::V1::BaseController
 
   # POST /accounts
   def create
-    render json: CustomersService.new.create_store(store_params)
+    render json: CustomersService.new.create_store(@account, store_params)
   end
 
   # PATCH/PUT /accounts/1
@@ -32,13 +32,13 @@ class Api::V1::StoresController < Api::V1::BaseController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_store
+    @account = Account.find(params[:account_id])
     @store = Store.find(params[:id])
   end
 
   # Only allow a trusted parameter "white list" through.
   def store_params
-    params.require(:store).permit(:wechat_id, :mobile_number, :nick_name, :heard_url,
-                                     :real_name, :gender, :age, :address, :is_wechat_focus,
-                                     :level, :integral, :remark)
+    params.require(:store).permit(:name, :description, :property, :address,
+                                  :mobile_number, :remark)
   end
 end

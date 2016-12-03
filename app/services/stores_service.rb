@@ -7,8 +7,8 @@ class StoresService < BaseService
     CommonService.response_format(ResponseCode.COMMON.OK, store)
   end
 
-  def create_store(store_params)
-    store = Store.new(store_params)
+  def create_store(account, store_params)
+    store = account.build_store(store_params)
 
     if store.save
       CommonService.response_format(ResponseCode.COMMON.OK, store)
