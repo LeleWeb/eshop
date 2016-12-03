@@ -1,42 +1,55 @@
-class Api::V1::ProductsController < ApplicationController
-  before_action :set_account, only: [:show, :update, :destroy]
+class Api::V1::ProductsController < Api::V1::BaseController
+  before_action :set_product, only: [:show, :update, :destroy]
+  before_action :set_account
+  before_action :set_store
 
   # GET /accounts
   def index
-    render json: AccountsService.new.get_accounts
+    render json: ProductsService.new.get_products
   end
 
   # GET /accounts/1
   def show
-    authorize @account
-    render json: AccountsService.new.get_account(@account)
+    authorize @product
+    render json: ProductsService.new.get_product(@product)
   end
 
   # POST /accounts
   def create
-    render json: AccountsService.new.create_account(account_params)
+    authorize @product
+    render json: ProductsService.new.create_product(@store, product_params)
   end
 
   # PATCH/PUT /accounts/1
   def update
-    authorize @account
-    render json: AccountsService.new.update_account(@account, account_params)
+    authorize @product
+    render json: ProductsService.new.update_product(@product, product_params)
   end
 
   # DELETE /accounts/1
   def destroy
-    authorize @account
-    render json: AccountsService.new.destory_account(@account)
+    authorize @product
+    render json: ProductsService.new.destory_product(@product)
   end
 
   private
-  # Use callbacks to share common setup or constraints between actions.
+  
   def set_account
-    @account = Account.find(@account)
+    @account = Account.find(params[:account_id])
+  end
+
+  def set_store
+    @store = Store.find(params[:store_id])
+  end
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_product
+    @product = Product.find(params[:id])
   end
 
   # Only allow a trusted parameter "white list" through.
-  def account_params
-    params.require(:account).permit(:uuid, :mobile_number, :email, :password)
+  def product_params
+    params.require(:product).permit(:name, :description, :detail, :stock, :price, :real_price,
+                                    :status, :property, :category_id, :remark)
   end
 end
