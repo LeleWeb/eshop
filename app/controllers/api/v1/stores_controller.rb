@@ -1,5 +1,6 @@
 class Api::V1::StoresController < Api::V1::BaseController
   before_action :set_store, only: [:show, :update, :destroy]
+  before_action :set_account
 
   # GET /accounts
   def index
@@ -30,9 +31,12 @@ class Api::V1::StoresController < Api::V1::BaseController
   end
 
   private
+  def set_account
+    @account = Account.find(params[:account_id])
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_store
-    @account = Account.find(params[:account_id])
     @store = Store.find(params[:id])
   end
 
