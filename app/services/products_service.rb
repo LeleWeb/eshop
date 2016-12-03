@@ -8,14 +8,15 @@ class ProductsService < BaseService
   end
 
   def create_product(store, product_params)
-    product = store.products.build(product_params)
+    product = store.products.create(product_params)
+    CommonService.response_format(ResponseCode.COMMON.OK, product)
 
-    if product.save
-      CommonService.response_format(ResponseCode.COMMON.OK, product)
-    else
-      ResponseCode.COMMON.FAILED.message = product.errors
-      CommonService.response_format(ResponseCode.COMMON.FAILED)
-    end
+    # if product.save
+    #   CommonService.response_format(ResponseCode.COMMON.OK, product)
+    # else
+    #   ResponseCode.COMMON.FAILED.message = product.errors
+    #   CommonService.response_format(ResponseCode.COMMON.FAILED)
+    # end
   end
 
   def update_product(product, product_params)
