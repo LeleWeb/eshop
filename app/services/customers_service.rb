@@ -19,7 +19,7 @@ class CustomersService < BaseService
   end
 
   def update_customer(customer, customer_params)
-    if customer.update(customer_params) 
+    if customer.update(customer_params)
       CommonService.response_format(ResponseCode.COMMON.OK, customer)
     else
       ResponseCode.COMMON.FAILED['message'] = customer.errors
