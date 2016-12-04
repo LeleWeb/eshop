@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161204102222) do
+ActiveRecord::Schema.define(version: 20161204103234) do
 
   create_table "accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "uuid",                 limit: 32
@@ -41,6 +41,13 @@ ActiveRecord::Schema.define(version: 20161204102222) do
     t.index ["lft"], name: "index_categories_on_lft", using: :btree
     t.index ["parent_id"], name: "index_categories_on_parent_id", using: :btree
     t.index ["rgt"], name: "index_categories_on_rgt", using: :btree
+  end
+
+  create_table "categories_classifications", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "Category_id"
+    t.integer "Classification_id"
+    t.index ["Category_id"], name: "index_categories_classifications_on_Category_id", using: :btree
+    t.index ["Classification_id"], name: "index_categories_classifications_on_Classification_id", using: :btree
   end
 
   create_table "classifications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
