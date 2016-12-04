@@ -54,7 +54,8 @@ class ProductsService < BaseService
     def find_by_category(store, query_params)
       if query_params[:category] == 'all'
         # 查询商家所有分类
-        store.products.select("viewable_by, locked")
+        product_ids = store.products.collect{|product| product.id}.uniq
+        
       else
 
       end
