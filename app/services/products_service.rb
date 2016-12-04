@@ -55,7 +55,7 @@ class ProductsService < BaseService
       if query_params[:category] == 'all'
         # 查询商家所有分类
         product_ids = store.products.collect{|product| product.id}.uniq
-        
+        CategoriesProduct.where()
       else
 
       end
