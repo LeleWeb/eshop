@@ -49,7 +49,7 @@ class ProductsService < BaseService
     CommonService.response_format(ResponseCode.COMMON.OK)
   end
 
-  private
+  # private
 
     def find_by_category(store, query_params)
       if query_params[:category] == 'all'
