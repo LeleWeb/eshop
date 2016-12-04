@@ -2,10 +2,11 @@ class Api::V1::ProductsController < Api::V1::BaseController
   before_action :set_product, only: [:show, :update, :destroy]
   before_action :set_account
   before_action :set_store
+  before_action :set_query_params, only: [:index]
 
   # GET /accounts
   def index
-    render json: ProductsService.new.get_products
+    render json: ProductsService.new.get_products(@store, @query_params)
   end
 
   # GET /accounts/1
@@ -32,7 +33,11 @@ class Api::V1::ProductsController < Api::V1::BaseController
   end
 
   private
-  
+
+  def set_query_params
+    @query_params = params.permit(:category, :limit)
+  end
+
   def set_account
     @account = Account.find(params[:account_id])
   end

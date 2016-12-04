@@ -1,6 +1,11 @@
 class ProductsService < BaseService
-  def get_products
-    CommonService.response_format(ResponseCode.COMMON.OK, Product.all)
+  def get_products(store, query_params)
+    if !query_params[:category].blank? && !query_params[:limit].blank?
+      CommonService.response_format(ResponseCode.COMMON.OK,
+                                    self.find_by_category(store, query_params))
+    else
+      CommonService.response_format(ResponseCode.COMMON.OK, Product.all)
+    end
   end
 
   def get_product(product)
@@ -43,5 +48,16 @@ class ProductsService < BaseService
     product.destroy
     CommonService.response_format(ResponseCode.COMMON.OK)
   end
+
+  private
+
+    def find_by_category(store, query_params)
+      if query_params[:category] == 'all'
+        # 查询商家所有分类
+        store.products.select("viewable_by, locked")
+      else
+
+      end
+    end
 
 end
