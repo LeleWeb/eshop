@@ -8,7 +8,7 @@ class ProductsService < BaseService
     cagetory = Category.find(product.category_id).name
 
     # 获取商品所有图片
-    pictures = pruduct.pictures
+    pictures = product.pictures
 
     CommonService.response_format(ResponseCode.COMMON.OK,
                                   product.as_json.merge("cagetory" => cagetory, "pictures" => pictures))
