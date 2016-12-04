@@ -2,6 +2,7 @@ class Api::V1::OrdersController < Api::V1::BaseController
   before_action :set_product, only: [:show, :update, :destroy]
   before_action :set_account
   before_action :set_store
+  before_action :set_customer
 
   # GET /accounts
   def index

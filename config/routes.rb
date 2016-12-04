@@ -5,15 +5,13 @@ Rails.application.routes.draw do
       resources :accounts do
         resources :stores do
           resources :products
-          resources :orders
         end
-
-        resources :customers do
-          resources :orders
-        end
+        resources :customers
       end
 
       resources :categories
+
+      resources :orders
 
       # 登陆登出
       post 'login', to: 'session#login'
