@@ -62,7 +62,8 @@ class ProductsService < BaseService
           category.products.each do |product|
             products << product
           end
-          data << {:category => category, :products => products}
+          data << {:category => category.as_json.merge(:picture => category.pictures[0]),
+                   :products => products}
         end
         data
       else
