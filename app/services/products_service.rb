@@ -53,9 +53,18 @@ class ProductsService < BaseService
 
     def find_by_category(store, query_params)
       if query_params[:category] == 'all'
+        data = []
         # 查询商家所有分类
         product_ids = store.products.collect{|product| product.id}.uniq
-        CategoriesProduct.where()
+        category_ids = CategoriesProduct.where("product_id in (?)", product_ids).group("category_id").collect{|x| x.category_id}
+        Category.find(category_ids).each do |category|
+          products = []
+          category.products.each do |product|
+            products << product
+          end
+          data << {:category => category, :products => products}
+        end
+        data
       else
 
       end
