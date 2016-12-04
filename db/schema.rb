@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161202033349) do
+ActiveRecord::Schema.define(version: 20161203055930) do
 
   create_table "accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "uuid",                 limit: 32
@@ -163,7 +163,7 @@ ActiveRecord::Schema.define(version: 20161202033349) do
     t.integer  "account_id"
     t.string   "name",          limit: 50
     t.string   "description"
-    t.integer  "type"
+    t.integer  "property"
     t.string   "address"
     t.string   "mobile_number", limit: 50
     t.string   "remark"
