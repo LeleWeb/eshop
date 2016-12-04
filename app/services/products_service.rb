@@ -4,7 +4,8 @@ class ProductsService < BaseService
   end
 
   def get_product(product)
-    CommonService.response_format(ResponseCode.COMMON.OK, product)
+    cagetory = Category.find(product.category_id).name
+    CommonService.response_format(ResponseCode.COMMON.OK, product.as_json.merge("cagetory" => cagetory))
   end
 
   def create_product(store, product_params)
