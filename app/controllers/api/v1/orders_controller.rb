@@ -1,8 +1,8 @@
 class Api::V1::OrdersController < Api::V1::BaseController
-  before_action :set_product, only: [:show, :update, :destroy]
-  before_action :set_account
+  before_action :set_order, only: [:show, :update, :destroy]
   before_action :set_store
   before_action :set_customer
+  before_action :set_product
 
   # GET /accounts
   def index
@@ -33,6 +33,9 @@ class Api::V1::OrdersController < Api::V1::BaseController
   end
 
   private
+  def set_product
+    @product = Product.find(params[:product_id])
+  end
 
   def set_account
     @account = Account.find(params[:account_id])
@@ -43,12 +46,12 @@ class Api::V1::OrdersController < Api::V1::BaseController
   end
 
   # Use callbacks to share common setup or constraints between actions.
-  def set_product
-    @product = Product.find(params[:id])
+  def set_order
+    @order = Order.find(params[:id])
   end
 
   # Only allow a trusted parameter "white list" through.
-  def product_params
+  def order_params
     params.require(:product).permit(:name, :description, :detail, :stock, :price, :real_price,
                                     :status, :property, :category_id, :remark, :details)
   end
