@@ -8,10 +8,9 @@ Rails.application.routes.draw do
         end
         resources :customers
       end
-
       resources :categories
-
       resources :orders
+      resources :pictures
 
       # 登陆登出
       post 'login', to: 'session#login'
