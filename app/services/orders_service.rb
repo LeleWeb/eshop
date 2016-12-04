@@ -7,7 +7,7 @@ class OrdersService < BaseService
     CommonService.response_format(ResponseCode.COMMON.OK, order)
   end
 
-  def create_product(product, buyer, seller, order_params)
+  def create_order(product, buyer, seller, order_params)
     order = buyer.orders.create(order_params)
     order.product = product
     seller.orders << order
@@ -22,17 +22,17 @@ class OrdersService < BaseService
     # end
   end
 
-  def update_product(product, product_params)
-    if product.update(product_params)
-      CommonService.response_format(ResponseCode.COMMON.OK, product)
+  def update_order(order, order_params)
+    if order.update(order_params)
+      CommonService.response_format(ResponseCode.COMMON.OK, order)
     else
-      ResponseCode.COMMON.FAILED['message'] = product.errors
+      ResponseCode.COMMON.FAILED['message'] = order.errors
       CommonService.response_format(ResponseCode.COMMON.FAILED)
     end
   end
 
-  def destory_product(product)
-    product.destroy
+  def destory_order(order)
+    order.destroy
     CommonService.response_format(ResponseCode.COMMON.OK)
   end
 
