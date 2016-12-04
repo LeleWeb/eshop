@@ -13,13 +13,6 @@ class OrdersService < BaseService
     seller.orders << order
 
     CommonService.response_format(ResponseCode.COMMON.OK, order)
-
-    # if product.save
-    #   CommonService.response_format(ResponseCode.COMMON.OK, product)
-    # else
-    #   ResponseCode.COMMON.FAILED.message = product.errors
-    #   CommonService.response_format(ResponseCode.COMMON.FAILED)
-    # end
   end
 
   def update_order(order, order_params)

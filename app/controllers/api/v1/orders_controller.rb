@@ -1,8 +1,8 @@
 class Api::V1::OrdersController < Api::V1::BaseController
   before_action :set_order, only: [:show, :update, :destroy]
-  before_action :set_buyer
-  before_action :set_seller
-  before_action :set_product
+  before_action :set_buyer, only: [:create]
+  before_action :set_seller, only: [:create]
+  before_action :set_product, only: [:create]
 
   # GET /accounts
   def index
