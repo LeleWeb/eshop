@@ -5,9 +5,12 @@ Rails.application.routes.draw do
       resources :accounts do
         resources :stores do
           resources :products
+          resources :orders
         end
 
-        resources :customers
+        resources :customers do
+          resources :orders
+        end
       end
 
       resources :categories
