@@ -1,10 +1,10 @@
 class Api::V1::CartsController < Api::V1::BaseController
   before_action :set_cart, only: [:show, :update, :destroy]
-  before_action :set_owner, :set_product, only: [:create]
+  before_action :set_owner, :set_product, only: [:index, :create]
 
   # GET /accounts
   def index
-    render json: CartsService.new.get_carts
+    render json: CartsService.new.get_carts(@owner)
   end
 
   # GET /accounts/1

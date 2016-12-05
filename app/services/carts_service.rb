@@ -1,6 +1,10 @@
 class CartsService < BaseService
-  def get_carts
-    CommonService.response_format(ResponseCode.COMMON.OK, ShoppingCart.all)
+  def get_carts(owner)
+    carts = []
+    if !owner.nil?
+      carts = owner.shopping_carts
+    end
+    CommonService.response_format(ResponseCode.COMMON.OK, carts)
   end
 
   def get_cart(cart)
