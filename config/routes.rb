@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       resources :orders
       resources :pictures
       resources :carts
+      resources :collections
 
       # 登陆登出
       post 'login', to: 'session#login'
