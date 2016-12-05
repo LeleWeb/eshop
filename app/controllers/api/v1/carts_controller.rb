@@ -1,6 +1,7 @@
 class Api::V1::CartsController < Api::V1::BaseController
   before_action :set_cart, only: [:show, :update, :destroy]
-  before_action :set_owner, :set_product, only: [:index, :create]
+  before_action :set_owner, only: [:index, :create]
+  before_action :set_product, only: [:create]
 
   # GET /accounts
   def index
