@@ -1,4 +1,4 @@
-class CartPolicy < ApplicationPolicy
+class ShoppingCartPolicy < ApplicationPolicy
   def show?
     return true
   end
