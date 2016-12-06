@@ -5,8 +5,8 @@ class SessionService < BaseService
       # 登陆成功，重置Token.
       account.reset_auth_token!
 p '@'*10
-      p get_account_data(account)
-      CommonService.response_format(ResponseCode.COMMON.OK, get_account_data(account))
+      p data = get_account_data(account)
+      CommonService.response_format(ResponseCode.COMMON.OK, data)
     else
       CommonService.response_format(ResponseCode.COMMON.FAILED)
     end
