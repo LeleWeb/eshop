@@ -1,10 +1,15 @@
 class ProductsService < BaseService
-  def get_products
-    CommonService.response_format(ResponseCode.COMMON.OK, Product.all)
+  def get_products(store, query_params)
+    if !query_params[:category].blank? && !query_params[:limit].blank?
+      CommonService.response_format(ResponseCode.COMMON.OK,
+                                    self.find_by_category(store, query_params))
+    else
+      CommonService.response_format(ResponseCode.COMMON.OK, Product.all)
+    end
   end
 
   def get_product(product)
-    CommonService.response_format(ResponseCode.COMMON.OK, product)
+    CommonService.response_format(ResponseCode.COMMON.OK, find_product_data(product))
   end
 
   def create_product(store, product_params)
@@ -36,5 +41,37 @@ class ProductsService < BaseService
     product.destroy
     CommonService.response_format(ResponseCode.COMMON.OK)
   end
+
+  # private
+
+    def find_by_category(store, query_params)
+      if query_params[:category] == 'all'
+        data = []
+        # 查询商家所有分类
+        product_ids = store.products.collect{|product| product.id}.uniq
+        category_ids = CategoriesProduct.where("product_id in (?)", product_ids).group("category_id").collect{|x| x.category_id}
+        Category.find(category_ids).each do |category|
+          products = []
+          category.products.each do |product|
+            products << find_product_data(product)
+          end
+          data << {:category => category.as_json.merge(:picture => category.pictures[0]),
+                   :products => products}
+        end
+        data
+      else
+
+      end
+    end
+
+    def find_product_data(product)
+      # 获取商品分类
+      cagetory = Category.find(product.category_id).name
+
+      # 获取商品所有图片
+      pictures = product.pictures
+
+      product.as_json.merge("cagetory" => cagetory, "pictures" => pictures)
+    end
 
 end
