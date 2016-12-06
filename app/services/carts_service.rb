@@ -13,7 +13,7 @@ class CartsService < BaseService
   end
 
   def create_cart(owner, product, cart_params)
-    if cart = owner.shopping_carts.where(product_id: product.id)
+    if cart = owner.shopping_carts.where(product_id: product.id).first
       # 购物车加入同一件商品，只修改数量
       cart.update(amount: cart.amount + 1)
     else
