@@ -18,7 +18,7 @@ class CartsService < BaseService
       cart.update(amount: cart.amount + 1)
     else
       cart = owner.shopping_carts.create(cart_params)
-      cart.product = product
+      cart.update(product_id: product.id)
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK, cart)
