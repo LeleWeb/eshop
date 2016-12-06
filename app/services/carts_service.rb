@@ -4,7 +4,8 @@ class CartsService < BaseService
     if !owner.nil?
       carts = owner.shopping_carts
     end
-    CommonService.response_format(ResponseCode.COMMON.OK, carts)
+
+    CommonService.response_format(ResponseCode.COMMON.OK, get_carts_data(carts))
   end
 
   def get_cart(cart)
@@ -35,6 +36,20 @@ class CartsService < BaseService
   def destory_cart(cart)
     cart.destroy
     CommonService.response_format(ResponseCode.COMMON.OK)
+  end
+
+  private
+
+  def get_carts_data(carts)
+    data = []
+    carts.each do |cart|
+      data << get_cart_data(cart)
+    end
+    data
+  end
+
+  def get_cart_data(cart)
+    cart.as_json.merge(:product => cart.product)
   end
 
 end
