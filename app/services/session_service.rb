@@ -27,7 +27,7 @@ class SessionService < BaseService
     data[:customer] = account.customer
 
     # stores
-    # data[:store] = account.store
+    data[:store] = account.store
 
     data
   end
