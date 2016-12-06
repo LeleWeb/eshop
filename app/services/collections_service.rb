@@ -12,8 +12,8 @@ class CollectionsService < BaseService
   end
 
   def create_collection(owner, product, collection_params)
-    collection = owner.shopping_collections.create(collection_params)
-    collection.product = product
+    collection = owner.collections.create(collection_params)
+    product.collections << collection
     CommonService.response_format(ResponseCode.COMMON.OK, collection)
   end
 
