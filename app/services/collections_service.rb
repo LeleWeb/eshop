@@ -2,7 +2,7 @@ class CollectionsService < BaseService
   def get_collections(owner)
     collections = []
     if !owner.nil?
-      collections = owner.shopping_collections
+      collections = owner.collections
     end
     CommonService.response_format(ResponseCode.COMMON.OK, collections)
   end
