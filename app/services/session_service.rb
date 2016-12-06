@@ -4,7 +4,8 @@ class SessionService < BaseService
     if account && account.authenticate(login_params[:password])
       # 登陆成功，重置Token.
       account.reset_auth_token!
-
+p '@'*10
+      p get_account_data(account)
       CommonService.response_format(ResponseCode.COMMON.OK, get_account_data(account))
     else
       CommonService.response_format(ResponseCode.COMMON.FAILED)
