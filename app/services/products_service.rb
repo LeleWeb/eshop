@@ -66,12 +66,12 @@ class ProductsService < BaseService
 
     def self.find_product_data(product)
       # 获取商品分类
-      cagetory = Category.find(product.category_id).name
+      categories = product.categories
 
       # 获取商品所有图片
       pictures = product.pictures
 
-      product.as_json.merge("cagetory" => cagetory, "pictures" => pictures)
+      product.as_json.merge(:categories => categories, :pictures => pictures)
     end
 
 end
