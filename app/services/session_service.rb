@@ -4,7 +4,7 @@ class SessionService < BaseService
     if account && account.authenticate(login_params[:password])
       # 登陆成功，重置Token.
       account.reset_auth_token!
-      
+
       CommonService.response_format(ResponseCode.COMMON.OK, get_account_data(account))
     else
       CommonService.response_format(ResponseCode.COMMON.FAILED)
@@ -21,13 +21,13 @@ class SessionService < BaseService
   def get_account_data(account)
     data = {}
     # account data
-    data[:account] = account
+    data[:account] = account.as_json.extract!('id', 'mobile_number', 'authentication_token')
 
     # customer
     data[:customer] = account.customer
 
     # stores
-    data[:store] = account.store
+    # data[:store] = account.store
 
     data
   end
