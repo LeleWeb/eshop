@@ -49,7 +49,7 @@ class CartsService < BaseService
   end
 
   def get_cart_data(cart)
-    cart.as_json.merge(:product => cart.product)
+    cart.as_json.merge(:product => ProductsService.find_product_data(cart.product))
   end
 
 end

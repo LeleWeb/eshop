@@ -9,7 +9,7 @@ class ProductsService < BaseService
   end
 
   def get_product(product)
-    CommonService.response_format(ResponseCode.COMMON.OK, find_product_data(product))
+    CommonService.response_format(ResponseCode.COMMON.OK, ProductsService.find_product_data(product))
   end
 
   def create_product(store, product_params)
@@ -53,7 +53,7 @@ class ProductsService < BaseService
         Category.find(category_ids).each do |category|
           products = []
           category.products.each do |product|
-            products << find_product_data(product)
+            products << ProductsService.find_product_data(product)
           end
           data << {:category => category.as_json.merge(:picture => category.pictures[0]),
                    :products => products}
@@ -64,7 +64,7 @@ class ProductsService < BaseService
       end
     end
 
-    def find_product_data(product)
+    def self.find_product_data(product)
       # 获取商品分类
       cagetory = Category.find(product.category_id).name
 
