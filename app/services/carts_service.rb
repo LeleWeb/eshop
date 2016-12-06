@@ -12,8 +12,14 @@ class CartsService < BaseService
   end
 
   def create_cart(owner, product, cart_params)
-    cart = owner.shopping_carts.create(cart_params)
-    cart.product = product
+    if cart = owner.shopping_carts.where(product_id: product.id)
+      # 购物车加入同一件商品，只修改数量
+      cart.update(amount: cart.amount + 1)
+    else
+      cart = owner.shopping_carts.create(cart_params)
+      cart.product = product
+    end
+
     CommonService.response_format(ResponseCode.COMMON.OK, cart)
   end
 
