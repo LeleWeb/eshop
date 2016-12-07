@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161204111005) do
+ActiveRecord::Schema.define(version: 20161205114040) do
 
   create_table "accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "uuid",                 limit: 32
@@ -69,6 +69,18 @@ ActiveRecord::Schema.define(version: 20161204111005) do
     t.index ["lft"], name: "index_classifications_on_lft", using: :btree
     t.index ["parent_id"], name: "index_classifications_on_parent_id", using: :btree
     t.index ["rgt"], name: "index_classifications_on_rgt", using: :btree
+  end
+
+  create_table "collections", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "object_type"
+    t.integer  "object_id"
+    t.string   "owner_type"
+    t.integer  "owner_id"
+    t.boolean  "is_deleted"
+    t.string   "remark"
+    t.datetime "deleted_at"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "customers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
