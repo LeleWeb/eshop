@@ -21,7 +21,8 @@ class CartsService < BaseService
       cart.update(product_id: product.id)
     end
 
-    CommonService.response_format(ResponseCode.COMMON.OK, cart)
+    CommonService.response_format(ResponseCode.COMMON.OK, {:cart => cart,
+                                                           :cart_item_amount => owner.shopping_carts(force_reload = true).length})
   end
 
   def update_cart(cart, cart_params)
