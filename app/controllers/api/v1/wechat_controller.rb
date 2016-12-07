@@ -3,11 +3,11 @@ class Api::V1::WechatController < Api::V1::BaseController
 
   # GET /wechat
   def index
-    p '@'*10
-    p params
-    p wechat_params["echostr"]
-    puts wechat_params["echostr"].class
-    render plain: wechat_params["echostr"].to_s #WechatService.new.get_wechat(wechat_params)
+    # p '@'*10
+    # p params
+    # p wechat_params["echostr"]
+    # puts wechat_params["echostr"].class
+    render text: wechat_params["echostr"] #WechatService.new.get_wechat(wechat_params)
   end
 
   private
