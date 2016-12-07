@@ -15,6 +15,9 @@ Rails.application.routes.draw do
       resources :carts
       resources :collections
 
+      # 微信推送事件统一接口
+      resources :wechat
+
       # 登陆登出
       post 'login', to: 'session#login'
       post 'logout', to: 'session#logout'

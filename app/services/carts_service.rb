@@ -4,7 +4,8 @@ class CartsService < BaseService
     if !owner.nil?
       carts = owner.shopping_carts
     end
-    CommonService.response_format(ResponseCode.COMMON.OK, carts)
+
+    CommonService.response_format(ResponseCode.COMMON.OK, get_carts_data(carts))
   end
 
   def get_cart(cart)
@@ -12,9 +13,16 @@ class CartsService < BaseService
   end
 
   def create_cart(owner, product, cart_params)
-    cart = owner.shopping_carts.create(cart_params)
-    cart.product = product
-    CommonService.response_format(ResponseCode.COMMON.OK, cart)
+    if cart = owner.shopping_carts.where(product_id: product.id).first
+      # 购物车加入同一件商品，只修改数量
+      cart.update(amount: cart.amount + 1)
+    else
+      cart = owner.shopping_carts.create(cart_params)
+      cart.update(product_id: product.id)
+    end
+
+    CommonService.response_format(ResponseCode.COMMON.OK, {:cart => cart,
+                                                           :cart_item_amount => owner.shopping_carts(force_reload = true).length})
   end
 
   def update_cart(cart, cart_params)
@@ -29,6 +37,20 @@ class CartsService < BaseService
   def destory_cart(cart)
     cart.destroy
     CommonService.response_format(ResponseCode.COMMON.OK)
+  end
+
+  private
+
+  def get_carts_data(carts)
+    data = []
+    carts.each do |cart|
+      data << get_cart_data(cart)
+    end
+    data
+  end
+
+  def get_cart_data(cart)
+    cart.as_json.merge(:product => ProductsService.find_product_data(cart.product))
   end
 
 end

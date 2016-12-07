@@ -1,6 +1,7 @@
 class CommonService < BaseService
   def self.response_format(response_code, data=nil)
-    data.nil? ? response_code : response_code['data'] = data
-    response_code
+    response = response_code.as_json
+    data.nil? ? response : response[:data] = data
+    response
   end
 end
