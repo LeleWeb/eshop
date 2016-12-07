@@ -3,7 +3,6 @@ class Api::V1::WechatController < Api::V1::BaseController
   def index
     p '@'*10
     p params
-    byebug
     render json: WechatService.new.get_wechat
   end
 
