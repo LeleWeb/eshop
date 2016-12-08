@@ -47,5 +47,3 @@ gem 'awesome_nested_set'
 # Passenger
 gem "passenger", ">= 5.0.25", require: "phusion_passenger/rack_handler"
 
-# 配置秘钥
-gem 'dotenv-rails'
