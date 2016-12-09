@@ -3,7 +3,7 @@ class Api::V1::WechatController < Api::V1::BaseController
 
   # GET /wechat
   def index
-    render html: wechat_params["echostr"] #WechatService.new.get_wechat(wechat_params)
+    render html: WechatService.new.get_wechat(wechat_params)
   end
 
   private
