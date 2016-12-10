@@ -35,7 +35,7 @@ class Api::V1::ProductsController < Api::V1::BaseController
   private
 
   def set_query_params
-    @query_params = params.permit(:category, :limit)
+    @query_params = params.permit(:category, :limit, :search)
   end
 
   def set_account

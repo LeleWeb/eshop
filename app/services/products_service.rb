@@ -3,6 +3,9 @@ class ProductsService < BaseService
     if !query_params[:category].blank? && !query_params[:limit].blank?
       CommonService.response_format(ResponseCode.COMMON.OK,
                                     self.find_by_category(store, query_params))
+    elsif !query_params[:search].blank?
+      CommonService.response_format(ResponseCode.COMMON.OK,
+                                    self.find_by_search(store, query_params))
     else
       CommonService.response_format(ResponseCode.COMMON.OK, Product.all)
     end
@@ -62,6 +65,14 @@ class ProductsService < BaseService
       else
 
       end
+    end
+
+    def find_by_search(store, query_params)
+      data = []
+      store.products.where("name like ?", "%#{query_params[:search]}%").each do |product|
+        data << ProductsService.find_product_data(product)
+      end
+      data
     end
 
     def self.find_product_data(product)
