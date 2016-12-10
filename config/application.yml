@@ -1,5 +1,6 @@
 # config/application.yml
 defaults: &defaults
+  # 微信相关
   WECHAT:
     WECHAT_TOKEN: eshop_token
     # 临时二维码请求参数
@@ -22,6 +23,20 @@ defaults: &defaults
           action_info:
             scene:
               scene_str: "123"
+
+  # 系统图片分类定义
+  PICTURES_CATEGORY:
+    PRODUCT:
+      轮播: 1
+      方正: 2
+      详情: 3
+    STORE:
+      广告轮播: 100
+      新日新品: 101
+      推荐: 102
+      火爆: 103
+      团购: 104
+      热销: 105
 
 development:
   <<: *defaults
