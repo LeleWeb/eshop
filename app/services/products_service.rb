@@ -68,10 +68,14 @@ class ProductsService < BaseService
       # 获取商品分类
       categories = product.categories
 
-      # 获取商品所有图片
+      # 获取商品所有图片,并按照产品图片分类展示.
+      picture_data = {}
       pictures = product.pictures
+      Settings.PICTURES_CATEGORY.PRODUCT.each do |key, value|
+        picture_data[key] = pictures.where(category: value)
+      end
 
-      product.as_json.merge(:categories => categories, :pictures => pictures)
+      product.as_json.merge(:categories => categories, :pictures => picture_data)
     end
 
 end
