@@ -1,6 +1,27 @@
 # config/application.yml
 defaults: &defaults
-  WECHAT_TOKEN: eshop_token
+  WECHAT:
+    WECHAT_TOKEN: eshop_token
+    # 临时二维码请求参数
+    TEMPORARY_QRCODE_POST_PARAMS:
+      expire_seconds:
+      action_name: "QR_SCENE"
+      action_info:
+        scene:
+          scene_id: 123
+    FOREVER_QRCODE_POST_PARAMS:
+      QR_LIMIT_SCENE:
+        QRCODE_POST_PARAMS:
+          action_name: "QR_LIMIT_SCENE"
+          action_info:
+            scene:
+              scene_id: 123
+      QR_LIMIT_STR_SCENE:
+        QRCODE_POST_PARAMS:
+          action_name: "QR_LIMIT_STR_SCENE"
+          action_info:
+            scene:
+              scene_str: "123"
 
 development:
   <<: *defaults
