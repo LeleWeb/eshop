@@ -40,4 +40,5 @@ class Api::V1::AddressesController < Api::V1::BaseController
     params.require(:address).permit(:name, :type, :customer_id)
   end
 
+
 end

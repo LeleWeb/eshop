@@ -24,4 +24,5 @@ class AddressPolicy < ApplicationPolicy
       scope
     end
   end
+
 end
