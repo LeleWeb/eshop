@@ -8,7 +8,7 @@ class AddressesService < BaseService
   end
 
   def create_address(address_params)
-    create(address_params)
+    address= create(address_params)
     CommonService.response_format(ResponseCode.COMMON.OK,address)
   end
 
