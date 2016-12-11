@@ -14,19 +14,23 @@ class HttpService < BaseService
 
   def self.post(url, params)
     uri = URI(url)
-    req = Net::HTTP::Post.new(uri)
-    req.set_form_data(params)
+    res = Net::HTTP.post_form(uri, params)
+    res.body
 
-    res = Net::HTTP.start(uri.hostname, uri.port) do |http|
-      http.request(req)
-    end
-
-    case res
-      when Net::HTTPSuccess, Net::HTTPRedirection
-        res.body
-      else
-        res.value
-    end
+    # uri = URI(url)
+    # req = Net::HTTP::Post.new(uri)
+    # req.set_form_data(params)
+    #
+    # res = Net::HTTP.start(uri.hostname, uri.port) do |http|
+    #   http.request(req)
+    # end
+    #
+    # case res
+    #   when Net::HTTPSuccess, Net::HTTPRedirection
+    #     res.body
+    #   else
+    #     res.value
+    # end
   end
 
 end
