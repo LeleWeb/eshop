@@ -1,14 +1,14 @@
 class AddressesService < BaseService
   def get_addresses
-    CommonService.response_format(ResponseCode.COMMON.OK, address.all)
+    CommonService.response_format(ResponseCode.COMMON.OK, Address.all)
   end
 
   def get_address(address)
-    CommonService.response_format(ResponseCode.COMMON.OK,  address.all)
+    CommonService.response_format(ResponseCode.COMMON.OK, address)
   end
 
   def create_address(address_params)
-    address = Address.create!(:name => address_params[:name])
+    create(address_params)
     CommonService.response_format(ResponseCode.COMMON.OK,address)
   end
 
