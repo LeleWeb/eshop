@@ -18,7 +18,7 @@ class HttpService < BaseService
     uri = URI.parse(url)
     https = Net::HTTP.new(uri.host,uri.port)
     https.use_ssl = true
-    req = Net::HTTP::Post.new(uri.path)
+    req = Net::HTTP::Post.new(uri)
     res = https.request(req)
 
     case res
