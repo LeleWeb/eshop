@@ -1,7 +1,7 @@
 require 'net/http'
 
 class HttpService < BaseService
-  def get(rul)
+  def get(url)
     uri = URI('http://example.com/some_path?query=string')
 
     Net::HTTP.start(uri.host, uri.port) do |http|

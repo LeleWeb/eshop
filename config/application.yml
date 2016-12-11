@@ -2,7 +2,9 @@
 defaults: &defaults
   # 微信相关
   WECHAT:
+    # 需要跟公众号服务器设置中的值一致
     WECHAT_TOKEN: eshop_token
+    CREATE_QRCODE_URL: "https://api.weixin.qq.com/cgi-bin/qrcode/create"
     # 临时二维码请求参数
     TEMPORARY_QRCODE_POST_PARAMS:
       expire_seconds:
