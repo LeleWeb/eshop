@@ -1,7 +1,7 @@
 require 'net/http'
 
 class HttpService < BaseService
-  def get(url, query_params=nil)
+  def self.get(url, query_params=nil)
     uri = URI(url)
 
     if !query_params.blank?
@@ -12,7 +12,7 @@ class HttpService < BaseService
     res.is_a?(Net::HTTPSuccess) ? res.body : res.value
   end
 
-  def post(url, params)
+  def self.post(url, params)
     uri = URI(url)
     req = Net::HTTP::Post.new(uri)
     req.set_form_data(params)
