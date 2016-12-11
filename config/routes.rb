@@ -17,6 +17,8 @@ Rails.application.routes.draw do
 
       # 微信推送事件统一接口
       resources :wechat
+      # 微信生成带参数二维码
+      resources :qrcode
 
       # 登陆登出
       post 'login', to: 'session#login'
