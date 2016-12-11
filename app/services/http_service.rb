@@ -1,14 +1,15 @@
 require 'net/http'
 
 class HttpService < BaseService
-  def get(url)
-    uri = URI('http://example.com/some_path?query=string')
+  def get(url, query_params=nil)
+    uri = URI(url)
 
-    Net::HTTP.start(uri.host, uri.port) do |http|
-      request = Net::HTTP::Get.new uri
-
-      response = http.request request # Net::HTTPResponse object
+    if !query_params.blank?
+      uri.query = URI.encode_www_form(params)
     end
+
+    res = Net::HTTP.get_response(uri)
+    res.is_a?(Net::HTTPSuccess) ? res.body : res.value
   end
 
   def post(url, params)
@@ -22,8 +23,7 @@ class HttpService < BaseService
 
     case res
       when Net::HTTPSuccess, Net::HTTPRedirection
-        # OK
-        puts res.body
+        res.body
       else
         res.value
     end

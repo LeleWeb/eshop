@@ -12,19 +12,18 @@ defaults: &defaults
       action_info:
         scene:
           scene_id: 123
+    # 永久二维码请求参数
     FOREVER_QRCODE_POST_PARAMS:
-      QR_LIMIT_SCENE:
-        QRCODE_POST_PARAMS:
-          action_name: "QR_LIMIT_SCENE"
-          action_info:
-            scene:
-              scene_id: 123
-      QR_LIMIT_STR_SCENE:
-        QRCODE_POST_PARAMS:
-          action_name: "QR_LIMIT_STR_SCENE"
-          action_info:
-            scene:
-              scene_str: "123"
+      QRCODE_POST_PARAMS:
+        action_name: "QR_LIMIT_SCENE"
+        action_info:
+          scene:
+            scene_id: 123
+      QRCODE_POST_PARAMS_STR:
+        action_name: "QR_LIMIT_STR_SCENE"
+        action_info:
+          scene:
+            scene_str: "123"
 
   # 系统图片分类定义
   PICTURES_CATEGORY:
