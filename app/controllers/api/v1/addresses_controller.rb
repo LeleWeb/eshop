@@ -23,21 +23,21 @@ class Api::V1::AddressesController < Api::V1::BaseController
     render json: AddressesService.new.update_address(@address, address_params)
   end
 
-# DELETE /categories /1
+# DELETE /addresses /1
   def destroy
-    authorize @category
+    authorize @address
     render json: AddressesService.new.destory_address(@address)
   end
 
   private
 # Use callbacks to share common setup or constraints between actions.
   def set_address
-    @address = Address.find(params[:id])
+    @address = Address.find(customer[:id])
   end
 
 # Only allow a trusted parameter "white list" through.
   def address_params
-    params.require(:address).permit(:name, :type, :parent_id)
+    params.require(:address).permit(:name, :type, :customer_id)
   end
 
 end
