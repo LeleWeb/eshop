@@ -1,6 +1,6 @@
 class QrcodeService < BaseService
   def create_qrcode
-    res = HttpService.post(Settings.WECHAT.CREATE_QRCODE_URL + "?access_token=YllhuL6vFw0m8V-8djq97uVjt3cSvHHVqALl76SmYvhYsi5OZJWYcrKAqh2Zukw0x-qi1vaFRepgFjiB3-Hfjmy1sfkgE-1Td9GqM2aMLBtAGQMGGUdfkwqCyny6bnScHBOgAJAWQD",
+    res = HttpService.post(Settings.WECHAT.CREATE_QRCODE_URL + "?access_token=72wGq0nbaDJBR_E4lxeq-TsirFIGSkF6XumLH6HFYF4DaOueuH8_Ii0LVdMQZXYy7t_CgrmkCyPqCEw1UEp5NTO1q2LZvq_D-7BPEv2L0AKrQeH4WEQfirqMcgBNw4HiYZCbAHADEH",
                            Settings.WECHAT.FOREVER_QRCODE_POST_PARAMS.QRCODE_POST_PARAMS_STR)
     puts res
     res
