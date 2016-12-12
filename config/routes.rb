@@ -14,6 +14,7 @@ Rails.application.routes.draw do
       resources :pictures
       resources :carts
       resources :collections
+      resources :addresses
 
       # 微信推送事件统一接口
       resources :wechat
