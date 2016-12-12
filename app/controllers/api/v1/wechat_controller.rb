@@ -6,6 +6,13 @@ class Api::V1::WechatController < Api::V1::BaseController
     render html: WechatService.new.get_wechat(wechat_params)
   end
 
+  # POST /accounts
+  def create
+    p '@@@@'
+    p params
+    render json: WechatService.new.create_wechat(params)
+  end
+
   private
 
   # Only allow a trusted parameter "white list" through.

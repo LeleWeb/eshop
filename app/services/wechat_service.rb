@@ -16,6 +16,10 @@ class WechatService < BaseService
     end
   end
 
+  def create_wechat(params)
+    
+  end
+
   def check_signature(wechat_params, wechat_token)
     # token,timestamp,nonce字典排序得到字符串list
     list = [wechat_token, wechat_params['timestamp'], wechat_params['nonce']].sort.join
