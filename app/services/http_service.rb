@@ -19,7 +19,9 @@ class HttpService < BaseService
     https = Net::HTTP.new(uri.host,uri.port)
     https.use_ssl = true
     req = Net::HTTP::Post.new(uri)
+    req.add_field('Content-Type', 'application/json')
     req.set_form_data(params)
+    #req.set_form_data("action_name" => "QR_LIMIT_STR_SCENE", )
     res = https.request(req)
 
     case res
