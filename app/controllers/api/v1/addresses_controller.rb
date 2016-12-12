@@ -1,5 +1,5 @@
 class Api::V1::AddressesController < Api::V1::BaseController
-  efore_action :set_address, only: [:show, :update, :destroy]
+  before_action :set_address, only: [:show, :update, :destroy]
 
 # GET /addresses
   def index
