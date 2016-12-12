@@ -4,7 +4,7 @@ class ApplicationController < ActionController::API
   # protect_from_forgery with: :exception
 
   # disable the CSRF token
-  protect_from_forgery with: :null_session
+  # protect_from_forgery with: :null_session
 
   # disable the CSRF token
   skip_before_action :verify_authenticity_token
