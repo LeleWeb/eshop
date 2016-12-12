@@ -17,7 +17,7 @@ class WechatService < BaseService
   end
 
   def create_wechat(params)
-
+    params
   end
 
   def check_signature(wechat_params, wechat_token)
