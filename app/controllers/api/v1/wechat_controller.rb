@@ -1,4 +1,4 @@
-class Api::V1::WechatController < Api::V1::BaseController
+class Api::V1::WechatController < ApplicationController
   before_action :wechat_params, only: [:index]
 
   # GET /wechat
