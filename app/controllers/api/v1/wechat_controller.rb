@@ -1,5 +1,5 @@
 class Api::V1::WechatController < ApplicationController
-  protect_from_forgery unless: -> { request.format.json? }
+
   before_action :wechat_params, only: [:index]
 
   # GET /wechat
