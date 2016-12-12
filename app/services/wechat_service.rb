@@ -9,7 +9,7 @@ class WechatService < BaseService
     end
 
     # 验证微信Token合法性
-    if check_signature(wechat_params, Settings.WECHAT_TOKEN)
+    if check_signature(wechat_params, Settings.WECHAT.WECHAT_TOKEN)
       return wechat_params["echostr"]
     else
       return 'Check Signature Failed!'
