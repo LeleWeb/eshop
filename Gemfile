@@ -47,3 +47,5 @@ gem 'awesome_nested_set'
 # Passenger
 gem "passenger", ">= 5.0.25", require: "phusion_passenger/rack_handler"
  
+# actionpack-xml_parser (https://github.com/rails/actionpack-xml_parser)
+gem 'actionpack-xml_parser'
