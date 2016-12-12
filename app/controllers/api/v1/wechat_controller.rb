@@ -8,10 +8,10 @@ class Api::V1::WechatController < ApplicationController
 
   # POST /accounts
   def create
-    p '@@@@'
-    p params
+    p '@@@@1'
+    p params.inspect
     logger.debug('@@@@')
-    logger.debug(params)
+    logger.debug(params.inspect)
     render json: WechatService.new.create_wechat(params)
   end
 
