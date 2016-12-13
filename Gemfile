@@ -49,3 +49,6 @@ gem "passenger", ">= 5.0.25", require: "phusion_passenger/rack_handler"
  
 # actionpack-xml_parser (https://github.com/rails/actionpack-xml_parser)
 gem 'actionpack-xml_parser'
+
+# UUID generator for producing universally unique identifiers based on RFC 4122 (http://www.ietf.org/rfc/rfc4122.txt).
+gem 'uuid', '~> 2.3', '>= 2.3.8'
