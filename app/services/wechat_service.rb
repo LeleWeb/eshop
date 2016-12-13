@@ -33,7 +33,8 @@ class WechatService < BaseService
   def self.create_unifiedorder(order)
     # 组织统一下单参数
     params = LocalConfig.WECHAT.PAY.unifiedorder.as_json
-    params.nonce_str = SecureRandom.hex
+    params[:nonce_str] = SecureRandom.hex
+    params
   end
 
 end
