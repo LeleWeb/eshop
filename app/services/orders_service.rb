@@ -8,6 +8,8 @@ class OrdersService < BaseService
   end
 
   def create_order(product, buyer, seller, order_params)
+    # 生成订单码(uuid)
+    order_params[:uuid] = UUID.new.generate
     order = buyer.orders.create(order_params)
     order.product = product
     seller.orders << order
