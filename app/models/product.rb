@@ -9,5 +9,7 @@ class Product < ApplicationRecord
   # 收藏
   has_many :collections, as: :object
 
+  has_and_belongs_to_many :orders
+
   attr_accessor :details
 end

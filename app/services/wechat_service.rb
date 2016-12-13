@@ -33,8 +33,22 @@ class WechatService < BaseService
   def self.create_unifiedorder(order)
     # 组织统一下单参数
     params = LocalConfig.WECHAT.PAY.unifiedorder.as_json
-    params[:nonce_str] = SecureRandom.hex
-    params
+    params['nonce_str'] = SecureRandom.hex
+    params['detail'] = generate_detail(order)
+
+    params['sign'] = self.generate_sign(params)
+  end
+  
+  # 
+  def self.generate_sign(params)
+    # TODO
+  end
+
+  # 获取订单商品列表
+  def self.generate_detail(order)
+    list = []
+
+    list
   end
 
 end
