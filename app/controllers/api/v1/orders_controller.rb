@@ -1,8 +1,6 @@
 class Api::V1::OrdersController < Api::V1::BaseController
   before_action :set_order, only: [:show, :update, :destroy]
-  before_action :set_buyer, only: [:create]
-  before_action :set_seller, only: [:create]
-  before_action :set_product, only: [:create]
+  before_action :set_buyer, set_details, only: [:create]
 
   # GET /accounts
   def index
@@ -17,7 +15,7 @@ class Api::V1::OrdersController < Api::V1::BaseController
 
   # POST /accounts
   def create
-    render json: OrdersService.new.create_order(@product, @buyer, @seller, order_params)
+    render json: OrdersService.new.create_order(@buyer, order_params, set_details)
   end
 
   # PATCH/PUT /accounts/1
@@ -33,16 +31,13 @@ class Api::V1::OrdersController < Api::V1::BaseController
   end
 
   private
-  def set_product
-    @product = Product.find(params[:product_id])
+
+  def set_details
+    params.permit(:details)
   end
 
   def set_buyer
     @buyer = eval(params[:buyer_type]).find(params[:buyer_id])
-  end
-
-  def set_seller
-    @seller = eval(params[:seller_type]).find(params[:seller_id])
   end
 
   # Use callbacks to share common setup or constraints between actions.
