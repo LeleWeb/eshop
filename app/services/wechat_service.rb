@@ -47,7 +47,14 @@ class WechatService < BaseService
   # 获取订单商品列表
   def self.generate_detail(order)
     list = []
-
+    order.products.each do |product|
+      data = LocalConfig.WECHAT.PAY.unifiedorder_product_details.as_json
+      data["goods_id"] = product.uuid
+      data["goods_name"] = product.name
+      data["quantity"] = order.amount
+      data["price"] = ""
+    list << collect_goods_detail(product)
+    end
     list
   end
 
