@@ -33,7 +33,7 @@ class Api::V1::OrdersController < Api::V1::BaseController
   private
 
   def set_details
-    params.permit(:details)
+    params.require(:details)
   end
 
   def set_buyer
