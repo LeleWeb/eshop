@@ -9,8 +9,14 @@ class OrdersService < BaseService
 
   def create_order(buyer, order_params, details)
     # 生成本系统订单
-    order_params[:uuid] = UUID.new.generate
+    order_params[:order_number] = UUID.new.generate
+    order_params[:status] = Settings.ORDER.STATUS.PREPAY
+    order_params[:pay_away] = 1
+    order_params[:time_start] = Time.now.strftime("%Y%m%d%H%M%S")
+    order_params[:time_expire] = (Time.now + Settings.ORDER.EXPIRE_TIME).strftime("%Y%m%d%H%M%S")
     order = buyer.orders.create(order_params)
+
+    # 生成对应的订单详情项
     details.each do |detail|
       order.order_details.create(detail)
     end

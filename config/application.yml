@@ -1,5 +1,15 @@
 # config/application.yml
 defaults: &defaults
+  # 订单状态
+  ORDER:
+    STATUS:
+      CANCEL: 0
+      PREPAY: 1
+      PAID: 2
+      DELIVERED: 3
+      COMPLETED: 4
+    EXPIRE_TIME: 10*60
+
   # 微信相关
   WECHAT:
     # 需要跟公众号服务器设置中的值一致
