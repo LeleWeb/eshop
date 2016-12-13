@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161210091724) do
+ActiveRecord::Schema.define(version: 20161213071022) do
 
   create_table "accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "uuid",                 limit: 32
+    t.string   "uuid"
     t.string   "mobile_number",        limit: 50
     t.string   "email",                limit: 50
     t.datetime "created_at",                      null: false
@@ -112,16 +112,16 @@ ActiveRecord::Schema.define(version: 20161210091724) do
   end
 
   create_table "detail_items", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "name",       limit: 50
-    t.string   "remark"
-    t.boolean  "is_deleted"
-    t.datetime "deleted_at"
-    t.datetime "created_at",            null: false
+    t.string   "name",       limit: 50,              comment: "属性名字"
+    t.string   "remark",                             comment: "属性备注"
+    t.boolean  "is_deleted",                         comment: "-1:已删除 0:正常"
+    t.datetime "deleted_at",                         comment: "删除时间"
+    t.datetime "created_at",            null: false, comment: "创建时间"
     t.datetime "updated_at",            null: false
   end
 
   create_table "orders", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "uuid",        limit: 32
+    t.string   "uuid"
     t.integer  "product_id"
     t.float    "unit_price",  limit: 24
     t.integer  "amount"
@@ -164,21 +164,21 @@ ActiveRecord::Schema.define(version: 20161210091724) do
   end
 
   create_table "products", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "uuid",        limit: 32
-    t.integer  "store_id"
+    t.string   "uuid"
+    t.integer  "store_id",                                            comment: "所属商家"
     t.string   "name"
     t.string   "description"
-    t.string   "detail"
-    t.integer  "stock"
-    t.float    "price",       limit: 24
-    t.float    "real_price",  limit: 24
+    t.string   "detail",                                              comment: "商品详情信息"
+    t.integer  "stock",                                               comment: "库存"
+    t.float    "price",       limit: 24,                              comment: "价格"
+    t.float    "real_price",  limit: 24,                              comment: "优惠价格"
     t.integer  "status"
     t.integer  "property"
-    t.boolean  "is_deleted"
-    t.string   "remark"
+    t.boolean  "is_deleted",             default: false,              comment: "-1：已删除 0:未上架 1:已上架"
+    t.string   "remark",                                              comment: "备注"
     t.datetime "deleted_at"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
     t.integer  "category_id"
   end
 
