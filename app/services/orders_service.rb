@@ -8,7 +8,7 @@ class OrdersService < BaseService
   end
 
   def create_order(buyer, order_params, details)
-    p buyer, order_params, details
+    p '@@@',buyer, order_params, details
     # 生成本系统订单
     order_params[:order_number] = UUID.new.generate
     order_params[:status] = Settings.ORDER.STATUS.PREPAY
