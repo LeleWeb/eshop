@@ -8,7 +8,7 @@ defaults: &defaults
       PAID: 2
       DELIVERED: 3
       COMPLETED: 4
-    EXPIRE_TIME: 10*60
+    EXPIRE_TIME: "#{10*60}"
 
   # 微信相关
   WECHAT:

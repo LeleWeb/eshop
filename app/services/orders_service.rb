@@ -13,7 +13,7 @@ class OrdersService < BaseService
     order_params[:status] = Settings.ORDER.STATUS.PREPAY
     order_params[:pay_away] = 1
     order_params[:time_start] = Time.now.strftime("%Y%m%d%H%M%S")
-    order_params[:time_expire] = (Time.now + Settings.ORDER.EXPIRE_TIME).strftime("%Y%m%d%H%M%S")
+    order_params[:time_expire] = (Time.now + Settings.ORDER.EXPIRE_TIME.to_i).strftime("%Y%m%d%H%M%S")
     order = buyer.orders.create(order_params)
 
     # 生成对应的订单详情项
