@@ -19,7 +19,7 @@ class OrdersService < BaseService
 
     # 生成对应的订单详情项
     details.each do |detail|
-      order.order_details.create(detail)
+      order.order_details.create(detail.permit(:product_id, :quantity, :price))
     end
 
     # 调用微信统一接口,生成预付订单.
