@@ -25,6 +25,9 @@ defaults: &defaults
           scene:
             scene_str: "123"
 
+    # WXPAY
+    UNIFIEDORDER_URL: "https://api.mch.weixin.qq.com/pay/unifiedorder"
+
   # 系统图片分类定义
   PICTURES_CATEGORY:
     PRODUCT:

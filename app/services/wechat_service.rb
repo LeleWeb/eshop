@@ -29,4 +29,11 @@ class WechatService < BaseService
     hashcode == wechat_params['signature']
   end
 
+  # 微信统一下单接口
+  def self.create_unifiedorder(order)
+    # 组织统一下单参数
+    params = LocalConfig.WECHAT.PAY.unifiedorder.as_json
+    params.nonce_str = SecureRandom.hex
+  end
+
 end
