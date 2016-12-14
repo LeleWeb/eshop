@@ -22,6 +22,8 @@ Rails.application.routes.draw do
       resources :qrcode
       # 微信支付相关接口
       resources :wxpay
+      # 微信网页授权回调接口
+      resources :wx_page_authorization
 
       # 登陆登出
       post 'login', to: 'session#login'
