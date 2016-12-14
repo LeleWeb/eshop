@@ -35,6 +35,11 @@ class WechatService < BaseService
     params = LocalConfig.WECHAT.PAY.unifiedorder.as_json
     params['nonce_str'] = SecureRandom.hex
     params['detail'] = generate_detail(order)
+    params['out_trade_no'] = order.order_number
+    params['total_fee'] = self.convert_yuan_fen(order.pay_price)
+    params['time_start'] = order.time_start
+    params['time_expire'] = order.time_expire
+    params['openid'] = ""
 
     params['sign'] = self.generate_sign(params)
   end
@@ -47,15 +52,29 @@ class WechatService < BaseService
   # 获取订单商品列表
   def self.generate_detail(order)
     list = []
-    order.products.each do |product|
+    order.order_details.each do |detail|
+      product = detail.product
       data = LocalConfig.WECHAT.PAY.unifiedorder_product_details.as_json
-      data["goods_id"] = product.uuid
+      data["goods_id"] = product.product_number
       data["goods_name"] = product.name
-      data["quantity"] = order.amount
-      data["price"] = ""
+      data["quantity"] = detail.quantity
+      data["price"] = self.convert_yuan_fen(detail.price)
     list << collect_goods_detail(product)
     end
     list
+  end
+
+  # 微信统一下单接口单价单位为分，此方法负责转换.
+  def self.convert_yuan_fen(price)
+    price*100
+  end
+
+  # 根据订单详情计算订单总金额，单位为：分.
+  def self.calculate_total_price(order)
+    total_price = 0
+    order.order_details.each do |detail|
+      total_price += detail
+    end
   end
 
 end
