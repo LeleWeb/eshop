@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161213090726) do
+ActiveRecord::Schema.define(version: 20161213144225) do
 
   create_table "accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "uuid"
@@ -120,23 +120,35 @@ ActiveRecord::Schema.define(version: 20161213090726) do
     t.datetime "updated_at",            null: false
   end
 
-  create_table "orders", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "uuid"
+  create_table "order_details", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "order_id"
     t.integer  "product_id"
-    t.float    "unit_price",  limit: 24
-    t.integer  "amount"
+    t.integer  "quantity"
+    t.float    "price",      limit: 24
+    t.boolean  "is_default"
+    t.string   "remark",     limit: 256
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  create_table "orders", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "order_number",      limit: 256
     t.integer  "status"
-    t.float    "total_price", limit: 24
+    t.float    "total_price",       limit: 24
     t.integer  "buyer_id"
-    t.string   "buyer_type",  limit: 50
-    t.integer  "seller_id"
-    t.string   "seller_type", limit: 50
+    t.string   "buyer_type",        limit: 50
     t.integer  "estimate"
     t.string   "remark"
     t.boolean  "is_deleted"
     t.datetime "deleted_at"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.integer  "pay_away"
+    t.datetime "time_start"
+    t.datetime "time_expire"
+    t.string   "consignee_name",    limit: 32
+    t.string   "consignee_phone",   limit: 32
+    t.string   "consignee_address", limit: 256
   end
 
   create_table "orders_products", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
