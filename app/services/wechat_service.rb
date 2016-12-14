@@ -93,4 +93,20 @@ class WechatService < BaseService
     end
   end
 
+  # 网页授权获取用户基本信息
+  def self.get_wx_page_authorization_userinfo(query_params)
+    # 用户同意授权，获取code
+    code = query_params[:query_params]
+    state = query_params[:state]
+
+    # 通过code换取网页授权access_token
+
+    # 刷新access_token（如果需要）
+
+    # 拉取用户信息(需scope为 snsapi_userinfo)
+
+    # 检验授权凭证（access_token）是否有效
+
+  end
+
 end
