@@ -20,6 +20,8 @@ Rails.application.routes.draw do
       resources :wechat
       # 微信生成带参数二维码
       resources :qrcode
+      # 微信支付相关接口
+      resources :wxpay
 
       # 登陆登出
       post 'login', to: 'session#login'
