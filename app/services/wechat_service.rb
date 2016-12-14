@@ -40,13 +40,29 @@ class WechatService < BaseService
     params['time_start'] = order.time_start
     params['time_expire'] = order.time_expire
     params['openid'] = ""
-
     params['sign'] = self.generate_sign(params)
+
+    # 参数组织为xml格式
+    xml_params = self.convert_hash_to_xml(params)
+
+
   end
   
   # 
   def self.generate_sign(params)
-    # TODO
+    #
+    sort_params = params.select {|k,v| v != ""}.sort_by {|_key, value| value}.to_h
+
+    #
+    stringA = ""
+    sort_params.each do |k, v|
+      stringA += "#{k}=#{v}&"
+    end
+    stringA = stringA.gsub(/&$/,'')
+
+    #
+    stringSignTemp = Digest::MD5.hexdigest(stringA+"&key=#{Settings.WECHAT.PAY.sign_key}")
+    signValue = stringSignTemp.upcase
   end
 
   # 获取订单商品列表
