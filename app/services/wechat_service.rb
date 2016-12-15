@@ -108,6 +108,8 @@ class WechatService < BaseService
     access_token_params["code"] = code
     access_token_res = JSON.parse(HttpService.get(Settings.WECHAT.PAGE_ACCESS_TOKEN.URL,
                                                   access_token_params))
+    puts '1'*10
+    p access_token_res
     if self.is_response_error?(access_token_res)
       # 获取网页授权access_token失败，打印log
       return
@@ -119,6 +121,8 @@ class WechatService < BaseService
     check_access_token_params["openid"] = access_token_res["openid"]
     auth_res = JSON.parse(HttpService.get(Settings.WECHAT.PAGE_ACCESS_TOKEN.AUTH_ACCESS_TOKEN.URL,
                                           check_access_token_params))
+    puts '2'*10
+    p auth_res
     if auth_res["errcode"] != 0 && auth_res["errmsg"] != "ok"
       # 检验授权凭证失败,打印log.
       return
@@ -137,6 +141,8 @@ class WechatService < BaseService
       user_info_params["openid"] = access_token_res["openid"]
       user_info_res = JSON.parse(HttpService.get(Settings.WECHAT.PAGE_ACCESS_TOKEN.GET_USERINFO.URL,
                                                  user_info_params))
+      puts '3'*10
+      p user_info_res
       if self.is_response_error?(user_info_res)
         # 拉去用户信息失败,打印log.
         return

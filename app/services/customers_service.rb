@@ -34,15 +34,11 @@ class CustomersService < BaseService
 
   # 微信网页授权登录后本系统customer用户同步方法
   def self.update_customer_by_wechat(access_token)
-    puts '@'*10
-    p access_token
     # 查询该用户是否第一次登录
     customer = Customer.find_by(openid: access_token["openid"])
     if customer.nil?
       # 创建customer
       customer = Account.create().create_customer(access_token)
-      puts '$'*10
-      p customer
     else
       # 更新customer
       customer.update(access_token)
