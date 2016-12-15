@@ -6,6 +6,7 @@ class Api::V1::WxPageAuthorizationController < ApplicationController
     # 公众号网页授权后重定向的回调链接地址
     WechatService.get_wx_page_authorization_userinfo(@query_params)
     #render html: WechatService.new.get_wechat(wechat_params)
+    redirect_to "http://www.yiyunma.com"
   end
 
   private
