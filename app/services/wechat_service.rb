@@ -153,7 +153,7 @@ class WechatService < BaseService
       customer = CustomersService.update_customer_by_wechat(user_info_res)
     end
 
-    customer
+    Account.find(customer.account_id)
   end
 
   def self.is_response_error?(res)
