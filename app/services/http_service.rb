@@ -7,7 +7,7 @@ class HttpService < BaseService
     uri = URI(url)
 
     if !query_params.blank?
-      uri.query = URI.encode_www_form(params)
+      uri.query = URI.encode_www_form(query_params)
     end
 
     res = Net::HTTP.get_response(uri)
