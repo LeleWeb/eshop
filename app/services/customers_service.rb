@@ -37,7 +37,7 @@ class CustomersService < BaseService
     puts '@'*10
     p auth_res
     # 查询该用户是否第一次登录
-    customer = Customer.find_by(openid: auth_res["openid"])
+    customer = nil#Customer.find_by(openid: auth_res["openid"])
     if customer.nil?
       # 创建customer
       Account.create(type: "customer").create_customer(auth_res)
