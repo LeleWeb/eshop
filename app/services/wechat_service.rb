@@ -105,8 +105,11 @@ class WechatService < BaseService
     access_token_params["secret"] = LocalConfig.WECHAT.secret
     access_token_params["code"] = code
     access_token_res = HttpService.get(Settings.WECHAT.PAGE_ACCESS_TOKEN.URL,
-                                       access_token_params)
-
+                                       access_token_params).as_json
+    if !access_token_res["errcode"].blank? && !access_token_res["errmsg"].blank?
+      return
+    end
+    
     # 微信授权登录成功后本系统自动创建customer
     #CustomersService.
 
@@ -121,7 +124,7 @@ class WechatService < BaseService
       user_info_params["access_token"] = access_token_res["access_token"]
       user_info_params["openid"] = access_token_res["openid"]
       user_info_res = HttpService.get(Settings.WECHAT.PAGE_ACCESS_TOKEN.GET_USERINFO.URL,
-                                      user_info_params)
+                                      user_info_params).as_json
       p "#"*10
       p user_info_res
     end
