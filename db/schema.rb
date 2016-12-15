@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161214030923) do
+ActiveRecord::Schema.define(version: 20161215102808) do
 
   create_table "accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "uuid"
@@ -95,20 +95,29 @@ ActiveRecord::Schema.define(version: 20161214030923) do
 
   create_table "customers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "account_id"
-    t.string   "wechat_id",       limit: 50
-    t.string   "mobile_number",   limit: 50
-    t.string   "nick_name",       limit: 50
-    t.string   "heard_url",       limit: 50
-    t.string   "real_name",       limit: 50
-    t.string   "gender",          limit: 10
+    t.string   "mobile_number", limit: 50
+    t.string   "real_name",     limit: 50
+    t.string   "gender",        limit: 10
     t.integer  "age"
     t.string   "address"
-    t.boolean  "is_wechat_focus"
     t.integer  "level"
     t.integer  "integral"
     t.string   "remark"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.string   "access_token",  limit: 256
+    t.integer  "expires_in"
+    t.string   "refresh_token", limit: 256
+    t.string   "openid",        limit: 256
+    t.string   "scope",         limit: 50
+    t.string   "unionid",       limit: 256
+    t.string   "nickname",      limit: 256
+    t.integer  "sex"
+    t.string   "province",      limit: 50
+    t.string   "city",          limit: 50
+    t.string   "country",       limit: 50
+    t.string   "headimgurl",    limit: 256
+    t.string   "privilege",     limit: 256
   end
 
   create_table "detail_items", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
