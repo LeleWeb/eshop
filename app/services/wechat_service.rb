@@ -100,7 +100,13 @@ class WechatService < BaseService
     state = query_params[:state]
 
     # 通过code换取网页授权access_token
-
+    params = Settings.WECHAT.PAGE_ACCESS_TOKEN.QUERY_PARAMS.as_json
+    params["appid"] = Settings.WECHAT.appid
+    params["secret"] = Settings.WECHAT.secret
+    params["code"] = code
+    res = HttpService.get(Settings.WECHAT.PAGE_ACCESS_TOKEN.URL, params)
+puts '@'*10
+    p res
     # 刷新access_token（如果需要）
 
     # 拉取用户信息(需scope为 snsapi_userinfo)
