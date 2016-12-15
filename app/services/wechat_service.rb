@@ -149,7 +149,7 @@ class WechatService < BaseService
   end
 
   def self.is_response_error?(res)
-    !user_info_res["errcode"].blank? && !user_info_res["errmsg"].blank?
+    !res["errcode"].blank? && !res["errmsg"].blank?
   end
 
 end
