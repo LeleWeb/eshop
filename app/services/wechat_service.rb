@@ -1,3 +1,5 @@
+require 'json'
+
 class WechatService < BaseService
   def get_wechat(wechat_params)
     # 判断是否存必要的参数：signature,timestamp,nonce,echostr
@@ -104,8 +106,8 @@ class WechatService < BaseService
     access_token_params["appid"] = LocalConfig.WECHAT.appid
     access_token_params["secret"] = LocalConfig.WECHAT.secret
     access_token_params["code"] = code
-    access_token_res = HttpService.get(Settings.WECHAT.PAGE_ACCESS_TOKEN.URL,
-                                       access_token_params).as_json
+    access_token_res = JSON.parse(HttpService.get(Settings.WECHAT.PAGE_ACCESS_TOKEN.URL,
+                                                  access_token_params))
     if !access_token_res["errcode"].blank? && !access_token_res["errmsg"].blank?
       return
     end
@@ -123,8 +125,8 @@ class WechatService < BaseService
       user_info_params = Settings.WECHAT.PAGE_ACCESS_TOKEN.GET_USERINFO.QUERY_PARAMS.as_json
       user_info_params["access_token"] = access_token_res["access_token"]
       user_info_params["openid"] = access_token_res["openid"]
-      user_info_res = HttpService.get(Settings.WECHAT.PAGE_ACCESS_TOKEN.GET_USERINFO.URL,
-                                      user_info_params).as_json
+      user_info_res = JSON.parse(HttpService.get(Settings.WECHAT.PAGE_ACCESS_TOKEN.GET_USERINFO.URL,
+                                                 user_info_params))
       p "#"*10
       p user_info_res
     end
