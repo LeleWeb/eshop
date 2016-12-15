@@ -34,6 +34,8 @@ class CustomersService < BaseService
 
   # 微信网页授权登录后本系统customer用户同步方法
   def self.update_customer_by_wechat(auth_res)
+    puts '@'*10
+    p auth_res
     # 查询该用户是否第一次登录
     customer = Customer.find_by(openid: auth_res["openid"])
     if customer.nil?
