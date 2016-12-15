@@ -125,7 +125,7 @@ class WechatService < BaseService
     end
     
     # 微信授权登录成功后本系统自动创建customer
-    #CustomersService.
+    CustomersService.update_customer_by_wechat(auth_res)
 
     # 刷新access_token（如果需要）
     # TODO 暂不需要
@@ -143,10 +143,8 @@ class WechatService < BaseService
       end
 
       # 更新微信用户信息到本地customer记录
-
+      CustomersService.update_customer_by_wechat(user_info_res)
     end
-
-
 
   end
 

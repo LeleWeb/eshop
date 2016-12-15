@@ -32,4 +32,17 @@ class CustomersService < BaseService
     CommonService.response_format(ResponseCode.COMMON.OK)
   end
 
+  # 微信网页授权登录后本系统customer用户同步方法
+  def self.update_customer_by_wechat(auth_res)
+    # 查询该用户是否第一次登录
+    customer = Customer.find_by(openid: auth_res["openid"])
+    if customer.nil?
+      # 创建customer
+      Account.create(type: "customer").create_customer(auth_res)
+    else
+      # 更新customer
+      customer.update(auth_res)
+    end
+  end
+
 end
