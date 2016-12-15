@@ -37,8 +37,13 @@ class CustomersService < BaseService
     # 查询该用户是否第一次登录
     customer = Customer.find_by(openid: access_token["openid"])
     if customer.nil?
+      account = Account.create(uuid: SecureRandom.hex)
+      puts '4'*10
+      p account
       # 创建customer
-      customer = Account.create(uuid: SecureRandom.hex).create_customer(access_token)
+      customer = account.create_customer(access_token)
+      puts '5'*10
+      p customer
     else
       # 更新customer
       customer.update(access_token)
