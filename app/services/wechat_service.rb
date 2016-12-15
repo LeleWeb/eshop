@@ -113,6 +113,7 @@ class WechatService < BaseService
     # 刷新access_token（如果需要）
     # TODO 暂不需要
 
+    p "$"*10
     # 拉取用户信息(需scope为 snsapi_userinfo)
     if access_token_res["scope"] == Settings.WECHAT.PAGE_ACCESS_TOKEN.SCOPE.snsapi_userinfo
       user_info_params = Settings.WECHAT.PAGE_ACCESS_TOKEN.GET_USERINFO.QUERY_PARAMS.as_json
@@ -120,8 +121,8 @@ class WechatService < BaseService
       user_info_params["openid"] = access_token_res["openid"]
       user_info_res = HttpService.get(Settings.WECHAT.PAGE_ACCESS_TOKEN.GET_USERINFO.URL,
                                       user_info_params)
-      puts "#"*10
-      puts user_info_res
+      p "#"*10
+      p user_info_res
     end
 
     # 检验授权凭证（access_token）是否有效
