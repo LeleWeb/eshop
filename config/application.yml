@@ -14,6 +14,18 @@ defaults: &defaults
   WECHAT:
     # 通过code换取网页授权access_token
     PAGE_ACCESS_TOKEN:
+      # 拉取用户信息(需scope为 snsapi_userinfo)
+      GET_USERINFO:
+        URL: "https://api.weixin.qq.com/sns/userinfo"
+        QUERY_PARAMS:
+          access_token: ""
+          openid: ""
+          lang: "zh_CN"
+
+      SCOPE:
+        snsapi_userinfo: "snsapi_userinfo"
+        snsapi_base: "snsapi_base"
+
       URL: "https://api.weixin.qq.com/sns/oauth2/access_token"
       QUERY_PARAMS:
         appid: ""

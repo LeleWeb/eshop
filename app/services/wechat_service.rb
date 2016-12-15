@@ -100,16 +100,29 @@ class WechatService < BaseService
     state = query_params[:state]
 
     # 通过code换取网页授权access_token
-    params = Settings.WECHAT.PAGE_ACCESS_TOKEN.QUERY_PARAMS.as_json
-    params["appid"] = LocalConfig.WECHAT.appid
-    params["secret"] = LocalConfig.WECHAT.secret
-    params["code"] = code
-    res = HttpService.get(Settings.WECHAT.PAGE_ACCESS_TOKEN.URL, params)
-puts '@'*10
-    p res
+    access_token_params = Settings.WECHAT.PAGE_ACCESS_TOKEN.QUERY_PARAMS.as_json
+    access_token_params["appid"] = LocalConfig.WECHAT.appid
+    access_token_params["secret"] = LocalConfig.WECHAT.secret
+    access_token_params["code"] = code
+    access_token_res = HttpService.get(Settings.WECHAT.PAGE_ACCESS_TOKEN.URL,
+                                       access_token_params)
+
+    # 微信授权登录成功后本系统自动创建customer
+    #CustomersService.
+
     # 刷新access_token（如果需要）
+    # TODO 暂不需要
 
     # 拉取用户信息(需scope为 snsapi_userinfo)
+    if access_token_res["scope"] == Settings.WECHAT.PAGE_ACCESS_TOKEN.snsapi_userinfo
+      user_info_params = Settings.WECHAT.PAGE_ACCESS_TOKEN.GET_USERINFO.QUERY_PARAMS.as_json
+      user_info_params["access_token"] = access_token_res["access_token"]
+      user_info_params["openid"] = access_token_res["openid"]
+      user_info_res = HttpService.get(Settings.WECHAT.PAGE_ACCESS_TOKEN.GET_USERINFO.URL,
+                                      user_info_params)
+      puts "#"*10
+      puts user_info_res
+    end
 
     # 检验授权凭证（access_token）是否有效
 
