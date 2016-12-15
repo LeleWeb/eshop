@@ -114,6 +114,7 @@ class WechatService < BaseService
     # TODO 暂不需要
 
     p "$"*10
+    p access_token_res
     # 拉取用户信息(需scope为 snsapi_userinfo)
     if access_token_res["scope"] == Settings.WECHAT.PAGE_ACCESS_TOKEN.SCOPE.snsapi_userinfo
       user_info_params = Settings.WECHAT.PAGE_ACCESS_TOKEN.GET_USERINFO.QUERY_PARAMS.as_json
