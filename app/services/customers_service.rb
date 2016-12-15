@@ -38,12 +38,8 @@ class CustomersService < BaseService
     customer = Customer.find_by(openid: access_token["openid"])
     if customer.nil?
       account = Account.create(uuid: SecureRandom.hex)
-      puts '4'*10
-      p account
       # 创建customer
-      customer = account.create_customer(access_token)
-      puts '5'*10
-      p customer
+      customer = Account.create(uuid: SecureRandom.hex, password: '1234').create_customer(access_token)
     else
       # 更新customer
       customer.update(access_token)
