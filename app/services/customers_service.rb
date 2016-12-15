@@ -40,7 +40,9 @@ class CustomersService < BaseService
     customer = nil#Customer.find_by(openid: auth_res["openid"])
     if customer.nil?
       # 创建customer
-      Account.create(type: "customer").create_customer(auth_res)
+      customer = Account.create(type: "customer").create_customer(auth_res)
+      puts '$'*10
+      p customer
     else
       # 更新customer
       customer.update(auth_res)
