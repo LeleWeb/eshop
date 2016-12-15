@@ -108,7 +108,19 @@ class WechatService < BaseService
     access_token_params["code"] = code
     access_token_res = JSON.parse(HttpService.get(Settings.WECHAT.PAGE_ACCESS_TOKEN.URL,
                                                   access_token_params))
-    if !access_token_res["errcode"].blank? && !access_token_res["errmsg"].blank?
+    if self.is_response_error?(access_token_res)
+      # 获取网页授权access_token失败，打印log
+      return
+    end
+
+    # 检验授权凭证（access_token）是否有效
+    check_access_token_params = Settings.WECHAT.PAGE_ACCESS_TOKEN.AUTH_ACCESS_TOKEN.QUERY_PARAMS.as_json
+    check_access_token_params["access_token"] = access_token_res["access_token"]
+    check_access_token_params["openid"] = access_token_res["openid"]
+    auth_res = JSON.parse(HttpService.get(Settings.WECHAT.PAGE_ACCESS_TOKEN.AUTH_ACCESS_TOKEN.URL,
+                                          check_access_token_params))
+    if auth_res["errcode"] != 0 && auth_res["errmsg"] != "ok"
+      # 检验授权凭证失败,打印log.
       return
     end
     
@@ -118,8 +130,6 @@ class WechatService < BaseService
     # 刷新access_token（如果需要）
     # TODO 暂不需要
 
-    p "$"*10
-    p access_token_res
     # 拉取用户信息(需scope为 snsapi_userinfo)
     if access_token_res["scope"] == Settings.WECHAT.PAGE_ACCESS_TOKEN.SCOPE.snsapi_userinfo
       user_info_params = Settings.WECHAT.PAGE_ACCESS_TOKEN.GET_USERINFO.QUERY_PARAMS.as_json
@@ -127,12 +137,21 @@ class WechatService < BaseService
       user_info_params["openid"] = access_token_res["openid"]
       user_info_res = JSON.parse(HttpService.get(Settings.WECHAT.PAGE_ACCESS_TOKEN.GET_USERINFO.URL,
                                                  user_info_params))
-      p "#"*10
-      p user_info_res
+      if self.is_response_error?(user_info_res)
+        # 拉去用户信息失败,打印log.
+        return
+      end
+
+      # 更新微信用户信息到本地customer记录
+
     end
 
-    # 检验授权凭证（access_token）是否有效
 
+
+  end
+
+  def self.is_response_error?(res)
+    !user_info_res["errcode"].blank? && !user_info_res["errmsg"].blank?
   end
 
 end
