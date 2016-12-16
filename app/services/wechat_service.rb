@@ -177,7 +177,7 @@ class WechatService < BaseService
     params.each do |key, value|
       if key != "detail"
         temp = root_ele.add_element(key)
-        temp.add_text(value)
+        temp.add_text(value.to_s)
       else
 
       end
