@@ -48,35 +48,26 @@ class WechatService < BaseService
 
     # 参数组织为xml格式
     xml_params = self.convert_unifiedorder_params_to_xml(params)
-    puts '@'*10
-    puts xml_params
+    xml_params
   end
   
   # 
   def self.generate_sign(params)
     #
-    puts "9"*10
-    p params
     sort_params = params.select {|k, v| !v.blank? }.sort_by {|_key, value| _key}.to_h
-    puts "8"*10
-    p sort_params
+
     #
     stringA = ""
     sort_params.each do |k, v|
       stringA += "#{k}=#{v}&"
     end
     stringA = stringA.gsub(/&$/,'')
-    puts "7"*10
-    p stringA
+
     #
     string_key = stringA+"&key=#{LocalConfig.WECHAT.PAY.sign_key}"
-    puts "6"*10
-    p string_key
 
     stringSignTemp = Digest::MD5.hexdigest(string_key)
     signValue = stringSignTemp.upcase
-    puts "5"*10
-    p signValue
     signValue
   end
 
@@ -84,8 +75,6 @@ class WechatService < BaseService
   def self.generate_detail(order)
     list = []
     order.order_details.each do |detail|
-      puts "$"*10
-      p detail
       product = detail.product
       data = LocalConfig.WECHAT.PAY.unifiedorder_product_details.as_json
       data["goods_id"] = product.uuid#product_number
