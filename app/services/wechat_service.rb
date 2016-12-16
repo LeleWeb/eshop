@@ -69,7 +69,7 @@ class WechatService < BaseService
     puts "7"*10
     p stringA
     #
-    stringSignTemp = Digest::MD5.hexdigest(stringA+"&key=#{Settings.WECHAT.PAY.sign_key}")
+    stringSignTemp = Digest::MD5.hexdigest(stringA+"&key=#{LocalConfig.WECHAT.PAY.sign_key}")
     signValue = stringSignTemp.upcase
     puts "6"*10
     p stringA
