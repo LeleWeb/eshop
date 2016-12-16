@@ -38,7 +38,7 @@ class WechatService < BaseService
     # 组织统一下单参数
     params = LocalConfig.WECHAT.PAY.unifiedorder.as_json
     params['nonce_str'] = SecureRandom.hex
-    params['detail']['goods_detail'] = generate_detail(order)
+    # params['detail']['goods_detail'] = generate_detail(order)
     params['out_trade_no'] = order.order_number
     params['total_fee'] = self.convert_yuan_fen(order.pay_price)
     # params['time_start'] = order.time_start
@@ -69,10 +69,14 @@ class WechatService < BaseService
     puts "7"*10
     p stringA
     #
-    stringSignTemp = Digest::MD5.hexdigest(stringA+"&key=#{LocalConfig.WECHAT.PAY.sign_key}")
-    signValue = stringSignTemp.upcase
+    string_key = stringA+"&key=#{LocalConfig.WECHAT.PAY.sign_key}"
     puts "6"*10
-    p stringA
+    p string_key
+
+    stringSignTemp = Digest::MD5.hexdigest(string_key)
+    signValue = stringSignTemp.upcase
+    puts "5"*10
+    p signValue
     signValue
   end
 
