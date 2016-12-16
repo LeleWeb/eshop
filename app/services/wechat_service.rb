@@ -38,7 +38,7 @@ class WechatService < BaseService
     # 组织统一下单参数
     params = LocalConfig.WECHAT.PAY.unifiedorder.as_json
     params['nonce_str'] = SecureRandom.hex
-    params['detail'] = generate_detail(order)
+    params['detail']['goods_detail'] = generate_detail(order)
     params['out_trade_no'] = order.order_number
     params['total_fee'] = self.convert_yuan_fen(order.pay_price)
     # params['time_start'] = order.time_start
@@ -182,10 +182,10 @@ class WechatService < BaseService
         puts "q"*10
         p key
         p value
-        detail_cdata = ""
+        detail_cdata = ''
         CData.new(value.inspect).write(detail_cdata)
         temp = root_ele.add_element(key)
-        temp.add_text(detail_cdata)
+        temp.add_text(detail_cdata.gsub('&lt;','<').gsub('&gt','>').gsub('&quot;','"'))
       end
     end
     root_ele.to_s
