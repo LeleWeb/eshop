@@ -79,7 +79,7 @@ class WechatService < BaseService
       data["goods_name"] = product.name
       data["quantity"] = detail.quantity
       data["price"] = self.convert_yuan_fen(detail.price)
-    list << collect_goods_detail(product)
+    list << data
     end
     list
   end
@@ -157,6 +157,10 @@ class WechatService < BaseService
 
   def self.get_wx_openid(order)
     eval(order.buyer_type).find(order.buyer_id).openid
+  end
+
+  def self.collect_goods_detail(product)
+    
   end
 
   def self.convert_unifiedorder_params_to_xml(params)
