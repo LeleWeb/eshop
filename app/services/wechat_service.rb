@@ -55,20 +55,25 @@ class WechatService < BaseService
   # 
   def self.generate_sign(params)
     #
-    puts "%"*10
-    p params, params.select {|k,v| v != ""}
-    sort_params = params.select {|k,v| !v.blank? }.sort_by {|_key, value| value}.to_h
-
+    puts "9"*10
+    p params
+    sort_params = params.select {|k, v| !v.blank? }.sort_by {|_key, value| _key}.to_h
+    puts "8"*10
+    p sort_params
     #
     stringA = ""
     sort_params.each do |k, v|
       stringA += "#{k}=#{v}&"
     end
     stringA = stringA.gsub(/&$/,'')
-
+    puts "7"*10
+    p stringA
     #
     stringSignTemp = Digest::MD5.hexdigest(stringA+"&key=#{Settings.WECHAT.PAY.sign_key}")
     signValue = stringSignTemp.upcase
+    puts "6"*10
+    p stringA
+    signValue
   end
 
   # 获取订单商品列表
