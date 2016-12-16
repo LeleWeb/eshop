@@ -15,6 +15,8 @@ class OrdersService < BaseService
     order_params[:time_start] = Time.now.strftime("%Y%m%d%H%M%S")
     order_params[:time_expire] = (Time.now + Settings.ORDER.EXPIRE_TIME.to_i).strftime("%Y%m%d%H%M%S")
     order = buyer.orders.create(order_params)
+    # 暂时设置实际支付订单为订单总额
+    order.update(pay_price: order.total_price)
 
     # 生成对应的订单详情项
     details.each do |detail|
