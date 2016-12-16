@@ -1,4 +1,6 @@
 require 'json'
+require 'rexml/document'
+include REXML
 
 class WechatService < BaseService
   def get_wechat(wechat_params)
@@ -41,13 +43,13 @@ class WechatService < BaseService
     params['total_fee'] = self.convert_yuan_fen(order.pay_price)
     params['time_start'] = order.time_start
     params['time_expire'] = order.time_expire
-    params['openid'] = ""
+    params['openid'] = self.get_wx_openid(order)
     params['sign'] = self.generate_sign(params)
 
     # 参数组织为xml格式
-    xml_params = self.convert_hash_to_xml(params)
-
-
+    xml_params = self.convert_unifiedorder_params_to_xml(params)
+    puts '@'*10
+    p xml_params
   end
   
   # 
@@ -108,8 +110,6 @@ class WechatService < BaseService
     access_token_params["code"] = code
     access_token_res = JSON.parse(HttpService.get(Settings.WECHAT.PAGE_ACCESS_TOKEN.URL,
                                                   access_token_params))
-    puts '1'*10
-    p access_token_res
     if self.is_response_error?(access_token_res)
       # 获取网页授权access_token失败，打印log
       return
@@ -121,15 +121,12 @@ class WechatService < BaseService
     check_access_token_params["openid"] = access_token_res["openid"]
     auth_res = JSON.parse(HttpService.get(Settings.WECHAT.PAGE_ACCESS_TOKEN.AUTH_ACCESS_TOKEN.URL,
                                           check_access_token_params))
-    puts '2'*10
-    p auth_res
     if auth_res["errcode"] != 0 && auth_res["errmsg"] != "ok"
       # 检验授权凭证失败,打印log.
       return
     end
     
     # 微信授权登录成功后本系统自动创建customer
-    customer= nil
     customer = CustomersService.update_customer_by_wechat(access_token_res)
 
     # 刷新access_token（如果需要）
@@ -142,8 +139,6 @@ class WechatService < BaseService
       user_info_params["openid"] = access_token_res["openid"]
       user_info_res = JSON.parse(HttpService.get(Settings.WECHAT.PAGE_ACCESS_TOKEN.GET_USERINFO.URL,
                                                  user_info_params))
-      puts '3'*10
-      p user_info_res
       if self.is_response_error?(user_info_res)
         # 拉去用户信息失败,打印log.
         return
@@ -158,6 +153,23 @@ class WechatService < BaseService
 
   def self.is_response_error?(res)
     !res["errcode"].blank? && !res["errmsg"].blank?
+  end
+
+  def self.get_wx_openid(order)
+    eval(order.buyer_type).find(order.buyer_id).openid
+  end
+
+  def self.convert_unifiedorder_params_to_xml(params)
+    root_ele = Element.new 'xml'
+    params.each do |key, value|
+      if key != "detail"
+        temp = root_ele.add_element(key)
+        temp.add_text(value)
+      else
+
+      end
+    end
+    root_ele.to_s
   end
 
 end
