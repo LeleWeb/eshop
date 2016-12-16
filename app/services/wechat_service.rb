@@ -185,10 +185,10 @@ class WechatService < BaseService
         detail_cdata = ''
         CData.new(value.inspect).write(detail_cdata)
         temp = root_ele.add_element(key)
-        temp.add_text(detail_cdata.gsub('&lt;','<').gsub('&gt','>').gsub('&quot;','"'))
+        temp.add_text(detail_cdata)
       end
     end
-    root_ele.to_s
+    root_ele.to_s.gsub('&lt;','<').gsub('&gt','>').gsub('&quot;','"')
   end
 
 end
