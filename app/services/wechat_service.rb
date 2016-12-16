@@ -75,7 +75,7 @@ class WechatService < BaseService
     order.order_details.each do |detail|
       product = detail.product
       data = LocalConfig.WECHAT.PAY.unifiedorder_product_details.as_json
-      data["goods_id"] = product.product_number
+      data["goods_id"] = product.uuid#product_number
       data["goods_name"] = product.name
       data["quantity"] = detail.quantity
       data["price"] = self.convert_yuan_fen(detail.price)
