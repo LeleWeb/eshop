@@ -73,6 +73,8 @@ class WechatService < BaseService
   def self.generate_detail(order)
     list = []
     order.order_details.each do |detail|
+      puts "$"*10
+      p detail
       product = detail.product
       data = LocalConfig.WECHAT.PAY.unifiedorder_product_details.as_json
       data["goods_id"] = product.uuid#product_number
