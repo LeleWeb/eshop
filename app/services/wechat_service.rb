@@ -180,7 +180,7 @@ class WechatService < BaseService
         temp.add_text(value.to_s)
       else
         detail_cdata = ""
-        CData.new(value).write(detail_cdata)
+        CData.new(value.to_s).write(detail_cdata)
         temp = root_ele.add_element(key)
         temp.add_text(detail_cdata)
       end
