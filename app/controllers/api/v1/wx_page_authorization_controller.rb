@@ -5,7 +5,7 @@ class Api::V1::WxPageAuthorizationController < ApplicationController
   def index
     # 公众号网页授权后重定向的回调链接地址
     account = WechatService.get_wx_page_authorization_userinfo(@query_params)
-    redirect_to LocalConfig.DOMAIN + "?id=#{account.id}&token=#{account.authentication_token}"
+    redirect_to "http://www.yiyunma.com" + "?id=#{account.id}&token=#{account.authentication_token}"
   end
 
   private
