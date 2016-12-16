@@ -24,7 +24,9 @@ class OrdersService < BaseService
     end
 
     # 调用微信统一接口,生成预付订单.
-    WechatService.create_unifiedorder(order)
+    xml_params = WechatService.create_unifiedorder(order)
+    puts '1'*10
+    puts xml_params
 
     CommonService.response_format(ResponseCode.COMMON.OK, order)
   end
