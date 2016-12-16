@@ -55,6 +55,8 @@ class WechatService < BaseService
   # 
   def self.generate_sign(params)
     #
+    puts "%"*10
+    p params, params.select {|k,v| v != ""}
     sort_params = params.select {|k,v| v != ""}.sort_by {|_key, value| value}.to_h
 
     #
