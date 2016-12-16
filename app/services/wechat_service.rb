@@ -88,7 +88,7 @@ class WechatService < BaseService
       data["goods_name"] = product.name
       data["quantity"] = detail.quantity
       data["price"] = self.convert_yuan_fen(detail.price)
-    list << data
+    list << data.to_json
     end
     list
   end
