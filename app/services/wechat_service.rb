@@ -36,15 +36,15 @@ class WechatService < BaseService
   # 微信统一下单接口
   def self.create_unifiedorder(order)
     # 组织统一下单参数
-    params = {}#LocalConfig.WECHAT.PAY.unifiedorder.as_json
-    params[LocalConfig.WECHAT.PAY.unifiedorder.nonce_str.KEY] = SecureRandom.hex
-    params[LocalConfig.WECHAT.PAY.unifiedorder.detail.KEY] = generate_detail(order)
-    params[LocalConfig.WECHAT.PAY.unifiedorder.out_trade_no.KEY] = order.order_number
-    params[LocalConfig.WECHAT.PAY.unifiedorder.total_fee.KEY] = self.convert_yuan_fen(order.pay_price)
-    # params[LocalConfig.WECHAT.PAY.unifiedorder.time_start.KEY] = order.time_start
-    # params[LocalConfig.WECHAT.PAY.unifiedorder.time_expire.KEY] = order.time_expire
-    params[LocalConfig.WECHAT.PAY.unifiedorder.openid.KEY] = self.get_wx_openid(order)
-    params[LocalConfig.WECHAT.PAY.unifiedorder.sign.KEY] = self.generate_sign(params)
+    params = LocalConfig.WECHAT.PAY.unifiedorder.as_json
+    params['nonce_str'] = SecureRandom.hex
+    params['detail'] = generate_detail(order)
+    params['out_trade_no'] = order.order_number
+    params['total_fee'] = self.convert_yuan_fen(order.pay_price)
+    # params['time_start'] = order.time_start
+    # params['time_expire'] = order.time_expire
+    params['openid'] = self.get_wx_openid(order)
+    params['sign'] = self.generate_sign(params)
 
     # 参数组织为xml格式
     xml_params = self.convert_unifiedorder_params_to_xml(params)
