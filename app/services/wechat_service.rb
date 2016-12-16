@@ -179,6 +179,9 @@ class WechatService < BaseService
         temp = root_ele.add_element(key)
         temp.add_text(value.to_s)
       else
+        puts "q"*10
+        p key
+        p value
         detail_cdata = ""
         CData.new(value.to_s).write(detail_cdata)
         temp = root_ele.add_element(key)
