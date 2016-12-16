@@ -183,7 +183,7 @@ class WechatService < BaseService
         p key
         p value
         detail_cdata = ""
-        CData.new(value.to_s).write(detail_cdata)
+        CData.new(value.inspect).write(detail_cdata)
         temp = root_ele.add_element(key)
         temp.add_text(detail_cdata)
       end
