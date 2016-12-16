@@ -49,7 +49,7 @@ class WechatService < BaseService
     # 参数组织为xml格式
     xml_params = self.convert_unifiedorder_params_to_xml(params)
     puts '@'*10
-    p xml_params
+    puts xml_params
   end
   
   # 
@@ -179,9 +179,6 @@ class WechatService < BaseService
         temp = root_ele.add_element(key)
         temp.add_text(value.to_s)
       else
-        puts "q"*10
-        p key
-        p value
         detail_cdata = ''
         CData.new(value.inspect).write(detail_cdata)
         temp = root_ele.add_element(key)
