@@ -88,7 +88,7 @@ class WechatService < BaseService
       data["goods_name"] = product.name
       data["quantity"] = detail.quantity
       data["price"] = self.convert_yuan_fen(detail.price)
-    list << data.to_json
+    list << data
     end
     list
   end
@@ -180,7 +180,7 @@ class WechatService < BaseService
         temp.add_text(value.to_s)
       else
         detail_cdata = ''
-        CData.new(value.inspect).write(detail_cdata)
+        CData.new(value.to_json).write(detail_cdata)
         temp = root_ele.add_element(key)
         temp.add_text(detail_cdata)
       end
