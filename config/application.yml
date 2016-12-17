@@ -1,5 +1,12 @@
 # config/application.yml
 defaults: &defaults
+  # http header设置
+  REQUEST_HEADERS:
+    CONTENT_TYPE_KEY: "Content-Type"
+    CONTENT_TYPE_VALUE:
+      JSON: "application/json"
+      XML: "application/xml"
+
   # 订单状态
   ORDER:
     STATUS:

@@ -48,16 +48,19 @@ class WechatService < BaseService
 
     # 参数组织为xml格式
     xml_params = self.convert_unifiedorder_params_to_xml(params)
+    puts '1'*10
+    puts xml_params
 
-    # # 发送统一下单请求
-    # req_headers = [
-    #                 {:key => Settings.REQUEST_HEADERS.CONTENT_TYPE_KEY, :value => Settings.REQUEST_HEADERS.CONTENT_TYPE_VALUE.XML}
-    #               ]
-    # HttpService.post(Settings.WECHAT.UNIFIEDORDER_URL,
-    #                  xml_params,
-    #                  req_headers)
+    # 发送统一下单请求
+    req_headers = [
+                    {:key => Settings.REQUEST_HEADERS.CONTENT_TYPE_KEY, :value => Settings.REQUEST_HEADERS.CONTENT_TYPE_VALUE.XML}
+                  ]
+    res = HttpService.post(Settings.WECHAT.UNIFIEDORDER_URL,
+                           xml_params,
+                           req_headers)
 
-    xml_params
+    puts '2'*10
+    puts res
   end
   
   # 
