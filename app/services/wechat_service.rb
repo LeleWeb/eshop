@@ -215,12 +215,12 @@ class WechatService < BaseService
   def self.generate_jsapi_params(prepay_res)
     signature_params = Settings.WECHAT.JSAPI_PAY_SIGNATURE_PARAMS.as_json
     signature_params["jsapi_ticket"] = self.get_jsapi_ticket
-    puts "#"*10
-    p signature_params["jsapi_ticket"]
     signature_params["url"] = "http://www.yiyunma.com/"
     signature_params["timestamp"] = self.generate_timeStamp/1000
     signature_params["noncestr"] = self.generate_nonce_str
     signature = self.generate_jsapi_sign(signature_params)
+    puts "#"*10
+    p signature_params
 
     data = {}
     data["appid"] = prepay_res["appid"]
@@ -245,6 +245,8 @@ class WechatService < BaseService
     temp_access_token = "f3Tt9L2KzR8dKFHtAsbGimYKoiGODG7tuHvz2RJX7dmRc7Rf3e-iFkhrorPu6RUrim4KBUNFFuQXXvQnhjNrvyA7jvVtAhyQr6YazsQpT2YDOUdAFAXIO"
     req_params = {"access_token" => temp_access_token, "type" => "jsapi"}
     res = HttpService.get("https://api.weixin.qq.com/cgi-bin/ticket/getticket", req_params)
+    puts '*'*10
+    p res
     if res["errcode"] == 0 && res["errmsg"] == "ok"
       return res["ticket"]
     end
