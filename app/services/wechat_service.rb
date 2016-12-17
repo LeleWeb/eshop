@@ -225,12 +225,12 @@ class WechatService < BaseService
     # p signature_params
 
     data = {}
-    data["appid"] = prepay_res["appid"]
-    data["timestamp"] = temp_time
-    data["noncestr"] = temp_str
+    data["appId"] = prepay_res["appid"]
+    data["timeStamp"] = temp_time
+    data["nonceStr"] = temp_str
     data["package"] = "prepay_id=#{prepay_res["prepay_id"]}"
-    data["signtype"] = "SHA1"
-    data["paysign"] = self.generate_sign(data, "Digest::SHA1")#signature
+    data["signType"] = "SHA1"
+    data["paySign"] = self.generate_sign(data, "Digest::SHA1")#signature
     #data["jsapi_ticket"] = signature_params["jsapi_ticket"]
     data
   end
