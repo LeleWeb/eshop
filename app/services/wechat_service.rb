@@ -61,7 +61,7 @@ class WechatService < BaseService
                            req_headers)
 
     # 统一支付接口调用返回xml结果转换为hash
-    res_hash = Hash.from_xml(res_xml)
+    res_hash = Hash.from_xml(res_xml)["xml"]
     puts '2'*10
     puts res_hash
 
