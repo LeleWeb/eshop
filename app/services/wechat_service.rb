@@ -207,13 +207,19 @@ class WechatService < BaseService
   end
 
   def self.generate_jsapi_params(prepay_res)
-    data = Settings.WECHAT.JSAPI_PARAMS.as_json
-    data["appId"] = prepay_res["appid"]
-    data["timeStamp"] = self.generate_timeStamp/1000
-    data["nonceStr"] = self.generate_nonce_str
+    signature_params = Settings.WECHAT.JSAPI_PAY_SIGNATURE_PARAMS.as_json
+    signature_params["jsapi_ticket"] = self.get_jsapi_ticket
+    signature_params["url"] = "http://www.yiyunma.com/"
+    signature_params["timestamp"] = self.generate_timeStamp/1000
+    signature_params["noncestr"] = self.generate_nonce_str
+    signature = self.generate_jsapi_sign(signature_params)
+
+    data["appid"] = prepay_res["appid"]
+    data["timestamp"] = self.generate_timeStamp/1000
+    data["noncestr"] = self.generate_nonce_str
     data["package"] = "prepay_id=#{prepay_res["prepay_id"]}"
-    data["signType"] = "SHA1"
-    data["paySign"] = self.generate_sign(data, encrypt_type="Digest::SHA1")
+    data["signtype"] = "SHA1"
+    data["paysign"] = signature
     data
   end
 
@@ -224,6 +230,31 @@ class WechatService < BaseService
   # 生成32位随机字符串
   def self.generate_nonce_str
     SecureRandom.hex
+  end
+
+  def self.get_jsapi_ticket
+    temp_access_token = "f3Tt9L2KzR8dKFHtAsbGimYKoiGODG7tuHvz2RJX7dmRc7Rf3e-iFkhrorPu6RUrim4KBUNFFuQXXvQnhjNrvyA7jvVtAhyQr6YazsQpT2YDOUdAFAXIO"
+    req_params = {"access_token" => temp_access_token, "type" => "jsapi"}
+    res = HttpService.get("https://api.weixin.qq.com/cgi-bin/ticket/getticket", req_params)
+    if res["errcode"] == 0 && res["errmsg"] == "ok"
+      return res["ticket"]
+    end
+  end
+
+  #
+  def self.generate_jsapi_sign(params, encrypt_type="Digest::SHA1")
+    #
+    sort_params = params.select {|k, v| !v.blank? }.sort_by {|_key, value| _key}.to_h
+
+    #
+    stringA = ""
+    sort_params.each do |k, v|
+      stringA += "#{k.downcase}=#{v}&"
+    end
+    stringA = stringA.gsub(/&$/,'')
+
+    stringSignTemp = eval(encrypt_type).hexdigest(stringA)
+    stringSignTemp
   end
 
 end

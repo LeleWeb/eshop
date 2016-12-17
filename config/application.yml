@@ -74,13 +74,11 @@ defaults: &defaults
     UNIFIEDORDER_URL: "https://api.mch.weixin.qq.com/pay/unifiedorder"
 
     # 网页端调起支付API请求参数
-    JSAPI_PARAMS:
-      appId: ""
-      timeStamp: ""
-      nonceStr: ""
-      package: ""
-      signType: ""
-      paySign: ""
+    JSAPI_PAY_SIGNATURE_PARAMS:
+      jsapi_ticket: ""
+      url: ""
+      timestamp: ""
+      noncestr: ""
 
   # 系统图片分类定义
   PICTURES_CATEGORY:

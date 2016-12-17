@@ -26,7 +26,7 @@ class OrdersService < BaseService
     # 调用微信统一接口,生成预付订单.
     res = WechatService.create_unifiedorder(order)
 
-    CommonService.response_format(ResponseCode.COMMON.OK, order)
+    CommonService.response_format(ResponseCode.COMMON.OK, {"order" => order, "prepay_data" => res)
   end
 
   def update_order(order, order_params)
