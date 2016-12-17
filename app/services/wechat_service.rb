@@ -220,6 +220,7 @@ class WechatService < BaseService
     signature_params["noncestr"] = self.generate_nonce_str
     signature = self.generate_jsapi_sign(signature_params)
 
+    data = {}
     data["appid"] = prepay_res["appid"]
     data["timestamp"] = self.generate_timeStamp/1000
     data["noncestr"] = self.generate_nonce_str
