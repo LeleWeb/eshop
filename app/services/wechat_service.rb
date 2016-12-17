@@ -1,4 +1,5 @@
 require 'json'
+require 'digest/sha1'
 require 'rexml/document'
 include REXML
 
@@ -37,7 +38,7 @@ class WechatService < BaseService
   def self.create_unifiedorder(order)
     # 组织统一下单参数
     params = LocalConfig.WECHAT.PAY.unifiedorder.as_json
-    params['nonce_str'] = SecureRandom.hex
+    params['nonce_str'] = self.generate_nonce_str
     # params['detail']['goods_detail'] = generate_detail(order)
     params['out_trade_no'] = order.order_number
     params['total_fee'] = self.convert_yuan_fen(order.pay_price)
@@ -60,17 +61,23 @@ class WechatService < BaseService
                            req_headers)
 
     # 统一支付接口调用返回xml结果转换为hash
-    res_hash = self.convert_xml_to_hash(res_xml)
+    res_hash = Hash.from_xml(res_xml)
+    if res_hash["return_code"] != "SUCCESS" || res_hash["result_code"] != "SUCCESS"
+      return {
+          "return_code" => res_hash["return_code"],
+          "return_msg" => res_hash["return_msg"],
+          "result_code" => res_hash["result_code"],
+          "err_code" => res_hash["err_code"],
+          "err_code_des" => res_hash["err_code_des"],
+      }
+    end
 
     # 网页端调起支付API所需参数生成
-    self.generate_jsapi_params()
-
-    puts '2'*10
-    puts res
+    self.generate_jsapi_params(res_hash)
   end
   
   # 
-  def self.generate_sign(params)
+  def self.generate_sign(params, encrypt_type="Digest::MD5")
     #
     sort_params = params.select {|k, v| !v.blank? }.sort_by {|_key, value| _key}.to_h
 
@@ -84,7 +91,7 @@ class WechatService < BaseService
     #
     string_key = stringA+"&key=#{LocalConfig.WECHAT.PAY.sign_key}"
 
-    stringSignTemp = Digest::MD5.hexdigest(string_key)
+    stringSignTemp = eval(encrypt_type).hexdigest(string_key)
     signValue = stringSignTemp.upcase
     signValue
   end
@@ -199,21 +206,24 @@ class WechatService < BaseService
     root_ele.to_s.gsub('&lt;','<').gsub('&gt','>').gsub('&quot;','"')
   end
 
-  def self.convert_xml_to_hash(xml)
-    hash = Hash.from_xml(xml)
-    puts '$'*10
-    p hash
-    parser = REXML::Parsers::PullParser.new(xml)
-    while parser.has_next?
-      res = parser.next
-      puts '@'*10
-      p res
-      #puts res[1]['att'] if res.start_tag? and res[0] == 'b'
-    end
+  def self.generate_jsapi_params(prepay_res)
+    data = Settings.WECHAT.JSAPI_PARAMS.as_json
+    data["appId"] = prepay_res["appid"]
+    data["timeStamp"] = self.generate_timeStamp/1000
+    data["nonceStr"] = self.generate_nonce_str
+    data["package"] = "prepay_id=#{prepay_res["prepay_id"]}"
+    data["signType"] = "SHA1"
+    data["paySign"] = self.generate_sign(data, encrypt_type="Digest::SHA1")
+    data
   end
 
-  def self.generate_jsapi_params()
-    
+  def self.generate_timeStamp
+    (Time.now.to_datetime.strftime '%Q').to_i
+  end
+
+  # 生成32位随机字符串
+  def self.generate_nonce_str
+    SecureRandom.hex
   end
 
 end
