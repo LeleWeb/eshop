@@ -200,6 +200,9 @@ class WechatService < BaseService
   end
 
   def self.convert_xml_to_hash(xml)
+    hash = Hash.from_xml(xml)
+    puts '$'*10
+    p hash
     parser = REXML::Parsers::PullParser.new(xml)
     while parser.has_next?
       res = parser.next
