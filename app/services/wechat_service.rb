@@ -55,9 +55,15 @@ class WechatService < BaseService
     req_headers = [
                     {:key => Settings.REQUEST_HEADERS.CONTENT_TYPE_KEY, :value => Settings.REQUEST_HEADERS.CONTENT_TYPE_VALUE.XML}
                   ]
-    res = HttpService.post(Settings.WECHAT.UNIFIEDORDER_URL,
+    res_xml = HttpService.post(Settings.WECHAT.UNIFIEDORDER_URL,
                            xml_params,
                            req_headers)
+
+    # 统一支付接口调用返回xml结果转换为hash
+    res_hash = self.convert_xml_to_hash(res_xml)
+
+    # 网页端调起支付API所需参数生成
+    self.generate_jsapi_params()
 
     puts '2'*10
     puts res
@@ -191,6 +197,20 @@ class WechatService < BaseService
       end
     end
     root_ele.to_s.gsub('&lt;','<').gsub('&gt','>').gsub('&quot;','"')
+  end
+
+  def self.convert_xml_to_hash(xml)
+    parser = PullParser.new(xml)
+    while parser.has_next?
+      res = parser.next
+      puts '@'*10
+      p res
+      #puts res[1]['att'] if res.start_tag? and res[0] == 'b'
+    end
+  end
+
+  def self.generate_jsapi_params()
+    
   end
 
 end
