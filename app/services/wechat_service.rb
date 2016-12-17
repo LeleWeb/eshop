@@ -62,6 +62,9 @@ class WechatService < BaseService
 
     # 统一支付接口调用返回xml结果转换为hash
     res_hash = Hash.from_xml(res_xml)
+    puts '2'*10
+    puts xml_params
+
     if res_hash["return_code"] != "SUCCESS" || res_hash["result_code"] != "SUCCESS"
       return {
           "return_code" => res_hash["return_code"],
@@ -73,7 +76,10 @@ class WechatService < BaseService
     end
 
     # 网页端调起支付API所需参数生成
-    self.generate_jsapi_params(res_hash)
+    prepay_data = self.generate_jsapi_params(res_hash)
+    puts '3'*10
+    puts xml_params
+    prepay_data
   end
   
   # 
