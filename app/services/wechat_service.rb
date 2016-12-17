@@ -48,6 +48,15 @@ class WechatService < BaseService
 
     # 参数组织为xml格式
     xml_params = self.convert_unifiedorder_params_to_xml(params)
+
+    # # 发送统一下单请求
+    # req_headers = [
+    #                 {:key => Settings.REQUEST_HEADERS.CONTENT_TYPE_KEY, :value => Settings.REQUEST_HEADERS.CONTENT_TYPE_VALUE.XML}
+    #               ]
+    # HttpService.post(Settings.WECHAT.UNIFIEDORDER_URL,
+    #                  xml_params,
+    #                  req_headers)
+
     xml_params
   end
   
@@ -88,7 +97,7 @@ class WechatService < BaseService
 
   # 微信统一下单接口单价单位为分，此方法负责转换.
   def self.convert_yuan_fen(price)
-    price*100
+    (price*100).to_i
   end
 
   # 根据订单详情计算订单总金额，单位为：分.
