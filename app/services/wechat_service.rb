@@ -264,7 +264,12 @@ class WechatService < BaseService
     end
     stringA = stringA.gsub(/&$/,'')
 
+    puts '+'*10
+    puts stringA
+
     stringSignTemp = eval(encrypt_type).hexdigest(stringA)
+    puts '+1'*10
+    puts stringSignTemp
     stringSignTemp
   end
 
