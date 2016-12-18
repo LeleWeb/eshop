@@ -244,7 +244,7 @@ class WechatService < BaseService
   end
 
   def self.get_jsapi_ticket
-    temp_access_token = "Hjo70r025sMhlciC441bHoTEolHYVJHMCggBinE73UhXTKL6nEtJTmzWk2vk0dk4Y5HD8XZw14YOoQgStelF_Iw7BtjNnvBU3y4FF8qf2YAJKOdAEAZAE"
+    temp_access_token = "KMyV_LFCSONKW3BOzLKilNqa4v9fjKk5t7NuuPUtqiwZNPUBAP5GtJGfJbNVy-4HL57alF1nVzvCS2DzdPTMjAgNFOPKI86Ikw7QKx6UuEU1AcoOJWexqV9hI-C8i0gsPFSeAHAKAN"
     req_params = {"access_token" => temp_access_token, "type" => "jsapi"}
     res = JSON.parse(HttpService.get("https://api.weixin.qq.com/cgi-bin/ticket/getticket", req_params))
     puts '*'*10
