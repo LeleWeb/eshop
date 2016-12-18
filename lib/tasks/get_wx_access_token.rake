@@ -1,4 +1,4 @@
-# require "../../app/services/wechat_service.rb"
+require "../../app/services/wechat_service.rb"
 
 task :get_wx_access_token do
   puts "Hello World!"
