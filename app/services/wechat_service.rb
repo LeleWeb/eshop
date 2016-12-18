@@ -274,5 +274,10 @@ class WechatService < BaseService
     puts stringSignTemp
     stringSignTemp
   end
+  
+  # 获取微信access_token
+  def self.get_access_token
+    puts "hello zw"
+  end
 
 end
