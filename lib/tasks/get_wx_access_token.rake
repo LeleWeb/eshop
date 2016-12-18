@@ -1,4 +1,4 @@
-require "../../app/services/wechat_service.rb"
+require File.expand_path('../../app/services/wechat_service', __FILE__)
 
 task :get_wx_access_token do
   puts "Hello World!"
