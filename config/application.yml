@@ -80,6 +80,14 @@ defaults: &defaults
       timestamp: ""
       noncestr: ""
 
+    # 获取access_token请求及参数
+    ACCESS_TOKEN:
+      URL: "https://api.weixin.qq.com/cgi-bin/token"
+      QUERY_PARAMS:
+        grant_type: "client_credential"
+        appid: ""
+        secret: ""
+
   # 系统图片分类定义
   PICTURES_CATEGORY:
     PRODUCT:

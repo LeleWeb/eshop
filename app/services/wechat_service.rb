@@ -285,7 +285,7 @@ class WechatService < BaseService
     res = JSON.parse(HttpService.get(Settings.WECHAT.ACCESS_TOKEN.URL, query_params))
     if res.key?("access_token") && !res["access_token"].blank?
       # 持久化到数据库
-
+      
     end
   end
 
