@@ -8,6 +8,7 @@ class QrcodeService < BaseService
                            Settings.WECHAT.FOREVER_QRCODE_POST_PARAMS.QRCODE_POST_PARAMS_STR.to_json,
                            req_headers)
     puts "a"*10
+    p req_headers, Settings.WECHAT.CREATE_QRCODE_URL + "?#{WechatService.read_access_token}", Settings.WECHAT.FOREVER_QRCODE_POST_PARAMS.QRCODE_POST_PARAMS_STR.to_json
     puts res
 
     if res.key?("ticket") && !res["ticket"].blank?
