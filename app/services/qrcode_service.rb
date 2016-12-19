@@ -10,16 +10,16 @@ class QrcodeService < BaseService
     puts "0"*10
     puts res
 
-    if res.key?("ticket") && !res["ticket"].blank?
-      # 通过ticket换取二维码
-      # HTTP GET请求（请使用https协议）https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=TICKET提醒：TICKET记得进行UrlEncode
-      query_parmas = Settings.WECHAT.SHOW_QRCODE.QUERY_PARAMS.as_json
-      query_parmas["ticket"] = res["ticket"]
-      res = HttpService.get(Settings.WECHAT.SHOW_QRCODE.URL, query_parmas)
-      puts "1"*10
-      p res
-      res
-    end
+    # if res.key?("ticket") && !res["ticket"].blank?
+    #   # 通过ticket换取二维码
+    #   # HTTP GET请求（请使用https协议）https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=TICKET提醒：TICKET记得进行UrlEncode
+    #   query_parmas = Settings.WECHAT.SHOW_QRCODE.QUERY_PARAMS.as_json
+    #   query_parmas["ticket"] = res["ticket"]
+    #   res = HttpService.get(Settings.WECHAT.SHOW_QRCODE.URL, query_parmas)
+    #   puts "1"*10
+    #   p res
+    #   res
+    # end
   end
 
 end
