@@ -216,7 +216,7 @@ class WechatService < BaseService
     temp_time = self.generate_timeStamp/1000
     temp_str = self.generate_nonce_str
     signature_params = {}#Settings.WECHAT.JSAPI_PAY_SIGNATURE_PARAMS.as_json
-    signature_params["jsapi_ticket"] = self.get_jsapi_ticket
+    signature_params["jsapi_ticket"] = self.read_jsapi_ticket
     signature_params["url"] = "http://www.yiyunma.com/"
     signature_params["timestamp"] = temp_time
     signature_params["noncestr"] = temp_str
@@ -243,17 +243,6 @@ class WechatService < BaseService
     SecureRandom.hex
   end
 
-  def self.get_jsapi_ticket
-    # temp_access_token = "KMyV_LFCSONKW3BOzLKilNqa4v9fjKk5t7NuuPUtqiwZNPUBAP5GtJGfJbNVy-4HL57alF1nVzvCS2DzdPTMjAgNFOPKI86Ikw7QKx6UuEU1AcoOJWexqV9hI-C8i0gsPFSeAHAKAN"
-    req_params = {"access_token" => self.read_access_token, "type" => "jsapi"}
-    res = JSON.parse(HttpService.get("https://api.weixin.qq.com/cgi-bin/ticket/getticket", req_params))
-    puts '*'*10
-    p res
-    if res["errcode"] == 0 && res["errmsg"] == "ok"
-      return res["ticket"]
-    end
-  end
-
   #
   def self.generate_jsapi_sign(params, encrypt_type="Digest::SHA1")
     #
@@ -277,7 +266,6 @@ class WechatService < BaseService
   
   # 获取微信access_token
   def self.update_access_token
-    puts "hello zw"
     #
     query_params = Settings.WECHAT.ACCESS_TOKEN.QUERY_PARAMS.as_json
     query_params["appid"] = LocalConfig.WECHAT.appid
@@ -292,6 +280,26 @@ class WechatService < BaseService
   # 读取有效的本地暂存access_token
   def self.read_access_token
     storage = SystemStorage.get_storage(Settings.WECHAT.EXPIRE_DATA.ACCESS_TOKEN)
+    if storage.nil?
+      return storage.content
+    else
+      return nil
+    end
+  end
+
+  # 获取微信jsapi_ticket
+  def self.update_jsapi_ticket
+    req_params = {"access_token" => self.read_access_token, "type" => "jsapi"}
+    res = JSON.parse(HttpService.get("https://api.weixin.qq.com/cgi-bin/ticket/getticket", req_params))
+    if res["errcode"] == 0 && res["errmsg"] == "ok"
+      # 持久化到数据库
+      SystemStorage.update_storage(Settings.WECHAT.EXPIRE_DATA.JSAPI_TICKET, res["ticket"])
+    end
+  end
+
+  # 读取有效的本地暂存jsapi_ticket
+  def self.read_jsapi_ticket
+    storage = SystemStorage.get_storage(Settings.WECHAT.EXPIRE_DATA.JSAPI_TICKET)
     if storage.nil?
       return storage.content
     else
