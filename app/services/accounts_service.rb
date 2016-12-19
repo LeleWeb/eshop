@@ -4,7 +4,7 @@ class AccountsService < BaseService
   end
 
   def get_account(account)
-    CommonService.response_format(ResponseCode.COMMON.OK, account)
+    CommonService.response_format(ResponseCode.COMMON.OK, AccountsService.get_account_data(account))
   end
 
   def create_account(account_params)
@@ -30,6 +30,21 @@ class AccountsService < BaseService
   def destory_account(account)
     account.destroy
     CommonService.response_format(ResponseCode.COMMON.OK)
+  end
+
+  # 获取账户下的所有关联信息
+  def self.get_account_data(account)
+    data = {}
+    # account data
+    data[:account] = account.as_json.extract!('id', 'mobile_number', 'authentication_token')
+
+    # customer
+    data[:customer] = account.customer
+
+    # stores
+    data[:store] = account.store
+
+    data
   end
 
 end
