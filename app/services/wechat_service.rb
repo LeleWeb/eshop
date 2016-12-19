@@ -228,7 +228,7 @@ class WechatService < BaseService
     data["nonceStr"] = temp_str
     data["package"] = "prepay_id=#{prepay_res["prepay_id"]}"
     data["signType"] = "SHA1"
-    data["paySign"] = self.generate_sign(data, "Digest::SHA1")#signature
+    data["paySign"] = self.generate_sign(data)#signature
     data["config_signature"] = config_signature
     data["jsapi_ticket"] = signature_params["jsapi_ticket"]
     data
@@ -278,6 +278,15 @@ class WechatService < BaseService
   # 获取微信access_token
   def self.get_access_token
     puts "hello zw"
+    #
+    query_params = Settings.WECHAT.ACCESS_TOKEN.QUERY_PARAMS.as_json
+    query_params["appid"] = LocalConfig.WECHAT.appid
+    query_params["secret"] = LocalConfig.WECHAT.secret
+    res = JSON.parse(HttpService.get(Settings.WECHAT.ACCESS_TOKEN.URL, query_params))
+    if res.key?("access_token") && !res["access_token"].blank?
+      # 持久化到数据库
+
+    end
   end
 
 end
