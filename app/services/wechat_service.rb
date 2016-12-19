@@ -244,8 +244,8 @@ class WechatService < BaseService
   end
 
   def self.get_jsapi_ticket
-    temp_access_token = "KMyV_LFCSONKW3BOzLKilNqa4v9fjKk5t7NuuPUtqiwZNPUBAP5GtJGfJbNVy-4HL57alF1nVzvCS2DzdPTMjAgNFOPKI86Ikw7QKx6UuEU1AcoOJWexqV9hI-C8i0gsPFSeAHAKAN"
-    req_params = {"access_token" => temp_access_token, "type" => "jsapi"}
+    # temp_access_token = "KMyV_LFCSONKW3BOzLKilNqa4v9fjKk5t7NuuPUtqiwZNPUBAP5GtJGfJbNVy-4HL57alF1nVzvCS2DzdPTMjAgNFOPKI86Ikw7QKx6UuEU1AcoOJWexqV9hI-C8i0gsPFSeAHAKAN"
+    req_params = {"access_token" => self.read_access_token, "type" => "jsapi"}
     res = JSON.parse(HttpService.get("https://api.weixin.qq.com/cgi-bin/ticket/getticket", req_params))
     puts '*'*10
     p res
@@ -276,7 +276,7 @@ class WechatService < BaseService
   end
   
   # 获取微信access_token
-  def self.get_access_token
+  def self.update_access_token
     puts "hello zw"
     #
     query_params = Settings.WECHAT.ACCESS_TOKEN.QUERY_PARAMS.as_json
@@ -285,7 +285,17 @@ class WechatService < BaseService
     res = JSON.parse(HttpService.get(Settings.WECHAT.ACCESS_TOKEN.URL, query_params))
     if res.key?("access_token") && !res["access_token"].blank?
       # 持久化到数据库
+      SystemStorage.update_storage(Settings.WECHAT.EXPIRE_DATA.ACCESS_TOKEN, res["access_token"])
+    end
+  end
 
+  # 读取有效的本地暂存access_token
+  def self.read_access_token
+    storage = SystemStorage.get_storage(Settings.WECHAT.EXPIRE_DATA.ACCESS_TOKEN)
+    if storage.nil?
+      return storage.content
+    else
+      return nil
     end
   end
 

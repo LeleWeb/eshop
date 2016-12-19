@@ -88,6 +88,11 @@ defaults: &defaults
         appid: ""
         secret: ""
 
+    # 定义微信有过期特性的数据名称
+    EXPIRE_DATA:
+      ACCESS_TOKEN: "access_token"
+      JSAPI_TICKET: "jsapi_ticket"
+
   # 系统图片分类定义
   PICTURES_CATEGORY:
     PRODUCT:
