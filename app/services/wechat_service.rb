@@ -280,8 +280,6 @@ class WechatService < BaseService
   # 读取有效的本地暂存access_token
   def self.read_access_token
     storage = SystemStorage.get_storage(Settings.WECHAT.EXPIRE_DATA.ACCESS_TOKEN)
-    puts 'c'*10
-    p storage
     if !storage.nil?
       return storage.content
     else
