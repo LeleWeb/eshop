@@ -5,7 +5,7 @@ class Api::V1::QrcodeController < Api::V1::BaseController
   def create
     puts 'b'*10
     p params
-    render plain: QrcodeService.new.create_qrcode#, content_type: "image/jpg"
+    render plain: QrcodeService.new.create_qrcode, content_type: "image/jpg"
   end
 
   private
