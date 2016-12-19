@@ -3,7 +3,8 @@ class Api::V1::WechatController < ApplicationController
 
   # GET /wechat
   def index
-    render html: WechatService.new.get_wechat(wechat_params)
+    WechatService.new.get_wechat(wechat_params)
+    redirect_to "http://www.yiyunma.com/#/home"
   end
 
   # POST /accounts
