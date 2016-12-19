@@ -10,7 +10,7 @@ class Api::V1::QrcodeController < Api::V1::BaseController
 
   # Only allow a trusted parameter "white list" through.
   def qrcode_params
-    puts '@'*10
+    puts '/'*10
     p params
     params#.permit()
   end
