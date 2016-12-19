@@ -300,10 +300,12 @@ class WechatService < BaseService
   # 读取有效的本地暂存jsapi_ticket
   def self.read_jsapi_ticket
     storage = SystemStorage.get_storage(Settings.WECHAT.EXPIRE_DATA.JSAPI_TICKET)
-    if storage.nil?
+    if !storage.nil? && !storage.content.blank?
       return storage.content
     else
-      return nil
+      self.update_access_token
+      self.update_jsapi_ticket
+      SystemStorage.get_storage(Settings.WECHAT.EXPIRE_DATA.JSAPI_TICKET).content
     end
   end
 
