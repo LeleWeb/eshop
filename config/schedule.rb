@@ -5,7 +5,9 @@
 
 # Example:
 #
-# set :output, "/path/to/my/cron_log.log"
+set :output, "/path/to/my/cron_log.log"
+set :environment, :production
+
 #
 # every 2.hours do
 #   command "/usr/bin/some_great_command"
@@ -20,7 +22,7 @@
 # Learn more: http://github.com/javan/whenever
 
 # 获取微信获取access_token定时任务，间隔90分钟。
-every 90.minutes do
+every 90.minutes  do
   rake "get_wx_access_token"
 end
 
