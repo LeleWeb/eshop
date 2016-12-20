@@ -6,7 +6,7 @@ include REXML
 class WechatService < BaseService
   def get_wechat(wechat_params)
     puts 'WechatService#get_wechat'
-    p
+    p wechat_params
     # 判断是否存必要的参数：signature,timestamp,nonce,echostr
     if wechat_params['signature'].blank? ||
         wechat_params['timestamp'].blank? ||
