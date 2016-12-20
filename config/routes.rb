@@ -25,6 +25,9 @@ Rails.application.routes.draw do
       # 微信网页授权回调接口
       resources :wx_page_authorization
 
+      # 创建分销二维码接口
+      resources :distribution_qrcode
+
       # 登陆登出
       post 'login', to: 'session#login'
       post 'logout', to: 'session#logout'
