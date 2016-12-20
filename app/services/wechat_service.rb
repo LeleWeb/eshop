@@ -269,19 +269,19 @@ class WechatService < BaseService
   # 获取微信access_token
   def self.update_access_token
     #
-    query_params = Settings.WECHAT.ACCESS_TOKEN.QUERY_PARAMS.as_json
-    query_params["appid"] = LocalConfig.WECHAT.appid
-    query_params["secret"] = LocalConfig.WECHAT.secret
-    res = JSON.parse(HttpService.get(Settings.WECHAT.ACCESS_TOKEN.URL, query_params))
+    query_params = ::Settings.WECHAT.ACCESS_TOKEN.QUERY_PARAMS.as_json
+    query_params["appid"] = ::LocalConfig.WECHAT.appid
+    query_params["secret"] = ::LocalConfig.WECHAT.secret
+    res = JSON.parse(HttpService.get(::Settings.WECHAT.ACCESS_TOKEN.URL, query_params))
     if res.key?("access_token") && !res["access_token"].blank?
       # 持久化到数据库
-      SystemStorage.update_storage(Settings.WECHAT.EXPIRE_DATA.ACCESS_TOKEN, res["access_token"])
+      SystemStorage.update_storage(::Settings.WECHAT.EXPIRE_DATA.ACCESS_TOKEN, res["access_token"])
     end
   end
 
   # 读取有效的本地暂存access_token
   def self.read_access_token
-    storage = SystemStorage.get_storage(Settings.WECHAT.EXPIRE_DATA.ACCESS_TOKEN)
+    storage = SystemStorage.get_storage(::Settings.WECHAT.EXPIRE_DATA.ACCESS_TOKEN)
     if !storage.nil?
       return storage.content
     else
