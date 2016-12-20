@@ -9,6 +9,8 @@ class DistributionQrcodeService < BaseService
 
   # 草料生成二维码的接口返回的是html格式数据，需要解析出图片的地址按照json格式返回给前端。
   def self.parse_qrcode_img(str)
+    puts 'a'*10
+    p str, str =~ /<img src=\"([^\"]*)\"/
     if str =~ /<img src=\"([^\"]*)\"/
       $1
     else
