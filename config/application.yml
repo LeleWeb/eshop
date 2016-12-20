@@ -1,5 +1,11 @@
 # config/application.yml
 defaults: &defaults
+  DISTRIBUTION_QRCODE:
+    CLI_CREATE_QRCODE:
+      URL: "https://cli.im/api/qrcode/code"
+      QUERY_PARAMS:
+        text: ""
+
   # http header设置
   REQUEST_HEADERS:
     CONTENT_TYPE_KEY: "Content-Type"

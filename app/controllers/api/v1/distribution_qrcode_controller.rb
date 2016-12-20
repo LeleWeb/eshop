@@ -1,2 +1,16 @@
-class Api::V1::DistributionQrcodeController < ApplicationController
+class Api::V1::DistributionQrcodeController < Api::V1::BaseController
+  #before_action :distribution_qrcode_params, only: [:create]
+
+  # 基于草料二维码实现产品分销二维码功能 http://cli.im/
+  def create
+    render json: DistributionQrcodeService.new.create_qrcode
+    # render plain: DistributionQrcodeService.new.create_qrcode, content_type: "image/jpg"
+  end
+
+  private
+
+  # Only allow a trusted parameter "white list" through.
+  def distribution_qrcode_params
+    params#.permit()
+  end
 end
