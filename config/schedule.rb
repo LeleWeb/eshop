@@ -25,10 +25,3 @@ every 90.minutes  do
   rake "get_wx_access_token"
 end
 
-# test
-every 1.minute do
-  puts '-------get_wx_access_token begin -------'
-  rake "get_wx_access_token"
-  puts '-------get_wx_access_token end   -------'
-end
-
