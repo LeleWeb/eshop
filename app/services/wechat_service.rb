@@ -226,13 +226,15 @@ class WechatService < BaseService
 
     data = {}
     data["appId"] = prepay_res["appid"]
-    data["timestamp"] = temp_time
+    data["timeStamp"] = temp_time
     data["nonceStr"] = temp_str
     data["package"] = "prepay_id=#{prepay_res["prepay_id"]}"
     data["signType"] = "MD5"
     data["paySign"] = self.generate_sign(data)#signature
     data["config_signature"] = config_signature
     data["jsapi_ticket"] = signature_params["jsapi_ticket"]
+    puts "b"*10
+    p data
     data
   end
 
