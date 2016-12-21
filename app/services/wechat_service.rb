@@ -224,8 +224,8 @@ class WechatService < BaseService
     signature_params = {}#Settings.WECHAT.JSAPI_PAY_SIGNATURE_PARAMS.as_json
     signature_params["jsapi_ticket"] = self.read_jsapi_ticket
     signature_params["url"] = "http://www.yiyunma.com/"
-    signature_params["timestamp"] = temp_time
-    signature_params["noncestr"] = temp_str
+    signature_params["timeStamp"] = temp_time
+    signature_params["nonceStr"] = temp_str
     config_signature = self.generate_jsapi_sign(signature_params)
 
     data = {}
