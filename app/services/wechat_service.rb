@@ -95,12 +95,16 @@ class WechatService < BaseService
       stringA += "#{k}=#{v}&"
     end
     stringA = stringA.gsub(/&$/,'')
-
+    puts 'c'
+    p stringA
     #
     string_key = stringA+"&key=#{LocalConfig.WECHAT.PAY.sign_key}"
-
+    puts 'd'
+    p string_key
     stringSignTemp = eval(encrypt_type).hexdigest(string_key)
     signValue = stringSignTemp.upcase
+    puts 'e'
+    p signValue
     signValue
   end
 
