@@ -219,7 +219,7 @@ class WechatService < BaseService
   end
 
   def self.generate_jsapi_params(prepay_res)
-    temp_time = self.generate_timeStamp/1000
+    temp_time = (self.generate_timeStamp/1000).to_s
     temp_str = self.generate_nonce_str
     signature_params = {}#Settings.WECHAT.JSAPI_PAY_SIGNATURE_PARAMS.as_json
     signature_params["jsapi_ticket"] = self.read_jsapi_ticket
@@ -230,7 +230,7 @@ class WechatService < BaseService
 
     data = {}
     data["appId"] = prepay_res["appid"]
-    data["timeStamp"] = self.generate_timeStamp/1000#temp_time
+    data["timeStamp"] = (self.generate_timeStamp/1000).to_s#temp_time
     data["nonceStr"] = self.generate_nonce_str#temp_str
     data["package"] = "prepay_id=#{prepay_res["prepay_id"]}"
     data["signType"] = "MD5"
