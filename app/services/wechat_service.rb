@@ -319,4 +319,14 @@ class WechatService < BaseService
     end
   end
 
+  # 支付签名验证
+  def self.check_sign(params)
+    param_sign = params.delete("sign")
+    # 本地计算签名
+    sign = self.generate_sign(params, encrypt_type="Digest::#{params["sign_type"].blank? ? "MD5" : params["sign_type"]}")
+
+    # 参数签名值与计算值比较
+    param_sign == sign
+  end
+
 end

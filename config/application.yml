@@ -25,6 +25,11 @@ defaults: &defaults
 
   # 微信相关
   WECHAT:
+    WXPAY_NOTIFY:
+      RETURN_CODE:
+        OK:
+          return_code: "SUCCESS"
+          return_msg: "OK"
     # 通过code换取网页授权access_token
     PAGE_ACCESS_TOKEN:
       # 拉取用户信息(需scope为 snsapi_userinfo)

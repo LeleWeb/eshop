@@ -1,24 +1,15 @@
 class Api::V1::WxpayController < Api::V1::BaseController
-  #before_action :wxpay_params, only: [:create]
+  before_action :wxpay_params, only: [:create]
 
-  #
-  def index
-    puts 'm'*10
-    p params
-    render json: {status: "ok"}
-  end
-
-  #
+  # 微信支付结果通用通知接受接口
   def create
-    puts 'n'*10
-    p params
-    render json: {status: "ok"}
+    render json: WxpayService.new.create_notify(wxpay_params)
   end
 
   private
 
   # Only allow a trusted parameter "white list" through.
   def wxpay_params
-    params#.permit()
+    params[:xml]
   end
 end
