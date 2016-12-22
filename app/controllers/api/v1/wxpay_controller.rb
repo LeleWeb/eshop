@@ -5,14 +5,14 @@ class Api::V1::WxpayController < Api::V1::BaseController
   def index
     puts 'm'*10
     p params
-    # render plain: QrcodeService.new.create_qrcode, content_type: "image/jpg"
+    render json: {status: "ok"}
   end
 
   #
   def create
     puts 'n'*10
     p params
-    # render plain: QrcodeService.new.create_qrcode, content_type: "image/jpg"
+    render json: {status: "ok"}
   end
 
   private
