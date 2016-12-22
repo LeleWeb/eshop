@@ -1,10 +1,10 @@
 class OrdersService < BaseService
   def get_orders(buyer)
-    CommonService.response_format(ResponseCode.COMMON.OK, buyer.orders)
+    CommonService.response_format(ResponseCode.COMMON.OK, OrdersService.get_order_datas(buyer.orders))
   end
 
   def get_order(order)
-    CommonService.response_format(ResponseCode.COMMON.OK, order)
+    CommonService.response_format(ResponseCode.COMMON.OK, OrdersService.get_order_data(order))
   end
 
   def create_order(buyer, order_params, details)
@@ -41,6 +41,18 @@ class OrdersService < BaseService
   def destory_order(order)
     order.destroy
     CommonService.response_format(ResponseCode.COMMON.OK)
+  end
+
+  def self.get_order_data(order)
+    order.merge("order_details" => order.order_details)
+  end
+
+  def self.get_order_datas(orders)
+    data = []
+    orders.each do |order|
+      data << self.get_order_data(order)
+    end
+    data
   end
 
 end
