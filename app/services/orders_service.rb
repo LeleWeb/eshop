@@ -1,6 +1,6 @@
 class OrdersService < BaseService
-  def get_orders
-    CommonService.response_format(ResponseCode.COMMON.OK, Order.all)
+  def get_orders(buyer)
+    CommonService.response_format(ResponseCode.COMMON.OK, buyer.orders)
   end
 
   def get_order(order)

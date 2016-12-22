@@ -1,10 +1,11 @@
 class Api::V1::OrdersController < Api::V1::BaseController
   before_action :set_order, only: [:show, :update, :destroy]
-  before_action :set_buyer, :set_details, only: [:create]
+  before_action :set_buyer, only: [:create, :index]
+  before_action :set_details, only: [:create]
 
   # GET /accounts
   def index
-    render json: OrdersService.new.get_orders
+    render json: OrdersService.new.get_orders(@buyer)
   end
 
   # GET /accounts/1
