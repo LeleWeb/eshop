@@ -1,15 +1,15 @@
 class AddressesService < BaseService
-  def get_addresses
-    CommonService.response_format(ResponseCode.COMMON.OK, Address.all)
+  def get_addresses(customer)
+    CommonService.response_format(ResponseCode.COMMON.OK, customer.addresses)
   end
 
   def get_address(address)
     CommonService.response_format(ResponseCode.COMMON.OK, address)
   end
 
-  def create_address(address_params)
-    address= create(address_params)
-    CommonService.response_format(ResponseCode.COMMON.OK,address)
+  def create_address(customer, address_params)
+    address = customer.addresses.create(address_params)
+    CommonService.response_format(ResponseCode.COMMON.OK, address)
   end
 
   def update_address(address, address_params)

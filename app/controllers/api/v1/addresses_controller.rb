@@ -4,7 +4,7 @@ class Api::V1::AddressesController < Api::V1::BaseController
 
 # GET /addresses
   def index
-    render json: AddressesService.new.get_addresses
+    render json: AddressesService.new.get_addresses(@customer)
   end
 
 # GET /addresses/1
@@ -15,7 +15,7 @@ class Api::V1::AddressesController < Api::V1::BaseController
 
 # POST /api/v1/addresses
   def create
-    render json: AddressesService.new.create_address(address_params)
+    render json: AddressesService.new.create_address(@customer, address_params)
   end
 
 # PATCH/PUT /addresses/1
