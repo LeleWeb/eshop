@@ -44,7 +44,7 @@ class OrdersService < BaseService
   end
 
   def self.get_order_data(order)
-    order.to_hash.merge("order_details" => order.order_details)
+    order.as_json.merge("order_details" => order.order_details)
   end
 
   def self.get_order_datas(orders)
