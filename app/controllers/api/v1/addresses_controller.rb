@@ -1,5 +1,6 @@
 class Api::V1::AddressesController < Api::V1::BaseController
   before_action :set_address, only: [:show, :update, :destroy]
+  before_action :set_customer, only: [:create, :index]
 
 # GET /addresses
   def index
@@ -31,13 +32,17 @@ class Api::V1::AddressesController < Api::V1::BaseController
 
   private
 # Use callbacks to share common setup or constraints between actions.
+  def set_customer
+    @customer = Customer.find(params[:customer_id])
+  end
+
   def set_address
-    @address = Address.find(customer[:id])
+    @address = Address.find(params[:id])
   end
 
 # Only allow a trusted parameter "white list" through.
   def address_params
-    params.require(:address).permit(:name, :type, :customer_id)
+    params.require(:address).permit(:mobile_number, :detailed_address, :is_default)
   end
 
 

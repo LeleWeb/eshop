@@ -44,7 +44,7 @@ class OrdersService < BaseService
   end
 
   def self.get_order_data(order)
-    order.as_json.merge("order_details" => order.order_details.collect{|order_detail| order_detail.as_json.merge("product" => order_detail.product)})
+    order.as_json.merge("order_details" => order.order_details.collect{|order_detail| order_detail.as_json.merge("product" => ProductsService.find_product_data(order_detail.product))})
   end
 
   def self.get_order_datas(orders)
