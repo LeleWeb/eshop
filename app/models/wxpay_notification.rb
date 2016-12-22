@@ -1,0 +1,2 @@
+class WxpayNotification < ApplicationRecord
+end
