@@ -13,7 +13,7 @@ class Api::V1::WxpayController < Api::V1::BaseController
 
   # Only allow a trusted parameter "white list" through.
   def wxpay_params
-    params.requrie[:xml].permit(:appid, :mch_id, :device_info, :nonce_str, :sign,
+    params.require[:xml].permit(:appid, :mch_id, :device_info, :nonce_str, :sign,
                                 :sign_type, :result_code, :err_code, :err_code_des,
                                 :openid, :is_subscribe, :trade_type, :bank_type,
                                 :total_fee, :settlement_total_fee, :fee_type, :cash_fee,
