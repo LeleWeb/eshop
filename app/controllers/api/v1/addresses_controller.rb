@@ -10,7 +10,7 @@ class Api::V1::AddressesController < Api::V1::BaseController
 # GET /addresses/1
   def show
     authorize @address
-    render json: AddresssesService.new.get_address(@address)
+    render json: AddressesService.new.get_address(@address)
   end
 
 # POST /api/v1/addresses
