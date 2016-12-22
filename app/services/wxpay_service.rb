@@ -8,7 +8,7 @@ class WxpayService < BaseService
     order = Order.find_by_order_number(wxpay_params["out_trade_no"])
     if order.status == Settings.ORDER.STATUS.PAID
       # 该通知是否已经处理过，直接返回结果成功。
-      return Settings.WECHAT.WXPAY_NOTIFY.RETURN_CODE.OK.as_json
+      return Settings.WECHAT.WXPAY_NOTIFY.RETURN_CODE.OK
     end
 
     # 签名验证，防止数据泄漏导致出现“假通知”，造成资金损失。
@@ -17,11 +17,14 @@ class WxpayService < BaseService
     end
 
     # 处理业务逻辑
-    ## 1. 保存支付结果到本地数据库
-    WxpayNotification.create(wxpay_params)
+    ## 1. 修改本地对应订单的状态
+    order.update(status: Settings.ORDER.STATUS.PAID)
 
-    ## 2. 修改本地对应订单的状态
+    ## 2. 保存支付结果到本地数据库
+    WxpayNotification.create(wxpay_params.merge({:order => order.id}))
 
+    #返回结果成功给微信服务器
+    Settings.WECHAT.WXPAY_NOTIFY.RETURN_CODE.OK
   end
 
 end
