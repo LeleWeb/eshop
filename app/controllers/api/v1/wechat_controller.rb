@@ -5,8 +5,6 @@ class Api::V1::WechatController < ApplicationController
   def index
     # render html: WechatService.new.get_wechat(wechat_params)
     WechatService.new.get_wechat(wechat_params)
-    puts 'n'*10
-
     redirect_to "http://www.yiyunma.com/"
   end
 
