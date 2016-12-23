@@ -20,7 +20,7 @@ class CommonService < BaseService
                         "9" => 3,
                         "10" => 3}
 
-    CSV.foreach("/var/www/eshop/test.csv") do |row|
+    CSV.foreach("/var/www/eshop/products.csv") do |row|
       p '1'*10, row
       # begin
         #Product.transaction do
