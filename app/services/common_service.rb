@@ -21,17 +21,12 @@ class CommonService < BaseService
                         "10" => 3}
 
     CSV.foreach("/var/www/eshop/products.csv") do |row|
-      p '1'*10, row
       # begin
         #Product.transaction do
-p 'a'*10,row[0], row[0] =~ /^\d+$/
           # 读取数据rows
           if !row.nil? && row[0] =~ /^\d+$/
-            p '2'*10, row
-
             # 数据库创建商品
             store = Store.find_by(name: "环球捕手")
-            p '3'*10, store
             product_params = {
               "uuid"=> SecureRandom.hex,
               "name"=> row[1],
@@ -42,25 +37,18 @@ p 'a'*10,row[0], row[0] =~ /^\d+$/
               "real_price"=> row[6],
               "category_id"=> row[7]
             }
-            p '4'*10, product_params
             product = store.products.create(product_params)
-            p '5'*10, product
             # 数据库创建商品图片
             product_picture_dir = row[8].gsub(/\\/, '/')
-            p '6'*10, product_picture_dir
 
             # 遍历目录下的所有图片文件
             pictures_dir = "#{Rails.root}/public/images/huanqiubushou/products/#{product_picture_dir}"
             if File.directory?(pictures_dir)
-              p '7'*10
               Dir.foreach(pictures_dir) do |filename|
                 if filename =~ /(.*)(\d+)\.(jpg|png)$/
-                  p '8'*10,filename
-
                   # 解析图片分类
                   picture_name = $1
                   category_number = $2
-
                   picture_params = {
                     "name"=> picture_name,
                     "url"=> filename.gsub("#{Rails.root}/public", ''),
