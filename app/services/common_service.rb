@@ -50,9 +50,10 @@ p 'a'*10,row[0], row[0] =~ /^\d+$/
             p '6'*10, product_picture_dir
 
             # 遍历目录下的所有图片文件
-            if File.directory?("#{Rails.root}/public/images/huanqiubushou/products/#{product_picture_dir}")
+            pictures_dir = "#{Rails.root}/public/images/huanqiubushou/products/#{product_picture_dir}"
+            if File.directory?(pictures_dir)
               p '7'*10
-              Dir.foreach(filepath) do |filename|
+              Dir.foreach(pictures_dir) do |filename|
                 if filename =~ /(.*)(\d+)\.(jpg|png)$/
                   p '8'*10,filename
 
