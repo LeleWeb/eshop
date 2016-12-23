@@ -127,6 +127,16 @@ defaults: &defaults
       团购: 104
       热销: 105
 
+  # 产品分类id定义
+  PRODUCT_CATEGORY:
+    HOME: 2
+    XIAOGUO: 3
+    LINGSHI: 4
+    JIANGUO: 5
+    YANGSHENG: 6
+    JINGKOU: 7
+    TECHAN: 8
+
 development:
   <<: *defaults
   neat_setting: 800

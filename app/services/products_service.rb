@@ -62,8 +62,13 @@ class ProductsService < BaseService
                    :products => products}
         end
         data
-      else
-
+      elsif query_params[:category].to_i == Settings.PRODUCT_CATEGORY.HOME
+        # 返回30个商品
+        data = []
+        Product.limit(30).each do |product|
+          data << ProductsService.find_product_data(product)
+        end
+        data
       end
     end
 
