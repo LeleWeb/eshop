@@ -9,16 +9,6 @@ class CommonService < BaseService
 
   def self.import_products
     puts "import_products"
-    picture_category = {"1" => 1,
-                        "2" => 1,
-                        "3" => 1,
-                        "4" => 2,
-                        "5" => 4,
-                        "6" => 3,
-                        "7" => 3,
-                        "8" => 3,
-                        "9" => 3,
-                        "10" => 3}
 
     store = Store.find_by(name: "环球捕手")
     CSV.foreach("/var/www/eshop/products.csv") do |row|
