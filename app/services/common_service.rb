@@ -8,6 +8,7 @@ class CommonService < BaseService
   end
 
   def self.import_products(file_path="/var/www/eshop/test.csv")
+    puts "import_products"
     picture_category = {"1" => 1,
                         "2" => 1,
                         "3" => 1,
