@@ -17,7 +17,7 @@ class ProductsService < BaseService
 
   def create_product(store, product_params)
     product = store.products.create(product_params)
-    product.categories << Category.find(product_params[:category_id])
+    product.categories << Category.find(product_params["category_id"])
 
     # 创建产品详情
     # product.product_details.create(product_params[:details])
@@ -66,7 +66,7 @@ class ProductsService < BaseService
       elsif query_params[:category].to_i == Settings.PRODUCT_CATEGORY.HOME
         # 返回30个商品
         data = []
-        Product.limit(30).each do |product|
+        Product.limit(query_params[:limit]).each do |product|
           data << ProductsService.find_product_data(product)
         end
         data

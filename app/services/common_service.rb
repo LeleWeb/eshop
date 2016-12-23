@@ -31,7 +31,8 @@ class CommonService < BaseService
             }
             # product = store.products.create(product_params)
             p 'c'*10,product_params
-            product = ProductsService.new.create_product(store, product_params)["data"]
+            product = ProductsService.new.create_product(store, product_params)[:data]
+            p 'd'*10,product
             # 数据库创建商品图片
             product_picture_dir = row[8].gsub(/\\/, '/')
 
