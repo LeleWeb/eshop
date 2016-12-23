@@ -30,7 +30,8 @@ p 'a'*10,row[0], row[0] =~ /^\d+$/
             p '2'*10, row
 
             # 数据库创建商品
-            store = Store.find_by(name: "环球捕手")
+            # store = Store.find_by(name: "环球捕手")
+            store = Store.find(3)
             p '3'*10, store
             product_params = {
                 "product"=> {
