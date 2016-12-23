@@ -46,9 +46,12 @@ class CommonService < BaseService
             if File.directory?("#{Rails.root}/public/images/huanqiubushou/products/#{product_picture_dir}")
               Dir.foreach(filepath) do |filename|
                 if filename =~ /(.*)(\d+)\.(jpg|png)$/
+                  puts filename
+
                   # 解析图片分类
                   picture_name = $1
                   category_number = $2
+                  puts picture_name,category_number
 
                   picture_params = {
                       "picture"=> {
@@ -59,6 +62,7 @@ class CommonService < BaseService
                       "owner_id"=> product.id,
                       "owner_type"=> "Product"
                   }
+                  puts product, picture_params
                   PicturesService.new.create_picture(product, picture_params)
 
                 end
