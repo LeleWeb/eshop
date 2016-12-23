@@ -18,6 +18,7 @@ class CommonService < BaseService
           # 读取数据rows
           if !row.nil? && row[0] =~ /^\d+$/
             # 数据库创建商品
+            category = {3 => 7, 5 => 6, 6=>8, 7=>5, 8=>3, 9=>4}
             product_params = {
               "uuid"=> SecureRandom.hex,
               "name"=> row[1],
@@ -26,9 +27,10 @@ class CommonService < BaseService
               "stock"=> row[4],
               "price"=> row[5],
               "real_price"=> row[6],
-              "category_id"=> row[7]
+              "category_id"=> category[row[7].to_i]
             }
-            product = store.products.create(product_params)
+            # product = store.products.create(product_params)
+            product = ProductsService.new.create_product(store, product_params)["data"]
             # 数据库创建商品图片
             product_picture_dir = row[8].gsub(/\\/, '/')
 

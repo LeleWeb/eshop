@@ -17,9 +17,10 @@ class ProductsService < BaseService
 
   def create_product(store, product_params)
     product = store.products.create(product_params)
+    product.categories << Category.find(product_params[:category_id])
 
     # 创建产品详情
-    product.product_details.create(product_params[:details])
+    # product.product_details.create(product_params[:details])
 
     CommonService.response_format(ResponseCode.COMMON.OK, product)
 
