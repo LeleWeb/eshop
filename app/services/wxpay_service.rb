@@ -15,14 +15,14 @@ class WxpayService < BaseService
     if !WechatService.check_sign(wxpay_params)
       return
     end
-
+    p 'a'*10,order
     # 处理业务逻辑
     ## 1. 修改本地对应订单的状态
     order.update(status: Settings.ORDER.STATUS.PAID)
-
+    p 'b'*10,order
     ## 2. 保存支付结果到本地数据库
-    WxpayNotification.create(wxpay_params.merge({:order => order.id}))
-
+    motificatnon = WxpayNotification.create(wxpay_params.merge({:order => order.id}))
+    p 'c'*10,motificatnon
     #返回结果成功给微信服务器
     Settings.WECHAT.WXPAY_NOTIFY.RETURN_CODE.OK
   end
