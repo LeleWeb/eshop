@@ -24,9 +24,10 @@ Rails.application.routes.draw do
       resources :wxpay
       # 微信网页授权回调接口
       resources :wx_page_authorization
-
       # 创建分销二维码接口
       resources :distribution_qrcode
+      # 公众号创建菜单接口
+      resources :wxmenu
 
       # 登陆登出
       post 'login', to: 'session#login'
