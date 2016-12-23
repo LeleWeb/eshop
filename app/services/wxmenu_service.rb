@@ -7,7 +7,7 @@ class WxmenuService < BaseService
         {:key => Settings.REQUEST_HEADERS.CONTENT_TYPE_KEY, :value => Settings.REQUEST_HEADERS.CONTENT_TYPE_VALUE.JSON}
     ]
     JSON.parse(HttpService.post(Settings.WECHAT.CREATE_WXMENU_URL + "?access_token=#{WechatService.read_access_token}",
-                                wxmenu_params.to_json,
+                                wxmenu_params["wxmenu"].to_json,
                                 req_headers))
   end
 
