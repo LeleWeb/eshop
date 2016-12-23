@@ -23,7 +23,7 @@ class CommonService < BaseService
     CSV.foreach("/var/www/eshop/test.csv") do |row|
       puts '1'*10, row
       # begin
-        Product.transaction do
+        ::Product.transaction do
 
           # 读取数据rows
           if !row.nil? && row[0] =~ /^\d+&/
