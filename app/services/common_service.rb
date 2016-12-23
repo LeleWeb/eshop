@@ -1,5 +1,3 @@
-require 'parseexcel'
-
 class CommonService < BaseService
   def self.response_format(response_code, data=nil)
     response = response_code.as_json
@@ -7,10 +5,9 @@ class CommonService < BaseService
     response
   end
 
-  def self.import_products(file_path="/var/www/eshop/products.xls")
-    workbook = Spreadsheet::ParseExcel.parse(file_path)
-    products_sheet = workbook.worksheet(0)
-    worksheet.each(skip) do |row|
+  def self.import_products(file_path="/var/www/eshop/test.csv")
+    CSV.foreach(file_path) do |row|
+      # use row here...
       puts row
     end
   end

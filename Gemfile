@@ -53,7 +53,4 @@ gem 'actionpack-xml_parser'
 # Whenever is a Ruby gem that provides a clear syntax for writing and deploying cron jobs.
 gem 'whenever', :require => false
 
-# parse excel
-gem 'parseexcel', '~> 0.5.2'
-gem "iconv", "~> 1.0.3"
 
