@@ -3,7 +3,7 @@ class Api::V1::CategoriesController < Api::V1::BaseController
 
   # GET /categories
   def index
-    render json: AccountsService.new.get_categories
+    render json: CategoriesService.new.get_categories
   end
 
   # GET /categories /1
