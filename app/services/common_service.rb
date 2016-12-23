@@ -43,7 +43,7 @@ p 'a'*10,row[0], row[0] =~ /^\d+$/
               "category_id"=> row[7]
             }
             p '4'*10, product_params
-            product = ProductsService.new.create_product(store, product_params)
+            product = store.products.create(product_params)
             p '5'*10, product
             # 数据库创建商品图片
             product_picture_dir = row[8].gsub(/\\/, '/')
@@ -60,7 +60,6 @@ p 'a'*10,row[0], row[0] =~ /^\d+$/
                   # 解析图片分类
                   picture_name = $1
                   category_number = $2
-                  p picture_name,category_number
 
                   picture_params = {
                       "picture"=> {
