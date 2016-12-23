@@ -2,6 +2,7 @@ class Api::V1::OrdersController < Api::V1::BaseController
   before_action :set_order, only: [:show, :update, :destroy]
   before_action :set_buyer, only: [:create, :index]
   before_action :set_details, only: [:create]
+  before_action :set_address, only: [:create]
 
   # GET /accounts
   def index
@@ -16,7 +17,7 @@ class Api::V1::OrdersController < Api::V1::BaseController
 
   # POST /accounts
   def create
-    render json: OrdersService.new.create_order(@buyer, order_params, set_details)
+    render json: OrdersService.new.create_order(@buyer, @address, order_params, set_details)
   end
 
   # PATCH/PUT /accounts/1
@@ -32,6 +33,9 @@ class Api::V1::OrdersController < Api::V1::BaseController
   end
 
   private
+  def set_address
+    @address = Address.find(params[:address_id])
+  end
 
   def set_details
     params.require(:details)

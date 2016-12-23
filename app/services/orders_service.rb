@@ -7,14 +7,14 @@ class OrdersService < BaseService
     CommonService.response_format(ResponseCode.COMMON.OK, OrdersService.get_order_data(order))
   end
 
-  def create_order(buyer, order_params, details)
+  def create_order(buyer, address, order_params, details)
     # 生成本系统订单
     order_params[:order_number] = SecureRandom.hex
     order_params[:status] = Settings.ORDER.STATUS.PREPAY
     order_params[:pay_away] = 1
     order_params[:time_start] = Time.now.strftime("%Y%m%d%H%M%S")
     order_params[:time_expire] = (Time.now + Settings.ORDER.EXPIRE_TIME.to_i).strftime("%Y%m%d%H%M%S")
-    order = buyer.orders.create(order_params)
+    order = buyer.orders.create(order_params.merge("consignee_address" => address.detailed_address))
     # 暂时设置实际支付订单为订单总额
     order.update(pay_price: order.total_price)
 
