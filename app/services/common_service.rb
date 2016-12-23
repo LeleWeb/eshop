@@ -22,7 +22,7 @@ class CommonService < BaseService
 
     CSV.foreach(file_path) do |row|
       begin
-        Client.transaction do
+        Product.transaction do
           puts '1'*10, row
           # 读取数据rows
           if !row.nil? && row[0] =~ /^\d+&/
