@@ -24,9 +24,9 @@ class CommonService < BaseService
       p '1'*10, row
       # begin
         #Product.transaction do
-p 'a'*10,row[0] =~ /^\d+&/
+p 'a'*10,row[0] =~ /^\d+$/
           # 读取数据rows
-          if !row.nil? && row[0] =~ /^\d+&/
+          if !row.nil? && row[0] =~ /^\d+$/
             p '2'*10, row
 
             # 数据库创建商品
