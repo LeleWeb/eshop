@@ -109,6 +109,9 @@ defaults: &defaults
       ACCESS_TOKEN: "access_token"
       JSAPI_TICKET: "jsapi_ticket"
 
+    # 微信创建公众号菜单接口
+    CREATE_WXMENU_URL: "https://api.weixin.qq.com/cgi-bin/menu/create"
+
   # 系统图片分类定义
   PICTURES_CATEGORY:
     PRODUCT:
