@@ -54,5 +54,5 @@ gem 'actionpack-xml_parser'
 gem 'whenever', :require => false
 
 # parse excel
-# gem 'parseexcel', '~> 0.5.2'
-
+gem 'parseexcel', '~> 0.5.2'
+gem "iconv", "~> 1.0.3"
