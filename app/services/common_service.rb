@@ -7,7 +7,7 @@ class CommonService < BaseService
     response
   end
 
-  def self.import_products(file_path="/var/www/eshop/test.csv")
+  def self.import_products
     puts "import_products"
     picture_category = {"1" => 1,
                         "2" => 1,
@@ -20,10 +20,11 @@ class CommonService < BaseService
                         "9" => 3,
                         "10" => 3}
 
-    CSV.foreach(file_path) do |row|
-      begin
+    CSV.foreach("/var/www/eshop/test.csv") do |row|
+      puts '1'*10, row
+      # begin
         Product.transaction do
-          puts '1'*10, row
+
           # 读取数据rows
           if !row.nil? && row[0] =~ /^\d+&/
             puts '2'*10, row
@@ -81,9 +82,9 @@ class CommonService < BaseService
             end
           end
         end
-      rescue
-        next
-      end
+      # rescue
+      #   next
+      # end
     end
   end
 end
