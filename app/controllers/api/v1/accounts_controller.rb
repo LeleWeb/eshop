@@ -1,5 +1,6 @@
 class Api::V1::AccountsController < Api::V1::BaseController
   before_action :set_account, only: [:show, :update, :destroy]
+  skip_before_action :authenticate_user!, only: [:create]
 
   # GET /accounts
   def index
