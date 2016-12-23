@@ -62,15 +62,10 @@ p 'a'*10,row[0], row[0] =~ /^\d+$/
                   category_number = $2
 
                   picture_params = {
-                      "picture"=> {
-                          "name"=> picture_name,
-                          "url"=> filename.gsub("#{Rails.root}/public", ''),
-                          "category"=> picture_category[category_number],
-                      },
-                      "owner_id"=> product.id,
-                      "owner_type"=> "Product"
+                    "name"=> picture_name,
+                    "url"=> filename.gsub("#{Rails.root}/public", ''),
+                    "category"=> picture_category[category_number]
                   }
-                  p product, picture_params
                   PicturesService.new.create_picture(product, picture_params)
 
                 end
