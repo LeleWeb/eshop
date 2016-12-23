@@ -23,6 +23,9 @@ class OrdersService < BaseService
       order.order_details.create(detail.permit(:product_id, :quantity, :price))
     end
 
+    # 删除订单对应的购物车商品
+    ShoppingCart.delete_shopping_cart(buyer, order)
+
     # 调用微信统一接口,生成预付订单.
     res = WechatService.create_unifiedorder(order)
 

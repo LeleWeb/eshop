@@ -53,4 +53,14 @@ class CartsService < BaseService
     cart.as_json.merge(:product => ProductsService.find_product_data(cart.product))
   end
 
+  # 根据订单删除购物车中已经生成订单的购物车商品
+  def self.delete_shopping_cart(customer, order)
+    order_products = order.order_details.collect{|order_detail| order_detail.product_id}
+    customer.shopping_carts.each do |shopping_cart|
+      if order_products.include?(shopping_cart.product_id)
+        shopping_cart.destory
+      end
+    end
+  end
+
 end
