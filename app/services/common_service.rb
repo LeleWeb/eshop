@@ -30,20 +30,17 @@ p 'a'*10,row[0], row[0] =~ /^\d+$/
             p '2'*10, row
 
             # 数据库创建商品
-            # store = Store.find_by(name: "环球捕手")
-            store = Store.find_store("环球捕手")
-            p '3'*10, store,Account.all
+            store = Store.find_by(name: "环球捕手")
+            p '3'*10, store
             product_params = {
-                "product"=> {
-                    "uuid"=> SecureRandom.hex,
-                    "name"=> row[1],
-                    "description"=> row[2],
-                    "detail"=> row[3],
-                    "stock"=> row[4],
-                    "price"=> row[5],
-                    "real_price"=> row[6],
-                    "category_id"=> row[7]
-                }
+              "uuid"=> SecureRandom.hex,
+              "name"=> row[1],
+              "description"=> row[2],
+              "detail"=> row[3],
+              "stock"=> row[4],
+              "price"=> row[5],
+              "real_price"=> row[6],
+              "category_id"=> row[7]
             }
             p '4'*10, product_params
             product = ProductsService.new.create_product(store, product_params)

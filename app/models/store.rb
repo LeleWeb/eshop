@@ -5,8 +5,4 @@ class Store < ApplicationRecord
 
   # 收藏
   has_many :collections, as: :owner
-
-  def self.find_store(name)
-    self.find_by(name: name)
-  end
 end
