@@ -7,7 +7,7 @@ class CommonService < BaseService
     response
   end
 
-  def self.import_products(file_path=Rails.root + "products.xlsx")
+  def self.import_products(file_path=Rails.root + "/products.xlsx")
     workbook = Spreadsheet::ParseExcel.parse(file_path)
     products_sheet = workbook.worksheet(0)
     worksheet.each(skip) do |row|
