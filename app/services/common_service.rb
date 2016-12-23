@@ -22,6 +22,7 @@ class CommonService < BaseService
 
     store = Store.find_by(name: "环球捕手")
     CSV.foreach("/var/www/eshop/products.csv") do |row|
+      puts row
       # begin
         Product.transaction do
           # 读取数据rows
@@ -45,14 +46,25 @@ class CommonService < BaseService
             pictures_dir = "#{Rails.root}/public/images/huanqiubushou/products/#{product_picture_dir}"
             if File.directory?(pictures_dir)
               Dir.foreach(pictures_dir) do |filename|
-                if filename =~ /(.*)(\d+)\.(jpg|png)$/
+                puts '2',filename
+                if filename =~ /([^_\d]+)_?(\d+)\.(jpg|png)$/
                   # 解析图片分类
                   picture_name = $1
-                  category_number = $2
+                  category_number = $2.to_i
+                  puts '3',category_number
+                  if category_number <= 3
+                    category_number = 1
+                  elsif category_number == 4
+                    category_number = 2
+                  elsif category_number ==5
+                    category_number = 4
+                  elsif category_number >= 6
+                    category_number = 3
+                  end
                   picture_params = {
-                    "name"=> picture_name,
-                    "url"=> filename.gsub("#{Rails.root}/public", ''),
-                    "category"=> picture_category[category_number]
+                    "name"=> filename,
+                    "url"=> "/images/huanqiubushou/products/#{filename}",
+                    "category"=> category_number
                   }
                   PicturesService.new.create_picture(product, picture_params)
 
