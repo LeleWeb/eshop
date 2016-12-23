@@ -21,17 +21,17 @@ class CommonService < BaseService
                         "10" => 3}
 
     CSV.foreach("/var/www/eshop/test.csv") do |row|
-      puts '1'*10, row,row[0],!row.nil? && row[0] =~ /^\d+&/
+      p '1'*10, row
       # begin
         #Product.transaction do
-
+p 'a'*10,row[0] =~ /^\d+&/
           # 读取数据rows
           if !row.nil? && row[0] =~ /^\d+&/
-            puts '2'*10, row
+            p '2'*10, row
 
             # 数据库创建商品
             store = Store.find_by(name: "环球捕手")
-            puts '3'*10, store
+            p '3'*10, store
             product_params = {
                 "product"=> {
                     "uuid"=> SecureRandom.hex,
@@ -44,24 +44,24 @@ class CommonService < BaseService
                     "category_id"=> row[7]
                 }
             }
-            puts '4'*10, product_params
+            p '4'*10, product_params
             product = ProductsService.new.create_product(store, product_params)
-            puts '5'*10, product
+            p '5'*10, product
             # 数据库创建商品图片
             product_picture_dir = row[8].gsub(/\\/, '/')
-            puts '6'*10, product_picture_dir
+            p '6'*10, product_picture_dir
 
             # 遍历目录下的所有图片文件
             if File.directory?("#{Rails.root}/public/images/huanqiubushou/products/#{product_picture_dir}")
-              puts '7'*10
+              p '7'*10
               Dir.foreach(filepath) do |filename|
                 if filename =~ /(.*)(\d+)\.(jpg|png)$/
-                  puts '8'*10,filename
+                  p '8'*10,filename
 
                   # 解析图片分类
                   picture_name = $1
                   category_number = $2
-                  puts picture_name,category_number
+                  p picture_name,category_number
 
                   picture_params = {
                       "picture"=> {
@@ -72,7 +72,7 @@ class CommonService < BaseService
                       "owner_id"=> product.id,
                       "owner_type"=> "Product"
                   }
-                  puts product, picture_params
+                  p product, picture_params
                   PicturesService.new.create_picture(product, picture_params)
 
                 end
