@@ -21,7 +21,7 @@ class CommonService < BaseService
                         "10" => 3}
 
     CSV.foreach("/var/www/eshop/test.csv") do |row|
-      puts '1'*10, row
+      puts '1'*10, row,row[0],!row.nil? && row[0] =~ /^\d+&/
       # begin
         #Product.transaction do
 
