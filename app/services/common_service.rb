@@ -31,8 +31,8 @@ p 'a'*10,row[0], row[0] =~ /^\d+$/
 
             # 数据库创建商品
             # store = Store.find_by(name: "环球捕手")
-            store = Store.all
-            p '3'*10, store
+            store = Store.find_store("环球捕手")
+            p '3'*10, store,Account.all
             product_params = {
                 "product"=> {
                     "uuid"=> SecureRandom.hex,
