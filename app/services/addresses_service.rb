@@ -15,8 +15,8 @@ class AddressesService < BaseService
       end
 
       address = customer.addresses.create!(address_params)
+      CommonService.response_format(ResponseCode.COMMON.OK, address)
     end
-    CommonService.response_format(ResponseCode.COMMON.OK, address)
   end
 
   def update_address(address, address_params)
