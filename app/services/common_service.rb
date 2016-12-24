@@ -8,15 +8,13 @@ class CommonService < BaseService
   end
 
   def self.import_products
-    puts "import_products"
-
     store = Store.find_by(name: "环球捕手")
     CSV.foreach("/var/www/eshop/products.csv") do |row|
-      puts row
       # begin
         Product.transaction do
           # 读取数据rows
           if !row.nil? && row[0] =~ /^\d+$/
+            p row
             # 数据库创建商品
             category = {"3" => 7, "5" => 6, "6"=>8, "7"=>5, "8"=>3, "9"=>4}
             product_params = {
@@ -29,21 +27,17 @@ class CommonService < BaseService
               "real_price"=> row[6],
               "category_id"=> category[row[7]]
             }
-            # product = store.products.create(product_params)
-            p 'c'*10,product_params
             product = ProductsService.new.create_product(store, product_params)[:data]
-            p 'd'*10,product
             # 数据库创建商品图片
             product_picture_dir = row[8].gsub(/\\/, '/')
-
             # 遍历目录下的所有图片文件
             pictures_dir = "#{Rails.root}/public/images/huanqiubushou/products/#{product_picture_dir}"
             if File.directory?(pictures_dir)
               Dir.foreach(pictures_dir) do |filename|
-                if filename =~ /([^_\d]+)_?(\d+)\.(jpg|png)$/
+                if filename =~ /(\d+)\.(jpg|png)$/
+                  p filename
                   # 解析图片分类
-                  picture_name = $1
-                  category_number = $2.to_i
+                  category_number = $1.to_i
                   if category_number <= 3
                     category_number = 1
                   elsif category_number == 4
@@ -59,7 +53,6 @@ class CommonService < BaseService
                     "category"=> category_number
                   }
                   picture = PicturesService.new.create_picture(product, picture_params)
-                  puts '3',picture
                 end
               end
             else
