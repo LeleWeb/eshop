@@ -7,7 +7,7 @@ class ProductsService < BaseService
       CommonService.response_format(ResponseCode.COMMON.OK,
                                     self.find_by_search(store, query_params))
     else
-      CommonService.response_format(ResponseCode.COMMON.OK, Product.all)
+      CommonService.response_format(ResponseCode.COMMON.OK, ProductsService.find_product_datas(store))
     end
   end
 
@@ -81,7 +81,15 @@ class ProductsService < BaseService
       data
     end
 
-    def self.find_product_data(product)
+  def self.find_product_datas(store)
+    data = []
+    store.products.each do |product|
+      data << ProductsService.find_product_data(product)
+    end
+    data
+  end
+
+  def self.find_product_data(product)
       # 获取商品分类
       categories = product.categories
 
