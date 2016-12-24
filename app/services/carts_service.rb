@@ -58,6 +58,8 @@ class CartsService < BaseService
     order_products = order.order_details.collect{|order_detail| order_detail.product_id}
     customer.shopping_carts.each do |shopping_cart|
       if order_products.include?(shopping_cart.product_id)
+        p 'a'*10
+        p shopping_cart,shopping_cart.class
         shopping_cart.destory
       end
     end
