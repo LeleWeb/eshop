@@ -49,7 +49,7 @@ class CommonService < BaseService
                   end
                   picture_params = {
                     "name"=> filename,
-                    "url"=> "/images/huanqiubushou/products/#{filename}",
+                    "url"=> "/images/huanqiubushou/products/#{product_picture_dir}/#{filename}",
                     "category"=> category_number
                   }
                   picture = PicturesService.new.create_picture(product, picture_params)
