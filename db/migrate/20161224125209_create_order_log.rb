@@ -6,8 +6,6 @@ class CreateOrderLog < ActiveRecord::Migration[5.0]
       t.integer :operator_id
       t.integer :action_number
       t.datetime :operate_time
-
-      t.timestamps
     end
   end
 end
