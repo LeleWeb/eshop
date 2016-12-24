@@ -8,7 +8,7 @@ class PicturesService < BaseService
   end
 
   def create_picture(owner, picture_params)
-    picture = owner.pictures.create(picture_params)
+    picture = owner.pictures.create!(picture_params)
     CommonService.response_format(ResponseCode.COMMON.OK, picture)
   end
 

@@ -40,12 +40,10 @@ class CommonService < BaseService
             pictures_dir = "#{Rails.root}/public/images/huanqiubushou/products/#{product_picture_dir}"
             if File.directory?(pictures_dir)
               Dir.foreach(pictures_dir) do |filename|
-                puts '2',filename
                 if filename =~ /([^_\d]+)_?(\d+)\.(jpg|png)$/
                   # 解析图片分类
                   picture_name = $1
                   category_number = $2.to_i
-                  puts '3',category_number
                   if category_number <= 3
                     category_number = 1
                   elsif category_number == 4
@@ -60,8 +58,8 @@ class CommonService < BaseService
                     "url"=> "/images/huanqiubushou/products/#{filename}",
                     "category"=> category_number
                   }
-                  PicturesService.new.create_picture(product, picture_params)
-
+                  picture = PicturesService.new.create_picture(product, picture_params)
+                  puts '3',picture
                 end
               end
             else
