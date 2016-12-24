@@ -70,6 +70,16 @@ class ProductsService < BaseService
           data << ProductsService.find_product_data(product)
         end
         data
+      else
+        # 按照分类查询产品
+        data = []
+        category = Category.find_by(id: query_params[:category].to_i)
+        if !category.nil?
+          category.products.each do |product|
+            data << ProductsService.find_product_data(product)
+          end
+        end
+        data
       end
     end
 
