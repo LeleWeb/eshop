@@ -5,4 +5,7 @@ class Store < ApplicationRecord
 
   # 收藏
   has_many :collections, as: :owner
+
+  # 分销
+  has_many :distributions, as: :owner
 end
