@@ -1,0 +1,2 @@
+class DistributionRule < ApplicationRecord
+end
