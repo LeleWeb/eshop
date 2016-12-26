@@ -8,4 +8,6 @@ class Store < ApplicationRecord
 
   # 分销
   has_many :distributions, as: :owner
+  # 分销规则
+
 end
