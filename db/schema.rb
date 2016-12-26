@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161222102239) do
+ActiveRecord::Schema.define(version: 20161226045112) do
 
   create_table "accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "uuid"
@@ -37,6 +37,19 @@ ActiveRecord::Schema.define(version: 20161222102239) do
     t.string   "remark"
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
+  end
+
+  create_table "adverts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "store_id"
+    t.string   "img_url",     limit: 256
+    t.string   "title",       limit: 256
+    t.string   "description", limit: 256
+    t.string   "link_url",    limit: 256
+    t.integer  "status"
+    t.integer  "category"
+    t.string   "remark",      limit: 256
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   create_table "categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -130,6 +143,11 @@ ActiveRecord::Schema.define(version: 20161222102239) do
     t.datetime "updated_at",            null: false
   end
 
+  create_table "distributions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "order_details", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "order_id"
     t.integer  "product_id"
@@ -139,6 +157,14 @@ ActiveRecord::Schema.define(version: 20161222102239) do
     t.string   "remark",     limit: 256
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+  end
+
+  create_table "order_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "order_id"
+    t.integer  "operator_type"
+    t.integer  "operator_id"
+    t.integer  "action_number"
+    t.datetime "operate_time"
   end
 
   create_table "orders", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -160,6 +186,8 @@ ActiveRecord::Schema.define(version: 20161222102239) do
     t.string   "consignee_phone",   limit: 32
     t.string   "consignee_address", limit: 256
     t.float    "pay_price",         limit: 24
+    t.integer  "shipping_type"
+    t.string   "shipping_number",   limit: 50
   end
 
   create_table "orders_products", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
