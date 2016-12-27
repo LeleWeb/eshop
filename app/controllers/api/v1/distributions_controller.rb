@@ -13,7 +13,7 @@ class Api::V1::DistributionsController < Api::V1::BaseController
 
   # Only allow a trusted parameter "white list" through.
   def distribution_params
-    params.require(:distribution).permit(:owner_type, :owner_id, :parent_id)
+    params.require(:distribution).permit(:owner_type, :owner_id, :parent_id, :parent_type)
   end
 
 end
