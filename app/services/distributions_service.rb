@@ -127,7 +127,7 @@ class DistributionsService < BaseService
     end
 
     # 3.去distribution_levels表找到第二布计算的总额所在区间等级记录，将总额*佣金系数得到个人佣金余额；
-    distribution_level = DistributionLevel.where("minimum >= ? and maximum < ? ", consume_sum, consume_sum)
+    distribution_level = DistributionLevel.where("minimum >= ? and maximum < ? ", consume_sum, consume_sum).first
     if !distribution_level.nil?
       commission = consume_sum*distribution_level.commission_ratio
     end
