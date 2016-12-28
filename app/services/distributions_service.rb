@@ -105,7 +105,7 @@ class DistributionsService < BaseService
     commission = 0.0
 
     # 1.去分销关系表(distributions)中查询指定customer节点及其三级子孙节点；
-    customer_distribution_node = Distribution.find_by(owner_type: object_type, owner_id: object_id)
+    customer_distribution_node = Distribution.find_by(owner_type: "Customer", owner_id: customer.id)
     first_node = true # 记录第一个根节点
     Distribution.each_with_level(customer_distribution_node.self_and_descendants) do |distribution, level|
       # 记录第一个元素（也就是指定查询的customer元素），以其作为起始的level
