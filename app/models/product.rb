@@ -12,4 +12,7 @@ class Product < ApplicationRecord
   has_and_belongs_to_many :orders
 
   attr_accessor :details
+
+  # 广告
+  has_and_belongs_to_many :adverts
 end
