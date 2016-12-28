@@ -4,10 +4,15 @@ class DistributionsService < BaseService
     parent = eval(distribution_params[:parent_type]).find(distribution_params[:parent_id])
     distributor_parent = Distribution.find_by(owner_type: distribution_params[:parent_type],
                                               owner_id: distribution_params[:parent_id])
+    if distributor_parent.nil?
+      # 若上级为商家且商家没有加入分销关系表时，新建商家为根分销节点
+      distributor_parent = Distribution.create(owner_type: distribution_params[:parent_type],
+                                               owner_id: distribution_params[:parent_id])
+    end
     owner = eval(distribution_params[:owner_type]).find(distribution_params[:owner_id])
 
     # 父子节点合法性检验
-    if parent.nil? || owner.nil? || distributor_parent.nil?
+    if parent.nil? || owner.nil?
       return false
     end
 
