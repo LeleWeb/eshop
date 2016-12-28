@@ -25,41 +25,16 @@ class DistributionsService < BaseService
     end
 
     # 创建分销管理关系
-    Distribution.create_distribution_relation(distributor_parent,
-                                              distribution_params[:owner_type],
-                                              distribution_params[:owner_id])
+    distribution = DistributionsService.create_distribution_relation(distributor_parent,
+                                                                     distribution_params[:owner_type],
+                                                                     distribution_params[:owner_id])
+    CommonService.response_format(ResponseCode.COMMON.OK, distribution)
   end
 
   # 分销佣金余额计算方法
   def get_commission(customer)
-    distributors = []
-    consume_sum = 0.0
-
-    # 1.去分销关系表(distributions)中查询指定customer节点及其三级子孙节点；
-    customer_distribution_node = Distribution.find_by(owner_type: object_type, owner_id: object_id)
-    first_node = true # 记录第一个根节点
-    Distribution.each_with_level(customer_distribution_node.self_and_descendants) do |distribution, level|
-      # 记录第一个元素（也就是指定查询的customer元素），以其作为起始的level
-      if first_node == true
-        begin_level = level
-        end_level = begin_level.to_i + (Settings.DISTRIBUTION_LEVEL.to_i - 1)
-        first_node = false
-      end
-
-      # 过滤三级内的分销者记录
-      if level >= begin_level && level <= end_level
-        distributors << distribution
-      end
-    end
-
-    # 2.遍历第一步的集合，查询每个customer的消费总额，然后求和；
-
-    distributors.each do |distribution|
-      consume_sum += Customer.get_consume_total(Customer.find(distribution.owner_id))
-    end
-
-    # 3.去distribution_levels表找到第二布计算的总额所在区间等级记录，将总额*佣金系数得到个人佣金余额；
-
+    CommonService.response_format(ResponseCode.COMMON.OK,
+                                  {"commission" => DistributionsService.calculate_commission(customer)})
   end
 
   ###
@@ -111,6 +86,41 @@ class DistributionsService < BaseService
     # 建立父子关系
     distributor.move_to_child_of(distributor_parent)
     distributor
+  end
+
+  def self.calculate_commission(customer)
+    distributors = []
+    consume_sum = 0.0
+    commission = 0.0
+
+    # 1.去分销关系表(distributions)中查询指定customer节点及其三级子孙节点；
+    customer_distribution_node = Distribution.find_by(owner_type: object_type, owner_id: object_id)
+    first_node = true # 记录第一个根节点
+    Distribution.each_with_level(customer_distribution_node.self_and_descendants) do |distribution, level|
+      # 记录第一个元素（也就是指定查询的customer元素），以其作为起始的level
+      if first_node == true
+        begin_level = level
+        end_level = begin_level.to_i + (Settings.DISTRIBUTION_LEVEL.to_i - 1)
+        first_node = false
+      end
+
+      # 过滤三级内的分销者记录
+      if level >= begin_level && level <= end_level
+        distributors << distribution
+      end
+    end
+
+    # 2.遍历第一步的集合，查询每个customer的消费总额，然后求和；
+    distributors.each do |distribution|
+      consume_sum += Customer.get_consume_total(Customer.find(distribution.owner_id))
+    end
+
+    # 3.去distribution_levels表找到第二布计算的总额所在区间等级记录，将总额*佣金系数得到个人佣金余额；
+    distribution_level = DistributionLevel.where("minimum >= ? and maximum < ? ", consume_sum, consume_sum)
+    if !distribution_level.nil?
+      commission = distribution_level*commission_ratio
+    end
+    commission
   end
 
 end

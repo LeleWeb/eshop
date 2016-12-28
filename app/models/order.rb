@@ -3,4 +3,6 @@ class Order < ApplicationRecord
   # belongs_to :seller, polymorphic: true
   belongs_to :buyer, polymorphic: true
   has_many :order_details
+
+  
 end
