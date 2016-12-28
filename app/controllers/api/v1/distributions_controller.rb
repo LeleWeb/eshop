@@ -13,7 +13,7 @@ class Api::V1::DistributionsController < Api::V1::BaseController
   end
 
   def get_distribute_authority
-    render json: DistributionsService.new.get_distribute_authority(@store, distribution_params)
+    render json: DistributionsService.new.get_distribute_authority(@store, params.permit(:owner_type, :owner_id))
   end
 
   private
