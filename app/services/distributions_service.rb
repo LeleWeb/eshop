@@ -84,7 +84,7 @@ class DistributionsService < BaseService
 
   # 当前customer消费满足一定的上限后成为分销者算法
   def self.rule_2(customer, distribution_rule)
-    Customer.get_consume_total(customer) > distribution_rule.value.to_f
+    CustomersService.get_consume_total(customer) > distribution_rule.value.to_f
   end
 
   def self.is_already_distributor?(object_type, object_id)
@@ -123,7 +123,7 @@ class DistributionsService < BaseService
 
     # 2.遍历第一步的集合，查询每个customer的消费总额，然后求和；
     distributors.each do |distribution|
-      consume_sum += Customer.get_consume_total(Customer.find(distribution.owner_id))
+      consume_sum += CustomersService.get_consume_total(Customer.find(distribution.owner_id))
     end
 
     # 3.去distribution_levels表找到第二布计算的总额所在区间等级记录，将总额*佣金系数得到个人佣金余额；
