@@ -47,4 +47,13 @@ class CustomersService < BaseService
     customer
   end
 
+  # 计算customer的累计消费总额
+  def self.get_consume_total(customer)
+    sum = 0.0 # 总金额单位是元
+    customer.orders.where(status: Settings.ORDER.STATUS.COMPLETED).each do |order|
+      sum += order.pay_price
+    end
+    sum
+  end
+
 end
