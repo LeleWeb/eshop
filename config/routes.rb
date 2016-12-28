@@ -29,11 +29,11 @@ Rails.application.routes.draw do
 
       # 分销关系接口
       resources :distributions
-      namespace :distributions do
+      # namespace :distributions do
         # 查询分销佣金总额接口
-        get '/commission', to: 'get_commission'
-        get '/authority', to: 'get_distribute_authority'
-      end
+        get '/distributions/commission', to: 'distributions#get_commission'
+        get '/distributions/authority', to: 'distributions#get_distribute_authority'
+      # end
 
       # 公众号创建菜单接口
       resources :wxmenu

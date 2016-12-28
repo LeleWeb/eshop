@@ -1,5 +1,6 @@
 # config/application.yml
 defaults: &defaults
+  HOME_URL: "http://www.yiyunma.com/#/home"
   DISTRIBUTION_LEVEL: 3   # 设置分销等级
   DISTRIBUTION_RULES:
     ANYONE: 0
