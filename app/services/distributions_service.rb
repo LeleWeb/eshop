@@ -133,14 +133,16 @@ class DistributionsService < BaseService
     # 获取父子节点对象
     owner = eval(distribution_params[:owner_type]).find(distribution_params[:owner_id])
 
-    # 父子节点合法性检验
+    # customer节点合法性检验
     if owner.nil?
+      puts "ERROR: Customer id invalid!"
       return false
     end
 
     # 判断当前用户是否已经是分销者，若是则返回提示。
     if DistributionsService.is_already_distributor?(distribution_params[:owner_type],
                                                     distribution_params[:owner_id])
+      puts "ERROR: Customer is already distributor!"
       return false
     end
 
@@ -148,6 +150,7 @@ class DistributionsService < BaseService
     if !DistributionsService.distribution_rule_authenticate?(store,
                                                              distribution_params[:owner_type],
                                                              distribution_params[:owner_id])
+      puts "ERROR: distribution rule authenticate failed!"
       return false
     end
 
