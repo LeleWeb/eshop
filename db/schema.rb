@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161226075512) do
+ActiveRecord::Schema.define(version: 20161226111233) do
 
   create_table "accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "uuid"
@@ -158,6 +158,13 @@ ActiveRecord::Schema.define(version: 20161226075512) do
     t.string   "remark",     limit: 256
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+  end
+
+  create_table "distribution_rules_stores", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "distribution_rules_id"
+    t.integer "stores_id"
+    t.index ["distribution_rules_id"], name: "index_distribution_rules_stores_on_distribution_rules_id", using: :btree
+    t.index ["stores_id"], name: "index_distribution_rules_stores_on_stores_id", using: :btree
   end
 
   create_table "distributions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
