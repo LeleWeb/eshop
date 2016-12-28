@@ -1,5 +1,5 @@
 class Api::V1::DistributionsController < Api::V1::BaseController
-  before_action :set_store, only: [:create]
+  before_action :set_store, only: [:create, :get_distribute_authority]
   before_action :set_customer, only: [:get_commission]
 
   # POST /api/v1/addresses
@@ -11,9 +11,13 @@ class Api::V1::DistributionsController < Api::V1::BaseController
     render json: DistributionsService.new.get_commission(@customer)
   end
 
+  def get_distribute_authority
+    render json: DistributionsService.new.get_distribute_authority(@store, distribution_params)
+  end
+
   private
   def set_customer
-    @customer = Customer.find(params[:customer_id])
+    @customer = Customer.find_by(id: params[:customer_id])
   end
 
   def set_store

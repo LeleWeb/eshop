@@ -32,6 +32,7 @@ Rails.application.routes.draw do
       namespace :distributions do
         # 查询分销佣金总额接口
         get '/commission', to: 'distributions#get_commission'
+        get '/authority', to: 'distributions#get_distribute_authority'
       end
 
       # 公众号创建菜单接口

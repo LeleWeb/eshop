@@ -37,6 +37,12 @@ class DistributionsService < BaseService
                                   {"commission" => DistributionsService.calculate_commission(customer)})
   end
 
+  # 分销鉴权
+  def get_distribute_authority(store, distribution_params)
+    CommonService.response_format(ResponseCode.COMMON.OK,
+                                  DistributionsService.distribute_authenticate(store, distribution_params))
+  end
+
   ###
 
   def self.distribution_rule_authenticate?(store, owner_type, owner_id)
@@ -121,6 +127,31 @@ class DistributionsService < BaseService
       commission = distribution_level*commission_ratio
     end
     commission
+  end
+
+  def self.distribute_authenticate(store, distribution_params)
+    # 获取父子节点对象
+    owner = eval(distribution_params[:owner_type]).find(distribution_params[:owner_id])
+
+    # 父子节点合法性检验
+    if owner.nil?
+      return false
+    end
+
+    # 判断当前用户是否已经是分销者，若是则返回提示。
+    if DistributionsService.is_already_distributor?(distribution_params[:owner_type],
+                                                    distribution_params[:owner_id])
+      return false
+    end
+
+    # 判断是否满足当前设定的分销规则
+    if !DistributionsService.distribution_rule_authenticate?(store,
+                                                             distribution_params[:owner_type],
+                                                             distribution_params[:owner_id])
+      return false
+    end
+
+    return true
   end
 
 end
