@@ -1,6 +1,7 @@
 class Api::V1::DistributionsController < Api::V1::BaseController
   before_action :set_store, only: [:create, :get_distribute_authority]
   before_action :set_customer, only: [:get_commission]
+  skip_before_action :authenticate_user!, only: [:get_commission, :get_distribute_authority]
 
   # POST /api/v1/addresses
   def create
