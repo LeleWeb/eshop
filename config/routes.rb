@@ -28,12 +28,12 @@ Rails.application.routes.draw do
       resources :distribution_qrcode
 
       # 分销关系接口
-      resources :distributions
       # namespace :distributions do
         # 查询分销佣金总额接口
         get '/distributions/commission', to: 'distributions#get_commission'
         get '/distributions/authority', to: 'distributions#get_distribute_authority'
       # end
+      resources :distributions
 
       # 公众号创建菜单接口
       resources :wxmenu
