@@ -1,35 +1,35 @@
 class DistributionsService < BaseService
   def create_distribution(store, distribution_params)
-    # 获取父节点对象
+    # 获取父节点对象.
     parent = eval(distribution_params[:parent_type]).find(distribution_params[:parent_id])
     distributor_parent = Distribution.find_by(owner_type: distribution_params[:parent_type],
                                               owner_id: distribution_params[:parent_id])
 
-    # 若上级为商家且商家没有加入分销关系表时，新建商家为根分销节点
+    # 若上级为商家且商家没有加入分销关系表时,新建商家为根分销节点.
     if distribution_params[:parent_type] == "Store" && distributor_parent.nil?
       distributor_parent = Distribution.create(owner_type: distribution_params[:parent_type],
                                                owner_id: distribution_params[:parent_id])
     end
 
-    # 父子节点合法性检验
+    # 父子节点合法性检验.
     if parent.nil?
       return {"code" => false, "message" => "parent is blank!"}
     end
 
-    # 判断owner合法性
+    # 判断owner合法性.
     result = DistributionsService.distribute_authenticate(store, distribution_params)
     if result["code"] != true
       return result
     end
 
-    # 创建分销管理关系
+    # 创建分销管理关系.
     distribution = DistributionsService.create_distribution_relation(distributor_parent,
                                                                      distribution_params[:owner_type],
                                                                      distribution_params[:owner_id])
     CommonService.response_format(ResponseCode.COMMON.OK, distribution)
   end
 
-  # 分销佣金余额计算方法
+  # 分销佣金余额计算方法.
   def get_commission(customer)
     CommonService.response_format(ResponseCode.COMMON.OK,
                                   {"commission" => DistributionsService.calculate_commission(customer)})
@@ -126,7 +126,7 @@ class DistributionsService < BaseService
     if !distribution_level.nil?
       commission = consume_sum*distribution_level.commission_ratio
     end
-    commission
+    commission.to_f
   end
 
   def self.distribute_authenticate(store, distribution_params)
