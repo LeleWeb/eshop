@@ -39,8 +39,10 @@ class DistributionsService < BaseService
 
   # 分销鉴权
   def get_distribute_authority(store, distribution_params)
-    CommonService.response_format(ResponseCode.COMMON.OK,
-                                  DistributionsService.distribute_authenticate(store, distribution_params))
+    # 判断当前用户是否已经是分销者,若是则返回提示.
+    code = DistributionsService.is_already_distributor?(distribution_params[:owner_type],
+                                                        distribution_params[:owner_id])
+    CommonService.response_format(ResponseCode.COMMON.OK, code)
   end
 
   ###
@@ -83,6 +85,7 @@ class DistributionsService < BaseService
   end
 
   def self.is_already_distributor?(object_type, object_id)
+    p 'is_already_distributor?',object_type, object_id
     !Distribution.find_by(owner_type: object_type, owner_id: object_id).nil?
   end
 
@@ -136,7 +139,6 @@ class DistributionsService < BaseService
   end
 
   def self.distribute_authenticate(store, distribution_params)
-    p 'distribute_authenticate',store, distribution_params
     # 获取当前customre对象.
     owner = eval(distribution_params[:owner_type]).find(distribution_params[:owner_id])
 
@@ -148,10 +150,9 @@ class DistributionsService < BaseService
     # 判断当前用户是否已经是分销者,若是则返回提示.
     if DistributionsService.is_already_distributor?(distribution_params[:owner_type],
                                                     distribution_params[:owner_id])
-      return {"code" => true, "message" => "ERROR: Customer is already distributor!"}
+      return {"code" => false, "message" => "ERROR: Customer is already distributor!"}
     end
-p 't'*10,DistributionsService.is_already_distributor?(distribution_params[:owner_type],
-                                                      distribution_params[:owner_id])
+
     # 判断是否满足当前设定的分销规则.
     if !DistributionsService.distribution_rule_authenticate?(store,
                                                              distribution_params[:owner_type],
