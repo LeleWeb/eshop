@@ -145,7 +145,7 @@ class DistributionsService < BaseService
     # 判断当前用户是否已经是分销者,若是则返回提示.
     if DistributionsService.is_already_distributor?(distribution_params[:owner_type],
                                                     distribution_params[:owner_id])
-      return {"code" => false, "message" => "ERROR: Customer is already distributor!"}
+      return {"code" => true, "message" => "ERROR: Customer is already distributor!"}
     end
 
     # 判断是否满足当前设定的分销规则.
