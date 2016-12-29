@@ -41,4 +41,7 @@
 
 # 分销规则种子数据
 store = Store.find_by(name: "环球捕手")
-store.distribution_rules.create(name: "ANYONE", category: Settings.DISTRIBUTION_RULES.ANYONE)
+# store.distribution_rules.create(name: "ANYONE", category: Settings.DISTRIBUTION_RULES.ANYONE)
+store.distribution_rules.create(name: "RULE1", category: Settings.DISTRIBUTION_RULES.RULE1)
+store.distribution_rules.create(name: "RULE2", category: Settings.DISTRIBUTION_RULES.RULE2)
+DistributionLevel.create(commission_ratio: 0.01, level: Settings.DISTRIBUTOR_LEVEL.ZERO, minimum: 0.0, maximum: 1000)

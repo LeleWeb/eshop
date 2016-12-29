@@ -5,6 +5,9 @@ defaults: &defaults
       COMMISSION: 0
   HOME_URL: "http://www.yiyunma.com/#/home"
   DISTRIBUTION_LEVEL: 3   # 设置分销等级
+  DISTRIBUTOR_LEVEL:
+    ZERO: 0
+    ONE: 1
   DISTRIBUTION_RULES:
     ANYONE: 0
     RULE1: 1
