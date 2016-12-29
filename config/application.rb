@@ -37,5 +37,8 @@ module Eshop
 
     config.autoload_paths << Rails.root.join('app/policies')
 
+    # 设置数据库时间为北京时间
+    config.time_zone = 'Beijing'
+    config.active_record.default_timezone = :local
   end
 end

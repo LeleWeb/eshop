@@ -4,5 +4,6 @@ class Order < ApplicationRecord
   belongs_to :buyer, polymorphic: true
   has_many :order_details
 
-
+  # 订单操作日志
+  has_many :order_logs
 end

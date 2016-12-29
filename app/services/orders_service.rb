@@ -61,9 +61,12 @@ class OrdersService < BaseService
   # 定时刷新订单状态，已发货的订单，超过七天后自动设置为已完成方法。
   def self.update_order_status
     # 查找所有状态为已发货的订单
+    orders = Order.where(status: Settings.ORDER.STATUS.DELIVERED)
 
     # 根据订单操作日志表读取每个订单的操作时间，如果该操作时间与当前时间差超过七天，则自动将订单状态转换为已完成。
-
+    orders.each do |order|
+      order.order_logs.where("operate_time <= ?", Time.now - )
+    end
   end
 
 end
