@@ -65,7 +65,12 @@ class OrdersService < BaseService
 
     # 根据订单操作日志表读取每个订单的操作时间，如果该操作时间与当前时间差超过七天，则自动将订单状态转换为已完成。
     orders.each do |order|
-      order.order_logs.where("operate_time <= ?", Time.now - )
+      delivered_order_log = order.order_logs.where("action_number = ? and operate_time < ?",
+                                                   Settings.ORDER.STATUS.DELIVERED,
+                                                   Time.zone.now - 7.day).first
+      if !delivered_order_log.nil?
+        order.update(status: Settings.ORDER.STATUS.COMPLETED)
+      end
     end
   end
 
