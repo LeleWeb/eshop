@@ -12,7 +12,7 @@ class DistributionsService < BaseService
     end
 
     # 父子节点合法性检验.
-    if parent.nil?
+    if parent.nil? || distributor_parent.nil?
       return {"code" => false, "message" => "parent is blank!"}
     end
 
