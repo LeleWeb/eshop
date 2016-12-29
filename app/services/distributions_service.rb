@@ -1,33 +1,38 @@
 class DistributionsService < BaseService
   def create_distribution(store, distribution_params)
-    # 获取父子节点对象
+    # 获取父节点对象
     parent = eval(distribution_params[:parent_type]).find(distribution_params[:parent_id])
     distributor_parent = Distribution.find_by(owner_type: distribution_params[:parent_type],
                                               owner_id: distribution_params[:parent_id])
-    if distributor_parent.nil?
-      # 若上级为商家且商家没有加入分销关系表时，新建商家为根分销节点
+    # 若上级为商家且商家没有加入分销关系表时，新建商家为根分销节点
+    if distribution_params[:parent_type] == "Store" && distributor_parent.nil?
       distributor_parent = Distribution.create(owner_type: distribution_params[:parent_type],
                                                owner_id: distribution_params[:parent_id])
     end
-    owner = eval(distribution_params[:owner_type]).find(distribution_params[:owner_id])
 
     # 父子节点合法性检验
-    if parent.nil? || owner.nil?
-      return false
+    if parent.nil?
+      return {"code" => false, "message" => "parent is blank!"}
     end
 
-    # 判断当前用户是否已经是分销者，若是则返回提示。
-    if DistributionsService.is_already_distributor?(distribution_params[:owner_type],
-                                                    distribution_params[:owner_id])
-      return false
+    # 判断owner合法性
+    result = DistributionsService.distribute_authenticate(store, distribution_params)
+    if result["code"] != true
+      return result
     end
 
-    # 判断是否满足当前设定的分销规则
-    if !DistributionsService.distribution_rule_authenticate?(store,
-                                                             distribution_params[:owner_type],
-                                                             distribution_params[:owner_id])
-      return false
-    end
+    # # 判断当前用户是否已经是分销者，若是则返回提示。
+    # if DistributionsService.is_already_distributor?(distribution_params[:owner_type],
+    #                                                 distribution_params[:owner_id])
+    #   return {"code" => false, "message" => "parent or owner is blank!"}
+    # end
+    #
+    # # 判断是否满足当前设定的分销规则
+    # if !DistributionsService.distribution_rule_authenticate?(store,
+    #                                                          distribution_params[:owner_type],
+    #                                                          distribution_params[:owner_id])
+    #   return false
+    # end
 
     # 创建分销管理关系
     distribution = DistributionsService.create_distribution_relation(distributor_parent,
@@ -135,7 +140,7 @@ class DistributionsService < BaseService
   end
 
   def self.distribute_authenticate(store, distribution_params)
-    # 获取父子节点对象
+    # 获取当前customre对象
     owner = eval(distribution_params[:owner_type]).find(distribution_params[:owner_id])
 
     # customer节点合法性检验
