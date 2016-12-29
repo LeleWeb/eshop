@@ -25,3 +25,8 @@ every 90.minutes  do
   rake "get_wx_access_token"
 end
 
+# 每天定时刷新订单状态，已发货的订单，超过七天后自动设置为已完成。
+every 1.day, :at => '00:00 am' do
+  rake "update_order_status"
+end
+

@@ -58,4 +58,11 @@ class OrdersService < BaseService
     data
   end
 
+  # 定时刷新订单状态，已发货的订单，超过七天后自动设置为已完成方法。
+  def self.update_order_status
+    # 查找所有状态为已发货的订单
+
+    # 根据
+  end
+
 end
