@@ -3,7 +3,7 @@ class Api::V1::BankAccountsController < Api::V1::BaseController
 
   # POST /accounts
   def create
-    render json: BankAccountsService.new.create_back_account(@customer, back_account_params)
+    render json: BankAccountsService.new.create_bank_account(@customer, bank_account_params)
   end
 
   private
@@ -13,8 +13,8 @@ class Api::V1::BankAccountsController < Api::V1::BaseController
   end
 
   # Only allow a trusted parameter "white list" through.
-  def back_account_params
-    params.require(:back_account).permit(:name, :card_number, :bank)
+  def bank_account_params
+    params.require(:bank_account).permit(:name, :card_number, :bank)
   end
 
 end
