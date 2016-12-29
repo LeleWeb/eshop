@@ -69,7 +69,11 @@ class OrdersService < BaseService
                                                    Settings.ORDER.STATUS.DELIVERED,
                                                    Time.zone.now - 7.day).first
       if !delivered_order_log.nil?
+        # 唯一刷新订单状态为完成的地方
         order.update(status: Settings.ORDER.STATUS.COMPLETED)
+
+        # 此处完成以当前订单的customer为分销节点为起始，往上两级的祖先节点的账户明细刷新.
+        DistributionsService.update_customer_account_details(order)
       end
     end
   end
