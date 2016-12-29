@@ -21,8 +21,6 @@ class DistributionsService < BaseService
     if result["code"] != true
       return result
     end
-    p "r"*10
-    p result
 
     # 创建分销管理关系
     distribution = DistributionsService.create_distribution_relation(distributor_parent,
@@ -85,7 +83,6 @@ class DistributionsService < BaseService
   end
 
   def self.is_already_distributor?(object_type, object_id)
-    p 'is_already_distributor?',object_type, object_id
     !Distribution.find_by(owner_type: object_type, owner_id: object_id).nil?
   end
 
@@ -119,22 +116,16 @@ class DistributionsService < BaseService
       end
     end
 
-    p "t"*10,distributors
-
     # 2.遍历第一步的集合，查询每个customer的消费总额，然后求和；
     distributors.each do |distribution|
       consume_sum += CustomersService.get_consume_total(Customer.find(distribution.owner_id))
     end
 
-    p "y"*10,consume_sum
-
     # 3.去distribution_levels表找到第二布计算的总额所在区间等级记录，将总额*佣金系数得到个人佣金余额；
     distribution_level = DistributionLevel.where("minimum >= ? and maximum < ? ", consume_sum, consume_sum).first
-    p "u"*10,distribution_level
     if !distribution_level.nil?
       commission = consume_sum*distribution_level.commission_ratio
     end
-    p "i"*10,commission
     commission
   end
 
