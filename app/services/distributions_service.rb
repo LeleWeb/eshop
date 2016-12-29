@@ -21,6 +21,8 @@ class DistributionsService < BaseService
     if result["code"] != true
       return result
     end
+    p "r"*10
+    p result
 
     # 创建分销管理关系
     distribution = DistributionsService.create_distribution_relation(distributor_parent,
@@ -134,6 +136,7 @@ class DistributionsService < BaseService
   end
 
   def self.distribute_authenticate(store, distribution_params)
+    p 'distribute_authenticate',store, distribution_params
     # 获取当前customre对象.
     owner = eval(distribution_params[:owner_type]).find(distribution_params[:owner_id])
 
@@ -147,7 +150,8 @@ class DistributionsService < BaseService
                                                     distribution_params[:owner_id])
       return {"code" => true, "message" => "ERROR: Customer is already distributor!"}
     end
-
+p 't'*10,DistributionsService.is_already_distributor?(distribution_params[:owner_type],
+                                                      distribution_params[:owner_id])
     # 判断是否满足当前设定的分销规则.
     if !DistributionsService.distribution_rule_authenticate?(store,
                                                              distribution_params[:owner_type],
