@@ -1,0 +1,2 @@
+class WithdrawDetail < ApplicationRecord
+end
