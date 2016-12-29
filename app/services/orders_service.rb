@@ -62,7 +62,8 @@ class OrdersService < BaseService
   def self.update_order_status
     # 查找所有状态为已发货的订单
 
-    # 根据
+    # 根据订单操作日志表读取每个订单的操作时间，如果该操作时间与当前时间差超过七天，则自动将订单状态转换为已完成。
+
   end
 
 end
