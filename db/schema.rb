@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161226111233) do
+ActiveRecord::Schema.define(version: 20161228103811) do
 
   create_table "accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "uuid"
@@ -113,6 +113,17 @@ ActiveRecord::Schema.define(version: 20161226111233) do
     t.datetime "updated_at",  null: false
   end
 
+  create_table "customer_account_details", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "customer_id"
+    t.datetime "trade_time"
+    t.float    "expenses_receipts", limit: 24
+    t.float    "balance",           limit: 24
+    t.integer  "category"
+    t.string   "remark",            limit: 256
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
   create_table "customers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "account_id"
     t.string   "mobile_number", limit: 50
@@ -148,6 +159,16 @@ ActiveRecord::Schema.define(version: 20161226111233) do
     t.datetime "deleted_at"
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
+  end
+
+  create_table "distribution_levels", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.float    "commission_ratio", limit: 24
+    t.integer  "level"
+    t.float    "minimum",          limit: 24
+    t.float    "maximum",          limit: 24
+    t.string   "remark",           limit: 256
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   create_table "distribution_rules", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
