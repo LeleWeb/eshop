@@ -140,26 +140,23 @@ class DistributionsService < BaseService
 
     # customer节点合法性检验
     if owner.nil?
-      puts "ERROR: Customer id invalid!"
-      return false
+      return {"code" => false, "message" => "ERROR: Customer id invalid!"}
     end
 
     # 判断当前用户是否已经是分销者，若是则返回提示。
     if DistributionsService.is_already_distributor?(distribution_params[:owner_type],
                                                     distribution_params[:owner_id])
-      puts "ERROR: Customer is already distributor!"
-      return false
+      return {"code" => false, "message" => "ERROR: Customer is already distributor!"}
     end
 
     # 判断是否满足当前设定的分销规则
     if !DistributionsService.distribution_rule_authenticate?(store,
                                                              distribution_params[:owner_type],
                                                              distribution_params[:owner_id])
-      puts "ERROR: distribution rule authenticate failed!"
-      return false
+      return {"code" => false, "message" => "ERROR: distribution rule authenticate failed!"}
     end
 
-    return true
+    return {"code" => true, "message" => "successful!"}
   end
 
 end
