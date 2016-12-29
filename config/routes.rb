@@ -38,6 +38,9 @@ Rails.application.routes.draw do
       # 公众号创建菜单接口
       resources :wxmenu
 
+      # 用户银行账号接口
+      resources :back_accounts
+
       # 登陆登出
       post 'login', to: 'session#login'
       post 'logout', to: 'session#logout'

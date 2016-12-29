@@ -6,5 +6,6 @@ class Customer < ApplicationRecord
   has_many :collections, as: :owner
   # 分销
   has_many :distributions, as: :owner
-
+  # 银行账号
+  has_many :back_accounts
 end
