@@ -39,7 +39,7 @@ class Api::V1::BankAccountsController < Api::V1::BaseController
 
   # Only allow a trusted parameter "white list" through.
   def bank_account_params
-    params.require(:bank_account).permit(:name, :card_number, :bank)
+    params.require(:bank_account).permit(:name, :card_number, :bank, :is_default)
   end
 
 end
