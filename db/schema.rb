@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161228103811) do
+ActiveRecord::Schema.define(version: 20161229064121) do
 
   create_table "accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "uuid"
@@ -206,7 +206,7 @@ ActiveRecord::Schema.define(version: 20161228103811) do
 
   create_table "order_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "order_id"
-    t.integer  "operator_type"
+    t.string   "operator_type"
     t.integer  "operator_id"
     t.integer  "action_number"
     t.datetime "operate_time"

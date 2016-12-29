@@ -1,0 +1,2 @@
+class CustomerAccount < ApplicationRecord
+end
