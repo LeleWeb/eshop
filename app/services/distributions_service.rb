@@ -4,6 +4,7 @@ class DistributionsService < BaseService
     parent = eval(distribution_params[:parent_type]).find(distribution_params[:parent_id])
     distributor_parent = Distribution.find_by(owner_type: distribution_params[:parent_type],
                                               owner_id: distribution_params[:parent_id])
+
     # 若上级为商家且商家没有加入分销关系表时，新建商家为根分销节点
     if distribution_params[:parent_type] == "Store" && distributor_parent.nil?
       distributor_parent = Distribution.create(owner_type: distribution_params[:parent_type],
@@ -20,19 +21,6 @@ class DistributionsService < BaseService
     if result["code"] != true
       return result
     end
-
-    # # 判断当前用户是否已经是分销者，若是则返回提示。
-    # if DistributionsService.is_already_distributor?(distribution_params[:owner_type],
-    #                                                 distribution_params[:owner_id])
-    #   return {"code" => false, "message" => "parent or owner is blank!"}
-    # end
-    #
-    # # 判断是否满足当前设定的分销规则
-    # if !DistributionsService.distribution_rule_authenticate?(store,
-    #                                                          distribution_params[:owner_type],
-    #                                                          distribution_params[:owner_id])
-    #   return false
-    # end
 
     # 创建分销管理关系
     distribution = DistributionsService.create_distribution_relation(distributor_parent,
@@ -126,16 +114,22 @@ class DistributionsService < BaseService
       end
     end
 
+    p "t"*10,distributors
+
     # 2.遍历第一步的集合，查询每个customer的消费总额，然后求和；
     distributors.each do |distribution|
       consume_sum += CustomersService.get_consume_total(Customer.find(distribution.owner_id))
     end
 
+    p "y"*10,distributors
+
     # 3.去distribution_levels表找到第二布计算的总额所在区间等级记录，将总额*佣金系数得到个人佣金余额；
     distribution_level = DistributionLevel.where("minimum >= ? and maximum < ? ", consume_sum, consume_sum).first
+    p "u"*10,distribution_level
     if !distribution_level.nil?
       commission = consume_sum*distribution_level.commission_ratio
     end
+    p "i"*10,commission
     commission
   end
 
