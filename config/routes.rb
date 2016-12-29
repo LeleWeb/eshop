@@ -39,7 +39,7 @@ Rails.application.routes.draw do
       resources :wxmenu
 
       # 用户银行账号接口
-      resources :back_accounts
+      resources :bank_accounts
 
       # 登陆登出
       post 'login', to: 'session#login'
