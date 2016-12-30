@@ -5,15 +5,15 @@ class DistributionsService < BaseService
     distributor_parent = Distribution.find_by(owner_type: distribution_params[:parent_type],
                                               owner_id: distribution_params[:parent_id])
 
-    # 父子节点合法性检验.
-    if parent.nil? || distributor_parent.nil?
-      return {"code" => false, "message" => "parent is blank or is not distributor!"}
-    end
-
     # 若上级为商家且商家没有加入分销关系表时,新建商家为根分销节点.
     if distribution_params[:parent_type] == "Store" && distributor_parent.nil?
       distributor_parent = Distribution.create(owner_type: distribution_params[:parent_type],
-                                               owner_id: distribution_params[:parent_id])
+          owner_id: distribution_params[:parent_id])
+    end
+
+    # 父子节点合法性检验.
+    if parent.nil? || distributor_parent.nil?
+      return {"code" => false, "message" => "parent is blank or is not distributor!"}
     end
 
     # 判断owner合法性.
