@@ -166,14 +166,14 @@ class DistributionsService < BaseService
     if result["code"] != true
       return
     end
-
+    p 'c'*10,order
     # 是合法分销者,查找该用户的分销记录。
     distributor = Distribution.find_by(owner_type: distribution_params[:parent_type],
                                        owner_id: distribution_params[:parent_id])
     if distributor.nil?
       return
     end
-
+    p 'd'*10,distributor
     # 计算自己和往上两级的父辈佣金,同时更新到消费者账户明细表。
     begin_level = distributor.level
     end_level = begin_level - (Settings.DISTRIBUTION_LEVEL-1)
@@ -183,7 +183,7 @@ class DistributionsService < BaseService
         distributors << distribution
       end
     end
-
+    p 'e'*10,distributors
     # 计算每个分销者本次佣金,创建消费者账户明细表记录.
     distributors.each do |distributor|
       CustomerAccountDetail.create(customer_id: distributor.owner_id,

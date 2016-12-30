@@ -60,6 +60,7 @@ class OrdersService < BaseService
 
   # 定时刷新订单状态，已发货的订单，超过七天后自动设置为已完成方法。
   def self.update_order_status
+    p 'a'*10,'update_order_status'
     # 查找所有状态为已发货的订单
     orders = Order.where(status: Settings.ORDER.STATUS.DELIVERED)
 
@@ -69,6 +70,7 @@ class OrdersService < BaseService
                                                    Settings.ORDER.STATUS.DELIVERED,
                                                    Time.zone.now - 7.day).first
       if !delivered_order_log.nil?
+        p 'b'*10,order,delivered_order_log
         # 唯一刷新订单状态为完成的地方
         order.update(status: Settings.ORDER.STATUS.COMPLETED)
 
