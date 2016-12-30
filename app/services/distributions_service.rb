@@ -158,6 +158,7 @@ class DistributionsService < BaseService
 
   # 有用户订单完成时,需要触发计算以改用户为起点，往上两级的所有用户佣金，并刷新到消费者账户明细表.
   def self.update_customer_account_details(order)
+    p 'update_customer_account_details'
     distributors = []
 
     # 判断该用户是否是分销者.
