@@ -98,10 +98,13 @@ class DistributionsService < BaseService
     distributors = []
     consume_sum = 0.0
     commission = 0.0
+    first_node = true # 记录第一个根节点
+    begin_level = nil
+    end_level = nil
 
     # 1.去分销关系表(distributions)中查询指定customer节点及其三级子孙节点；
     customer_distribution_node = Distribution.find_by(owner_type: "Customer", owner_id: customer.id)
-    first_node = true # 记录第一个根节点
+    p '1'*10,customer_distribution_node
     Distribution.each_with_level(customer_distribution_node.self_and_descendants) do |distribution, level|
       # 记录第一个元素（也就是指定查询的customer元素），以其作为起始的level
       if first_node == true
