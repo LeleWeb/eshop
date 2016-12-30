@@ -9,8 +9,8 @@ class WithdrawDetailsService < BaseService
   end
 
   def create_withdraw_detail(customer, store, withdraw_detail_params)
-    withdraw_detail_params.as_json.merge("operate_time" => Time.now,
-                                         "status" => Settings.WITHDRAW.APPLYING)
+    withdraw_detail_params = withdraw_detail_params.as_json.merge("operate_time" => Time.now,
+                                                                  "status" => Settings.WITHDRAW.APPLYING)
     withdraw_detail = customer.withdraw_details.create!(withdraw_detail_params)
     store.withdraw_details << withdraw_detail
     CommonService.response_format(ResponseCode.COMMON.OK, withdraw_detail)
