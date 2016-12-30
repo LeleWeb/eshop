@@ -162,12 +162,10 @@ class DistributionsService < BaseService
     distributors = []
 
     # 判断该用户是否是分销者.
-    result = DistributionsService.distribute_authenticate(Store.find_by(name: "环球捕手"),
-                                                          {:owner_type => order.buyer_type, :owner_id => order.buyer_id})
-    if result["code"] != true
-      p 'g'*10,result
+    if !DistributionsService.is_already_distributor?(order.buyer_type, order.buyer_id)
       return
     end
+
     p 'c'*10,order
     # 是合法分销者,查找该用户的分销记录。
     distributor = Distribution.find_by(owner_type: distribution_params[:parent_type],
