@@ -168,8 +168,7 @@ class DistributionsService < BaseService
 
     p 'c'*10,order
     # 是合法分销者,查找该用户的分销记录。
-    distributor = Distribution.find_by(owner_type: distribution_params[:parent_type],
-                                       owner_id: distribution_params[:parent_id])
+    distributor = Distribution.find_by(owner_type: order.buyer_type, owner_id: order.buyer_id)
     if distributor.nil?
       return
     end
