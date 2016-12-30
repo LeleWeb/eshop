@@ -165,6 +165,7 @@ class DistributionsService < BaseService
     result = DistributionsService.distribute_authenticate(Store.find_by(name: "环球捕手"),
                                                           {:owner_type => order.buyer_type, :owner_id => order.buyer_id})
     if result["code"] != true
+      p 'g'*10,result
       return
     end
     p 'c'*10,order
