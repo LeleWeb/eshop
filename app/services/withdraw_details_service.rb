@@ -1,4 +1,4 @@
-class WithdrawDetailsServic < BaseService
+class WithdrawDetailsService < BaseService
 
   def get_withdraw_details(customer)
     CommonService.response_format(ResponseCode.COMMON.OK, customer.withdraw_details)
