@@ -41,6 +41,9 @@ Rails.application.routes.draw do
       # 用户银行账号接口
       resources :bank_accounts
 
+      # 体现明细接口
+      resources :withdraw_details
+
       # 登陆登出
       post 'login', to: 'session#login'
       post 'logout', to: 'session#logout'
