@@ -10,4 +10,6 @@ class Customer < ApplicationRecord
   has_many :bank_accounts
   # 体现申请
   has_many :withdraw_details
+  # 用户账户
+  has_one :customer_account
 end
