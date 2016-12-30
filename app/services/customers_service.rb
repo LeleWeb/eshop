@@ -49,10 +49,8 @@ class CustomersService < BaseService
 
   # 计算customer的累计消费总额
   def self.get_consume_total(customer)
-    p 'm'*10,customer.orders
     sum = 0.0 # 总金额单位是元
     customer.orders.where(status: Settings.ORDER.STATUS.COMPLETED).each do |order|
-      p "p"*10,order
       sum += order.pay_price
     end
     sum
