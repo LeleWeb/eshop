@@ -11,4 +11,7 @@ class Store < ApplicationRecord
 
   # 分销规则
   has_and_belongs_to_many :distribution_rules
+
+  # 体现申请
+  has_many :withdraw_details
 end

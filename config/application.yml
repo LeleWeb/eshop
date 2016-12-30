@@ -1,5 +1,8 @@
 # config/application.yml
 defaults: &defaults
+  WITHDRAW:
+    APPLYING: 0
+    PAID: 1
   CUSTOMER_ACCOUNT:
     TRANSACTION_TYPE:
       COMMISSION: 0

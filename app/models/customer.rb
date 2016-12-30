@@ -8,4 +8,6 @@ class Customer < ApplicationRecord
   has_many :distributions, as: :owner
   # 银行账号
   has_many :bank_accounts
+  # 体现申请
+  has_many :withdraw_details
 end
