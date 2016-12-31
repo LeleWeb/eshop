@@ -10,7 +10,7 @@ class BankAccountsService < BaseService
 
   def create_bank_account(customer, bank_account_params)
     p 'a'*10,bank_account_params
-    bank_account_params = bank_account_params.as_json.delete("customer_id")
+    bank_account_params.as_json.delete("customer_id")
     Address.transaction do
       # 处理默认地址唯一性
       if bank_account_params[:is_default] == true
