@@ -15,7 +15,7 @@ class BankAccountsService < BaseService
         customer.bank_accounts.collect{|bank_account| bank_account.update(is_default: false)}
       end
 
-      bank_account = customer.bank_accounts.create!(bank_account_params)
+      bank_account = customer.bank_accounts.create!(bank_account_params.as_json)
       CommonService.response_format(ResponseCode.COMMON.OK, bank_account)
     end
   end
