@@ -114,9 +114,16 @@ class DistributionsService < BaseService
     if !distribution_level.nil?
       commission = consume_sum*distribution_level.commission_ratio
     end
+    
+    # 因为有之前的customer没有创建customer_account，所以此次判断如果没有则新增.
+    customer_account = customer.customer_account
+    if customer_account.nil?
+      customer_account = customer.customer.create_customer_account()
+    end
+
     {
         "commission" => commission.to_f,
-        "usable_commission" => commission.to_f - customer.customer_account.withdraw_sum
+        "usable_commission" => commission.to_f - customer_account.withdraw_sum
     }
   end
 
