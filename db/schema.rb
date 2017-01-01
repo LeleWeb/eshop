@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161229083423) do
+ActiveRecord::Schema.define(version: 20161230013457) do
 
   create_table "accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "uuid"
@@ -57,6 +57,16 @@ ActiveRecord::Schema.define(version: 20161229083423) do
     t.integer "products_id"
     t.index ["adverts_id"], name: "index_adverts_products_on_adverts_id", using: :btree
     t.index ["products_id"], name: "index_adverts_products_on_products_id", using: :btree
+  end
+
+  create_table "bank_accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "customer_id"
+    t.string   "name"
+    t.string   "card_number"
+    t.string   "bank"
+    t.boolean  "is_default"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -170,12 +180,13 @@ ActiveRecord::Schema.define(version: 20161229083423) do
 
   create_table "distribution_levels", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.float    "commission_ratio", limit: 24
-    t.integer  "level"
+    t.string   "level"
     t.float    "minimum",          limit: 24
     t.float    "maximum",          limit: 24
     t.string   "remark",           limit: 256
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
+    t.boolean  "is_deleted"
   end
 
   create_table "distribution_rules", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
