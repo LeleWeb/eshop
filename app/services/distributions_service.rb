@@ -120,7 +120,7 @@ class DistributionsService < BaseService
     if customer_account.nil?
       customer_account = customer.create_customer_account()
     end
-
+    p 'a'*10,commission,customer_account
     {
         "commission" => commission.to_f,
         "usable_commission" => commission.to_f - customer_account.withdraw_sum
