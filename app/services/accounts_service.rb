@@ -60,7 +60,7 @@ class AccountsService < BaseService
     end
 
     # 创建用户账户
-    customer_account = customer.create_customer_account()
+    customer_account = customer.create_customer_account(withdraw_sum: 0.0)
     {"account" => account, "customer" => customer, "customer_account" => customer_account}
   end
 

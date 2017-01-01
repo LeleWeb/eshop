@@ -118,7 +118,7 @@ class DistributionsService < BaseService
     # 因为有之前的customer没有创建customer_account，所以此次判断如果没有则新增.
     customer_account = customer.customer_account
     if customer_account.nil?
-      customer_account = customer.create_customer_account()
+      customer_account = customer.create_customer_account(withdraw_sum: 0.0)
     end
     p 'a'*10,commission,customer_account
     {
