@@ -31,8 +31,10 @@ class DistributionsService < BaseService
 
   # 分销佣金余额计算方法.
   def get_commission(customer)
+    data = DistributionsService.calculate_commission(customer)
+    descendants = DistributionsService.get_customer_sublevel_distributors(customer)
     CommonService.response_format(ResponseCode.COMMON.OK,
-                                  {"commission" => DistributionsService.calculate_commission(customer)})
+                                  data.merge("descendants" => descendants.size))
   end
 
   # 分销鉴权
@@ -98,25 +100,9 @@ class DistributionsService < BaseService
     distributors = []
     consume_sum = 0.0
     commission = 0.0
-    first_node = true # 记录第一个根节点
-    begin_level = nil
-    end_level = nil
 
     # 1.去分销关系表(distributions)中查询指定customer节点及其三级子孙节点；
-    customer_distribution_node = Distribution.find_by(owner_type: "Customer", owner_id: customer.id)
-    Distribution.each_with_level(customer_distribution_node.self_and_descendants) do |distribution, level|
-      # 记录第一个元素（也就是指定查询的customer元素），以其作为起始的level
-      if first_node == true
-        begin_level = level
-        end_level = begin_level.to_i + (Settings.DISTRIBUTION_LEVEL.to_i - 1)
-        first_node = false
-      end
-
-      # 过滤三级内的分销者记录
-      if level >= begin_level && level <= end_level
-        distributors << distribution
-      end
-    end
+    distributors = self.get_customer_sublevel_distributors(customer)
 
     # 2.遍历第一步的集合，查询每个customer的消费总额，然后求和；
     distributors.each do |distribution|
@@ -128,7 +114,10 @@ class DistributionsService < BaseService
     if !distribution_level.nil?
       commission = consume_sum*distribution_level.commission_ratio
     end
-    commission.to_f
+    {
+        "commission" => commission.to_f,
+        "usable_commission" => 0
+    }
   end
 
   def self.distribute_authenticate(store, distribution_params)
@@ -158,7 +147,6 @@ class DistributionsService < BaseService
 
   # 有用户订单完成时,需要触发计算以改用户为起点，往上两级的所有用户佣金，并刷新到消费者账户明细表.
   def self.update_customer_account_details(order)
-    p 'update_customer_account_details'
     distributors = []
 
     # 判断该用户是否是分销者.
@@ -166,23 +154,15 @@ class DistributionsService < BaseService
       return
     end
 
-    p 'c'*10,order
     # 是合法分销者,查找该用户的分销记录。
     distributor = Distribution.find_by(owner_type: order.buyer_type, owner_id: order.buyer_id)
     if distributor.nil?
       return
     end
-    p 'd'*10,distributor
+
     # 计算自己和往上两级的父辈佣金,同时更新到消费者账户明细表。
-    begin_level = distributor.level
-    end_level = begin_level - (Settings.DISTRIBUTION_LEVEL-1)
-    Distribution.each_with_level(distributor.self_and_ancestors) do |distribution, level|
-      # 过滤三级内的分销者记录.
-      if level <= begin_level && level >= end_level
-        distributors << distribution
-      end
-    end
-    p 'e'*10,distributors
+    distributors = self.get_customer_parent_distributors(distributor)
+
     # 计算每个分销者本次佣金,创建消费者账户明细表记录.
     distributors.each do |distributor|
       CustomerAccountDetail.create(customer_id: distributor.owner_id,
@@ -190,7 +170,46 @@ class DistributionsService < BaseService
                                    expenses_receipts: order.pay_price,
                                    category: Settings.CUSTOMER_ACCOUNT.TRANSACTION_TYPE.COMMISSION)
     end
+  end
 
+  # 获取指定用户的三级内所有下级分销者.
+  def self.get_customer_sublevel_distributors(customer, distribution_level=Settings.DISTRIBUTION_LEVEL)
+    distributors = []
+    first_node = true # 记录第一个根节点
+    begin_level = nil
+    end_level = nil
+
+    # 1.去分销关系表(distributions)中查询指定customer节点及其三级子孙节点；
+    customer_distribution_node = Distribution.find_by(owner_type: "Customer", owner_id: customer.id)
+    Distribution.each_with_level(customer_distribution_node.self_and_descendants) do |distribution, level|
+      # 记录第一个元素（也就是指定查询的customer元素），以其作为起始的level
+      if first_node == true
+        begin_level = level
+        end_level = begin_level.to_i + (distribution_level.to_i - 1)
+        first_node = false
+      end
+
+      # 过滤三级内的分销者记录
+      if level >= begin_level && level <= end_level
+        distributors << distribution
+      end
+    end
+    distributors
+  end
+
+  # 获取指定用户的所有父级及祖先分销者.
+  def self.get_customer_parent_distributors(distributor, distribution_level=Settings.DISTRIBUTION_LEVEL)
+    distributors = []
+    # 计算自己和往上两级的父辈佣金,同时更新到消费者账户明细表。
+    begin_level = distributor.level
+    end_level = begin_level - (distribution_level-1)
+    Distribution.each_with_level(distributor.self_and_ancestors) do |distribution, level|
+      # 过滤三级内的分销者记录.
+      if level <= begin_level && level >= end_level
+        distributors << distribution
+      end
+    end
+    distributors
   end
 
 end
