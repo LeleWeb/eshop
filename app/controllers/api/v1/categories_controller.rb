@@ -1,5 +1,6 @@
 class Api::V1::CategoriesController < Api::V1::BaseController
   before_action :set_category, only: [:show, :update, :destroy]
+  skip_before_action :authenticate_user!, only: [:create]
 
   # GET /categories
   def index
