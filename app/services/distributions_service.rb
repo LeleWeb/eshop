@@ -116,7 +116,7 @@ class DistributionsService < BaseService
     end
     {
         "commission" => commission.to_f,
-        "usable_commission" => 0
+        "usable_commission" => commission.to_f - customer.customer_account.withdraw_sum
     }
   end
 
