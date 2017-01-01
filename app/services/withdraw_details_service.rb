@@ -1,7 +1,7 @@
 class WithdrawDetailsService < BaseService
 
   def get_withdraw_details(customer)
-    CommonService.response_format(ResponseCode.COMMON.OK, customer.withdraw_details)
+    CommonService.response_format(ResponseCode.COMMON.OK, customer.withdraw_details.order(created_at: :desc))
   end
 
   def get_withdraw_detail(withdraw_detail)
