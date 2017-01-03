@@ -9,7 +9,7 @@ class WxmessagesService < BaseService
       data["FromUserName"] = wxmessages_params["FromUserName"]
       data["CreateTime"] = wxmessages_params["CreateTime"]
       data["MsgType"] = "text"
-      data["Content"] = "你好"
+      data["Content"] = "hello world!"
       p 'c'*10,xml = WxmessagesService.convert_hash_to_xml(data,
                                                            Settings.WECHAT.WXMESSAGES.EVENT.SUBSCRIBE.XML.as_json)
       xml
@@ -32,7 +32,7 @@ class WxmessagesService < BaseService
         temp.add_text(value.to_s)
       end
     end
-    root_ele.to_s.gsub('&lt;','<').gsub('&gt','>').gsub('&quot;','"')
+    root_ele.to_s.gsub('&lt;','<').gsub('&gt;','>').gsub('&quot;','"')
   end
 
 end
