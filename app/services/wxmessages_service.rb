@@ -10,8 +10,8 @@ class WxmessagesService < BaseService
       data["CreateTime"] = wxmessages_params["CreateTime"]
       data["MsgType"] = "text"
       data["Content"] = "hello world!"
-      p 'c'*10,xml = WxmessagesService.convert_hash_to_xml(data,
-                                                           Settings.WECHAT.WXMESSAGES.EVENT.SUBSCRIBE.XML.as_json)
+      xml = WxmessagesService.convert_hash_to_xml(data, Settings.WECHAT.WXMESSAGES.EVENT.SUBSCRIBE.XML.as_json)
+      p 'c'*10,xml
       xml
     else
       "success"

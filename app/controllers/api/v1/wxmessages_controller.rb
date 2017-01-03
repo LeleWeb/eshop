@@ -5,7 +5,7 @@ class Api::V1::WxmessagesController < Api::V1::BaseController
   # 微信支付结果通用通知接受接口
   def create
     p '9'*10,params
-    p temp = WxmessagesService.new.wxmessages_management(params["xml"])
+    temp = WxmessagesService.new.wxmessages_management(params["xml"])
     render xml: temp
   end
 

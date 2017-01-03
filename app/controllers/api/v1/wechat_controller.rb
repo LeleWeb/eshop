@@ -10,7 +10,9 @@ class Api::V1::WechatController < ApplicationController
 
   # POST /accounts
   def create
-    render xml: WechatService.new.create_wechat(params)
+    temp = WechatService.new.create_wechat(params)
+    p '9'*10,temp
+    render xml: temp
   end
 
   private
