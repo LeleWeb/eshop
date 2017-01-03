@@ -5,7 +5,7 @@ class WxmessagesService < BaseService
     if wxmessages_params["Event"] == Settings.WECHAT.WXMESSAGES.EVENT.SUBSCRIBE.KEY
       p 'b'*10,wxmessages_params
       p 'c'*10,xml = WxmessagesService.convert_hash_to_xml(wxmessages_params,
-                                                           Settings.WECHAT.EVENT.SUBSCRIBE.XML.as_json)
+                                                           Settings.WECHAT.WXMESSAGES.EVENT.SUBSCRIBE.XML.as_json)
       xml
     else
       "success"
