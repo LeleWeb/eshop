@@ -24,7 +24,7 @@ class WxmessagesService < BaseService
     params.each do |key, value|
       if xml_cdata_flag[key] == true
         detail_cdata = ''
-        CData.new(value.to_json).write(detail_cdata)
+        CData.new(value).write(detail_cdata)
         temp = root_ele.add_element(key)
         temp.add_text(detail_cdata)
       else
