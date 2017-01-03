@@ -10,7 +10,7 @@ class Api::V1::WechatController < ApplicationController
 
   # POST /accounts
   def create
-    render json: WechatService.new.create_wechat(params)
+    render xml: WechatService.new.create_wechat(params["xml"])
   end
 
   private
