@@ -4,7 +4,13 @@ class WxmessagesService < BaseService
     # 关注事件,发送关注自动回复文字.
     if wxmessages_params["Event"] == Settings.WECHAT.WXMESSAGES.EVENT.SUBSCRIBE.KEY
       p 'b'*10,wxmessages_params
-      p 'c'*10,xml = WxmessagesService.convert_hash_to_xml(wxmessages_params,
+      data = {}
+      data["ToUserName"] = wxmessages_params["ToUserName"]
+      data["FromUserName"] = wxmessages_params["FromUserName"]
+      data["CreateTime"] = wxmessages_params["CreateTime"]
+      data["MsgType"] = "text"
+      data["Content"] = "你好"
+      p 'c'*10,xml = WxmessagesService.convert_hash_to_xml(data,
                                                            Settings.WECHAT.WXMESSAGES.EVENT.SUBSCRIBE.XML.as_json)
       xml
     else
