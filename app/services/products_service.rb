@@ -66,11 +66,11 @@ class ProductsService < BaseService
       elsif query_params[:category].to_i == Settings.PRODUCT_CATEGORY.HOME
         # 返回30个商品
         data = []
-        apples = Product.where("name like %?%", "苹果").limit(6)
-        jianguo = Product.where("name like %?%", "巴旦木").limit(6)
-        hongzao = Product.where("name like %?%", "红枣").limit(6)
-        heijialun = Product.where("name like %?%", "黑加仑葡萄干").limit(6)
-        hetao = Product.where("name like %?%", "美国核桃").limit(6)
+        apples = Product.where(name: "阿克苏苹果").limit(6)
+        jianguo = Product.where(name: "巴旦木").limit(6)
+        hongzao = Product.where(name: "红枣").limit(6)
+        heijialun = Product.where(name: "黑加仑葡萄干").limit(6)
+        hetao = Product.where(name: "美国核桃").limit(6)
 
         for i in 0..5
           data << ProductsService.find_product_data(apples[i])
