@@ -57,7 +57,7 @@ class ProductsService < BaseService
         Category.find(category_ids).each do |category|
           products = []
           category.products.each do |product|
-            products << ProductsService.find_product_data(product)
+            products << ProductsService.find_product_data(product) if !product.nil?
           end
           data << {:category => category.as_json.merge(:picture => category.pictures[0]),
                    :products => products}
@@ -66,7 +66,7 @@ class ProductsService < BaseService
       elsif query_params[:category].to_i == Settings.PRODUCT_CATEGORY.HOME
         # 返回30个商品
         data = []
-        apples = Product.where(name: "阿克苏苹果").limit(6)
+        apples = Product.where("name = ? or name = ?", "阿克苏苹果", "夏威夷果").limit(6)
         jianguo = Product.where(name: "巴旦木").limit(6)
         hongzao = Product.where(name: "红枣").limit(6)
         heijialun = Product.where(name: "黑加仑葡萄干").limit(6)
@@ -83,7 +83,6 @@ class ProductsService < BaseService
         # Product.limit(query_params[:limit]).each do |product|
         #   data << ProductsService.find_product_data(product)
         # end
-        p 'a'*10,data.size
         data
       else
         # 按照分类查询产品
