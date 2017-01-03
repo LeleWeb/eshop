@@ -1,5 +1,6 @@
 class WxmessagesService < BaseService
   def wxmessages_management(wxmessages_params)
+    p 'a'*10,wxmessages_params
     # 关注事件,发送关注自动回复文字.
     if wxmessages_params["Event"] == Settings.WECHAT.WXMESSAGES.EVNET.SUBSCRIBE.KEY
       p 'b'*10,wxmessages_params
