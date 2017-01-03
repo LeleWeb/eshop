@@ -83,6 +83,7 @@ class ProductsService < BaseService
         # Product.limit(query_params[:limit]).each do |product|
         #   data << ProductsService.find_product_data(product)
         # end
+        p 'a'*10,data
         data
       else
         # 按照分类查询产品
