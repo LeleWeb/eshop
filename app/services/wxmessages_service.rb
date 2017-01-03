@@ -2,10 +2,10 @@ class WxmessagesService < BaseService
   def wxmessages_management(wxmessages_params)
     p 'a'*10,wxmessages_params
     # 关注事件,发送关注自动回复文字.
-    if wxmessages_params["Event"] == Settings.WECHAT.WXMESSAGES.EVNET.SUBSCRIBE.KEY
+    if wxmessages_params["Event"] == Settings.WECHAT.WXMESSAGES.EVENT.SUBSCRIBE.KEY
       p 'b'*10,wxmessages_params
       p 'c'*10,xml = WxmessagesService.convert_hash_to_xml(wxmessages_params,
-                                                           Settings.WECHAT.EVNET.SUBSCRIBE.XML.as_json)
+                                                           Settings.WECHAT.EVENT.SUBSCRIBE.XML.as_json)
       xml
     else
       "success"

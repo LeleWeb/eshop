@@ -44,7 +44,7 @@ defaults: &defaults
   WECHAT:
     # 微信消息管理
     WXMESSAGES:
-      EVNET:
+      EVENT:
         SUBSCRIBE:
           KEY: "subscribe"
           TEXT: "您好，欢迎关注熊笨熊商城果园，希望小熊在这里能给您喜欢的。"

@@ -24,6 +24,9 @@ class WechatService < BaseService
   end
 
   def create_wechat(params)
+    # TODO 验证微信服务器合法性
+
+    params = params["xml"]
     #
     case params["MsgType"]
       when "event"
