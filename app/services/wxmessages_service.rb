@@ -5,8 +5,8 @@ class WxmessagesService < BaseService
     if wxmessages_params["Event"] == Settings.WECHAT.WXMESSAGES.EVENT.SUBSCRIBE.KEY
       p 'b'*10,wxmessages_params
       data = {}
-      data["ToUserName"] = wxmessages_params["ToUserName"]
-      data["FromUserName"] = wxmessages_params["FromUserName"]
+      data["ToUserName"] = wxmessages_params["FromUserName"]
+      data["FromUserName"] = wxmessages_params["ToUserName"]
       data["CreateTime"] = wxmessages_params["CreateTime"]
       data["MsgType"] = "text"
       data["Content"] = "hello world!"
