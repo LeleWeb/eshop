@@ -1,18 +1,14 @@
 class WxmessagesService < BaseService
   def wxmessages_management(wxmessages_params)
-    p 'a'*10,wxmessages_params
     # 关注事件,发送关注自动回复文字.
     if wxmessages_params["Event"] == Settings.WECHAT.WXMESSAGES.EVENT.SUBSCRIBE.KEY
-      p 'b'*10,wxmessages_params
       data = {}
       data["ToUserName"] = wxmessages_params["FromUserName"]
       data["FromUserName"] = wxmessages_params["ToUserName"]
       data["CreateTime"] = wxmessages_params["CreateTime"]
       data["MsgType"] = "text"
-      data["Content"] = "熊笨熊商城，专注于为广大消费者提供能够放心，优质，无害的有机健康食品，100%专柜正品，七天退换，成为消费者于生产者之间的桥梁。"
-      xml = WxmessagesService.convert_hash_to_xml(data, Settings.WECHAT.WXMESSAGES.EVENT.SUBSCRIBE.XML.as_json)
-      p 'c'*10,xml
-      xml
+      data["Content"] = Settings.WECHAT.WXMESSAGES.EVENT.SUBSCRIBE.TEXT
+      WxmessagesService.convert_hash_to_xml(data, Settings.WECHAT.WXMESSAGES.EVENT.SUBSCRIBE.XML.as_json)
     else
       "success"
     end

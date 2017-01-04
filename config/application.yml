@@ -47,7 +47,7 @@ defaults: &defaults
       EVENT:
         SUBSCRIBE:
           KEY: "subscribe"
-          TEXT: "您好，欢迎关注熊笨熊商城果园，希望小熊在这里能给您喜欢的。"
+          TEXT: "熊笨熊商城，专注于为广大消费者提供能够放心，优质，无害的有机健康食品，100%专柜正品，七天退换，成为消费者于生产者之间的桥梁。"
           XML:
             ToUserName: true
             FromUserName: true

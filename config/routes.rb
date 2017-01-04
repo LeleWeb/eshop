@@ -26,8 +26,6 @@ Rails.application.routes.draw do
       resources :wx_page_authorization
       # 创建分销二维码接口
       resources :distribution_qrcode
-      # 微信消息管理接口
-      resources :wxmessages
 
       # 分销关系接口
       # namespace :distributions do
