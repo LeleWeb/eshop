@@ -11,8 +11,8 @@ class ProductsService < BaseService
     end
   end
 
-  def get_product(product)
-    CommonService.response_format(ResponseCode.COMMON.OK, ProductsService.find_product_data(product))
+  def get_product(product, query_params)
+    CommonService.response_format(ResponseCode.COMMON.OK, ProductsService.find_product_data(product, query_params[:customer_id]))
   end
 
   def create_product(store, product_params)
@@ -113,7 +113,7 @@ class ProductsService < BaseService
     data
   end
 
-  def self.find_product_data(product)
+  def self.find_product_data(product, customer_id=nil)
       # 获取商品分类
       categories = product.categories
 
@@ -124,7 +124,17 @@ class ProductsService < BaseService
         picture_data[key] = pictures.where(category: value)
       end
 
-      product.as_json.merge(:categories => categories, :pictures => picture_data)
+      # 如果存在指定的用户,则判断用户是否收藏了该商品.
+      collection_flag = false
+      customer = nil
+      if !customer_id.blank? && !(customer = Customer.find_by(id: customer_id)).nil?
+        collection = customer.collections.where(object_type: 'Product', object_id: product.id)
+        collection_flag = true if !collection.nil?
+      end
+
+      product.as_json.merge(:categories => categories,
+                            :pictures => picture_data,
+                            :is_collection => collection_flag)
     end
 
 end
