@@ -125,7 +125,7 @@ class ProductsService < BaseService
       end
 
       # 如果存在指定的用户,则判断用户是否收藏了该商品.
-      collection_flag = false
+      is_collected = false
       customer = nil
       if !customer_id.blank? && !(customer = Customer.find_by(id: customer_id)).nil?
         collection = customer.collections.where(object_type: 'Product', object_id: product.id)
@@ -134,7 +134,7 @@ class ProductsService < BaseService
 
       product.as_json.merge(:categories => categories,
                             :pictures => picture_data,
-                            :is_collection => collection_flag)
+                            :is_collected => is_collected)
     end
 
 end
