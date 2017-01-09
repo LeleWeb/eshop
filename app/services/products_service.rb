@@ -129,7 +129,7 @@ class ProductsService < BaseService
       customer = nil
       if !customer_id.blank? && !(customer = Customer.find_by(id: customer_id)).nil?
         collection = customer.collections.where(object_type: 'Product', object_id: product.id)
-        collection_flag = true if !collection.nil?
+        is_collected = true if !collection.nil?
       end
 
       product.as_json.merge(:categories => categories,
