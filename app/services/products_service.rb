@@ -121,7 +121,7 @@ class ProductsService < BaseService
       picture_data = {}
       pictures = product.pictures
       Settings.PICTURES_CATEGORY.PRODUCT.each do |key, value|
-        picture_data[key] = pictures.where(category: value).collect{|x| x.url = '/' + x.url}
+        picture_data[key] = pictures.where(category: value)
       end
 
       # 如果存在指定的用户,则判断用户是否收藏了该商品.
