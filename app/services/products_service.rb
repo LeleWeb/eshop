@@ -81,7 +81,7 @@ class ProductsService < BaseService
         # end
 
         data = []
-        
+
         Product.limit(query_params[:limit]).each do |product|
           data << ProductsService.find_product_data(product)
         end
