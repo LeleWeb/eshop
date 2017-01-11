@@ -63,29 +63,29 @@ class ProductsService < BaseService
                    :products => products}
         end
         data
-      elsif query_params[:category].to_i == Settings.PRODUCT_CATEGORY.HOME
-        # # 返回30个商品
-        # data = []
-        # apples = Product.where("name = ? or name = ?", "阿克苏苹果", "夏威夷果").limit(6)
-        # jianguo = Product.where(name: "巴旦木").limit(6)
-        # hongzao = Product.where(name: "红枣").limit(6)
-        # heijialun = Product.where(name: "黑加仑葡萄干").limit(6)
-        # hetao = Product.where(name: "美国核桃").limit(6)
-        #
-        # for i in 0..5
-        #   data << ProductsService.find_product_data(apples[i])
-        #   data << ProductsService.find_product_data(jianguo[i])
-        #   data << ProductsService.find_product_data(hongzao[i])
-        #   data << ProductsService.find_product_data(heijialun[i])
-        #   data << ProductsService.find_product_data(hetao[i])
-        # end
-
-        data = []
-
-        Product.limit(query_params[:limit]).each do |product|
-          data << ProductsService.find_product_data(product)
-        end
-        data
+      # elsif query_params[:category].to_i == Settings.PRODUCT_CATEGORY.HOME
+      #   # # 返回30个商品
+      #   # data = []
+      #   # apples = Product.where("name = ? or name = ?", "阿克苏苹果", "夏威夷果").limit(6)
+      #   # jianguo = Product.where(name: "巴旦木").limit(6)
+      #   # hongzao = Product.where(name: "红枣").limit(6)
+      #   # heijialun = Product.where(name: "黑加仑葡萄干").limit(6)
+      #   # hetao = Product.where(name: "美国核桃").limit(6)
+      #   #
+      #   # for i in 0..5
+      #   #   data << ProductsService.find_product_data(apples[i])
+      #   #   data << ProductsService.find_product_data(jianguo[i])
+      #   #   data << ProductsService.find_product_data(hongzao[i])
+      #   #   data << ProductsService.find_product_data(heijialun[i])
+      #   #   data << ProductsService.find_product_data(hetao[i])
+      #   # end
+      #
+      #   data = []
+      #
+      #   Product.limit(query_params[:limit]).each do |product|
+      #     data << ProductsService.find_product_data(product)
+      #   end
+      #   data
       else
         # 按照分类查询产品
         data = []
