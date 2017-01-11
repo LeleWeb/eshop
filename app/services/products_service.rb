@@ -114,27 +114,31 @@ class ProductsService < BaseService
   end
 
   def self.find_product_data(product, customer_id=nil)
-      # 获取商品分类
-      categories = product.categories
-
-      # 获取商品所有图片,并按照产品图片分类展示.
-      picture_data = {}
-      pictures = product.pictures
-      Settings.PICTURES_CATEGORY.PRODUCT.each do |key, value|
-        picture_data[key] = pictures.where(category: value)
-      end
-
-      # 如果存在指定的用户,则判断用户是否收藏了该商品.
-      is_collected = false
-      customer = nil
-      if !customer_id.blank? && !(customer = Customer.find_by(id: customer_id)).nil?
-        collection = customer.collections.where(object_type: 'Product', object_id: product.id)
-        is_collected = true if !collection.nil?
-      end
-
-      product.as_json.merge(:categories => categories,
-                            :pictures => picture_data,
-                            :is_collected => is_collected)
+    if product.nil?
+      return nil
     end
+
+    # 获取商品分类
+    categories = product.categories
+
+    # 获取商品所有图片,并按照产品图片分类展示.
+    picture_data = {}
+    pictures = product.pictures
+    Settings.PICTURES_CATEGORY.PRODUCT.each do |key, value|
+      picture_data[key] = pictures.where(category: value)
+    end
+
+    # 如果存在指定的用户,则判断用户是否收藏了该商品.
+    is_collected = false
+    customer = nil
+    if !customer_id.blank? && !(customer = Customer.find_by(id: customer_id)).nil?
+      collection = customer.collections.where(object_type: 'Product', object_id: product.id)
+      is_collected = true if !collection.nil?
+    end
+
+    product.as_json.merge(:categories => categories,
+                          :pictures => picture_data,
+                          :is_collected => is_collected)
+  end
 
 end
