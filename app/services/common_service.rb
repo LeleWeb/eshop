@@ -69,7 +69,7 @@ class CommonService < BaseService
   def self.set_product_home
     # 获取前30个商品
     Product.limit(30).each do |product|
-      product.categories.create(category_id: Settings.PRODUCT_CATEGORY.HOME)
+      CategoriesProduct.create(product_id: product.id, category_id: Settings.PRODUCT_CATEGORY.HOME)
     end
   end
 
