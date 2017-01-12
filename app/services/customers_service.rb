@@ -38,7 +38,7 @@ class CustomersService < BaseService
     # 查询该用户是否第一次登录
     customer = Customer.find_by(openid: access_token["openid"])
     if customer.nil?
-      res = AccountsService.create_system_of_account(nil, access_token["access_token"])
+      res = AccountsService.create_system_of_account(nil, access_token)
       customer = res["customer"]
     else
       # 更新customer

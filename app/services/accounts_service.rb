@@ -52,7 +52,11 @@ class AccountsService < BaseService
       # 微信网页授权登录,自动创建账户体系.
       # 创建account,customer.
       account = Account.create(uuid: SecureRandom.hex, password: LocalConfig.DEFAULT_PASSWORD)
-      customer = account.create_customer(access_token: wx_access_token)
+      customer = account.create_customer(access_token: wx_access_token["access_token"],
+                                         expires_in: wx_access_token["expires_in"],
+                                         refresh_token: wx_access_token["refresh_token"],
+                                         openid: wx_access_token["openid"],
+                                         scope: wx_access_token["scope"])
     else
       # 网页注册，通过参数创建账户体系
       account = Account.create(account_params)
