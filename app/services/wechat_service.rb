@@ -177,6 +177,8 @@ class WechatService < BaseService
     # 微信授权登录成功后本系统自动创建customer
     customer = CustomersService.update_customer_by_wechat(access_token_res)
     p 'B'*10,customer
+    customer
+
     # 刷新access_token（如果需要）
     # TODO 暂不需要
 
