@@ -146,6 +146,7 @@ class WechatService < BaseService
 
   # 网页授权获取用户基本信息
   def self.get_wx_page_authorization_userinfo(query_params)
+    p 'A'*10,query_params
     # 用户同意授权，获取code
     code = query_params[:code]
     state = query_params[:state]
@@ -175,7 +176,7 @@ class WechatService < BaseService
     
     # 微信授权登录成功后本系统自动创建customer
     customer = CustomersService.update_customer_by_wechat(access_token_res)
-
+    p 'B'*10,customer
     # 刷新access_token（如果需要）
     # TODO 暂不需要
 
@@ -193,6 +194,8 @@ class WechatService < BaseService
 
       # 更新微信用户信息到本地customer记录
       customer = CustomersService.update_customer_by_wechat(user_info_res)
+      p 'C'*10,customer
+      customer
     end
 
     Account.find(customer.account_id)
