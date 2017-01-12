@@ -45,6 +45,7 @@ class WechatService < BaseService
 
   # 微信统一下单接口
   def self.create_unifiedorder(order)
+    p '0'*10,order,eval(order.buyer_type).find(order.buyer_id).openid
     # 组织统一下单参数
     params = LocalConfig.WECHAT.PAY.unifiedorder.as_json
     params['nonce_str'] = self.generate_nonce_str
