@@ -344,7 +344,9 @@ class WechatService < BaseService
 
   # 生成微信网页授权的url
   def self.create_wx_oauth2_url(state)
-    Settings.WECHAT.WX_OAUTH2.URL
+    url = Settings.WECHAT.WX_OAUTH2.URL
+    query_parmas = "?appid=#{LocalConfig.WECHAT.appid}&redirect_uri=#{Settings.WECHAT.WX_OAUTH2.QUERY_PARAMS.redirect_uri}&response_type=#{Settings.WECHAT.WX_OAUTH2.QUERY_PARAMS.response_type}&scope=#{Settings.WECHAT.WX_OAUTH2.QUERY_PARAMS.scope}&state=#{state}#wechat_redirect"
+    url + query_parmas
   end
 
 end

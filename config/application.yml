@@ -44,9 +44,9 @@ defaults: &defaults
   WECHAT:
     # 微信网页授权url
     WX_OAUTH2:
-      URL: "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0958a9b801758435&redirect_uri=http%3a%2f%2fwww.yiyunma.com%2fapi%2fv1%2fwx_page_authorization&response_type=code&scope=snsapi_base&state=zhangweitest#wechat_redirect"
+      URL: "https://open.weixin.qq.com/connect/oauth2/authorize"
       QUERY_PARAMS:
-        appid: "wx0958a9b801758435"
+        appid: ""
         redirect_uri: "http%3a%2f%2fwww.yiyunma.com%2fapi%2fv1%2fwx_page_authorization"
         response_type: "code"
         scope: "snsapi_base"
