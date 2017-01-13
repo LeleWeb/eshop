@@ -1,8 +1,9 @@
 class DistributionQrcodeService < BaseService
   def create_qrcode(customer)
     # 调用草料二维码来生成，后期可以将源码直接集成到本系统。
+    url = WechatService.create_wx_oauth2_url("parent_id=#{customer.id}")
     query_params = Settings.DISTRIBUTION_QRCODE.CLI_CREATE_QRCODE.QUERY_PARAMS.as_json
-    query_params["text"] =  "#{Settings.HOME_URL}?parent_id=#{customer.id}"#"http://www.yiyunma.com/#/detail?product_id=#{product.id}"
+    query_params["text"] =  url
     res_string = HttpService.get(Settings.DISTRIBUTION_QRCODE.CLI_CREATE_QRCODE.URL, query_params)
     CommonService.response_format(ResponseCode.COMMON.OK, DistributionQrcodeService.parse_qrcode_img(res_string))
   end
