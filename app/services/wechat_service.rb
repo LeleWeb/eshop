@@ -344,7 +344,7 @@ class WechatService < BaseService
 
   # 生成微信网页授权的url
   def self.create_wx_oauth2_url(state)
-    Settings.WX_OAUTH2
+    Settings.WECHAT.WX_OAUTH2.URL
   end
 
 end
