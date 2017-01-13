@@ -200,7 +200,9 @@ class WechatService < BaseService
       customer
     end
 
-    Account.find(customer.account_id)
+    # 组成返回参数，id为当前登录的用户在本系统的id, parent_id为父级分销者的id
+    {"account_id" => customer.account_id,
+     "parent_account_id" => self.get_parent_distributor(state)}
   end
 
   def self.is_response_error?(res)
@@ -347,6 +349,14 @@ class WechatService < BaseService
     url = Settings.WECHAT.WX_OAUTH2.URL
     query_parmas = "?appid=#{LocalConfig.WECHAT.appid}&redirect_uri=#{Settings.WECHAT.WX_OAUTH2.QUERY_PARAMS.redirect_uri}&response_type=#{Settings.WECHAT.WX_OAUTH2.QUERY_PARAMS.response_type}&scope=#{Settings.WECHAT.WX_OAUTH2.QUERY_PARAMS.scope}&state=#{state}#wechat_redirect"
     url + query_parmas
+  end
+
+  def self.get_parent_distributor(state)
+    parent_id = ""
+    if !state.blank? && state =~ /\d+$/ && !(parent_customer = Customer.find_by(id: $0.to_i)).nil?
+      parent_id = parent_customer.account_id
+    end
+    parent_id
   end
 
 end
