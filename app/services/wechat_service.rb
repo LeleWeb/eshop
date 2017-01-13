@@ -355,7 +355,7 @@ class WechatService < BaseService
 
   def self.get_parent_distributor(state)
     parent_id = ""
-    if !state.blank? && state =~ /\d+$/ && !(parent_customer = Customer.find_by(id: $0.to_i)).nil?
+    if !state.blank? && state =~ /(\d+)$/ && !(parent_customer = Customer.find_by(id: $1.to_i)).nil?
       parent_id = parent_customer.account_id
     end
     parent_id
