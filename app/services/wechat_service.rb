@@ -160,6 +160,7 @@ class WechatService < BaseService
                                                   access_token_params))
     if self.is_response_error?(access_token_res)
       # 获取网页授权access_token失败，打印log
+      puts "ERROR: access_token_res: #{access_token_res}!"
       return
     end
 
@@ -171,6 +172,7 @@ class WechatService < BaseService
                                           check_access_token_params))
     if auth_res["errcode"] != 0 && auth_res["errmsg"] != "ok"
       # 检验授权凭证失败,打印log.
+      puts "ERROR: auth_res: #{auth_res}!"
       return
     end
     
