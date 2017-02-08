@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170103110642) do
+ActiveRecord::Schema.define(version: 20170103112156) do
 
   create_table "accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "uuid"
@@ -80,6 +80,13 @@ ActiveRecord::Schema.define(version: 20170103110642) do
     t.datetime "deleted_at"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+  end
+
+  create_table "brands_products", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "brand_id"
+    t.integer "product_id"
+    t.index ["brand_id"], name: "index_brands_products_on_brand_id", using: :btree
+    t.index ["product_id"], name: "index_brands_products_on_product_id", using: :btree
   end
 
   create_table "categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -201,6 +208,7 @@ ActiveRecord::Schema.define(version: 20170103110642) do
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
     t.boolean  "is_deleted"
+    t.datetime "deleted_at"
   end
 
   create_table "distribution_rules", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -214,15 +222,26 @@ ActiveRecord::Schema.define(version: 20170103110642) do
   end
 
   create_table "distribution_rules_stores", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "distribution_rules_id"
-    t.integer "stores_id"
-    t.index ["distribution_rules_id"], name: "index_distribution_rules_stores_on_distribution_rules_id", using: :btree
-    t.index ["stores_id"], name: "index_distribution_rules_stores_on_stores_id", using: :btree
+    t.integer "distribution_rule_id"
+    t.integer "store_id"
+    t.index ["distribution_rule_id"], name: "index_distribution_rules_stores_on_distribution_rule_id", using: :btree
+    t.index ["store_id"], name: "index_distribution_rules_stores_on_store_id", using: :btree
   end
 
   create_table "distributions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "owner_type"
+    t.integer  "owner_id"
+    t.string   "remark",         limit: 256
+    t.integer  "parent_id"
+    t.integer  "lft",                                    null: false
+    t.integer  "rgt",                                    null: false
+    t.integer  "depth",                      default: 0, null: false
+    t.integer  "children_count",             default: 0, null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+    t.index ["lft"], name: "index_distributions_on_lft", using: :btree
+    t.index ["parent_id"], name: "index_distributions_on_parent_id", using: :btree
+    t.index ["rgt"], name: "index_distributions_on_rgt", using: :btree
   end
 
   create_table "order_details", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
