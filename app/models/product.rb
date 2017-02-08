@@ -15,4 +15,10 @@ class Product < ApplicationRecord
 
   # 广告
   has_and_belongs_to_many :adverts
+
+  # 使用自连接将若干商品当做一个虚拟商品销售
+  has_many :items, class_name: "Product",
+           foreign_key: "group_id"
+
+  belongs_to :group, class_name: "Product"
 end
