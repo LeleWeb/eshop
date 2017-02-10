@@ -8,7 +8,7 @@ class Api::V1::ImagesController < Api::V1::BaseController
 
   # POST /images
   def create
-    render json: PicturesService.new.create_picture(@owner, picture_params)
+    render json: PicturesService.new.create_image(@owner, image_params)
   end
 
   private
