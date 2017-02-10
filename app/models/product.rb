@@ -5,6 +5,7 @@ class Product < ApplicationRecord
 
   # 商品图片
   has_many :pictures, as: :imageable
+  has_many :images, as: :imageable
 
   # 收藏
   has_many :collections, as: :object
