@@ -14,7 +14,7 @@ class Api::V1::ImagesController < Api::V1::BaseController
   private
 
   def set_owner
-    p params
+    p 'A'*10,params["owner_type"],params[:owner_type]
     @owner = eval(params[:owner_type]).find(params[:owner_id])
   end
 
