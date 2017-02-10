@@ -8,13 +8,12 @@ class Api::V1::ImagesController < Api::V1::BaseController
 
   # POST /images
   def create
-    render json: PicturesService.new.create_image(@owner, image_params)
+    render json: ImagesService.new.create_image(@owner, image_params)
   end
 
   private
 
   def set_owner
-    p 'A'*10,params["owner_type"],params[:owner_type]
     @owner = eval(params[:owner_type]).find(params[:owner_id])
   end
 
