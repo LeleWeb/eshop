@@ -3,12 +3,12 @@ class Api::V1::ImagesController < Api::V1::BaseController
 
   # GET /images
   def index
-    @images = ImagesService.new.get_images
+    render json: ImagesService.new.get_images
   end
 
   # POST /images
   def create
-    @res = PicturesService.new.create_picture(@owner, picture_params)
+    render json: PicturesService.new.create_picture(@owner, picture_params)
   end
 
   private
