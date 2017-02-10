@@ -47,6 +47,9 @@ Rails.application.routes.draw do
       # 登陆登出
       post 'login', to: 'session#login'
       post 'logout', to: 'session#logout'
+
+      # 图片接口
+      resources :images
     end
   end
 end
