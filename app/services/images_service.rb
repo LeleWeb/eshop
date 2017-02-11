@@ -10,7 +10,7 @@ class ImagesService < BaseService
     image = owner.images.build(image_params)
     if image.save
       #iterate through each of the files
-      image_params[:pictures].each do |file|
+      image_params[:document_data].each do |file|
         image.documents.create!(:document => file)
         #create a document associated with the item that has just been created
       end

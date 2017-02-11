@@ -12,9 +12,9 @@ class Api::V1::ImagesController < Api::V1::BaseController
   end
 
   # Uploading multiple files
-  # def upload_multiple_files
-  #   render json: ImagesService.new.upload_multiple_files(@owner, image_params)
-  # end
+  def upload_multiple_files
+    render json: ImagesService.new.upload_multiple_files(@owner, image_params)
+  end
 
   private
 
@@ -24,6 +24,6 @@ class Api::V1::ImagesController < Api::V1::BaseController
 
   # Only allow a trusted parameter "white list" through.
   def image_params
-    params.permit(:name, :category, :remark, :picture, :pictures => [])
+    params.permit(:name, :category, :remark, :picture, :document_data => [])
   end
 end
