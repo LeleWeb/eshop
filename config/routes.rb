@@ -50,6 +50,9 @@ Rails.application.routes.draw do
 
       # 图片接口
       resources :images
+      # 一次传多张图接口
+      post 'upload_multiple_files', to: 'images#upload_multiple_files'
+
     end
   end
 end
