@@ -3,8 +3,8 @@ class CollectionsService < BaseService
     collections = []
     if !owner.nil?
       owner.collections.each do |collection|
-        collection.as_json.merge(:product => ProductsService.find_by_id(collection.object_id))
-        collections << collection
+        tmp = collection.as_json.merge(:product => ProductsService.find_by_id(collection.object_id))
+        collections << tmp
       end
     end
     CommonService.response_format(ResponseCode.COMMON.OK, collections)
