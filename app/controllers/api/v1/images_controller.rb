@@ -1,5 +1,5 @@
 class Api::V1::ImagesController < Api::V1::BaseController
-  before_action :set_owner, only: [:create]
+  before_action :set_owner, only: [:create, :upload_multiple_files]
 
   # GET /images
   def index
@@ -11,6 +11,11 @@ class Api::V1::ImagesController < Api::V1::BaseController
     render json: ImagesService.new.create_image(@owner, image_params)
   end
 
+  # Uploading multiple files
+  def upload_multiple_files
+    render json: ImagesService.new.upload_multiple_files(@owner, image_params)
+  end
+
   private
 
   def set_owner
@@ -19,6 +24,6 @@ class Api::V1::ImagesController < Api::V1::BaseController
 
   # Only allow a trusted parameter "white list" through.
   def image_params
-    params.permit(:name, :category, :remark, :picture)
+    params.permit(:name, :category, :remark, :picture, :document_data => [])
   end
 end
