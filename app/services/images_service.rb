@@ -16,7 +16,7 @@ class ImagesService < BaseService
         image.documents.create!(:document => file)
         #create a document associated with the item that has just been created
       end
-      CommonService.response_format(ResponseCode.COMMON.OK, image)
+      CommonService.response_format(ResponseCode.COMMON.OK, image.as_json.merge(:documents => image.documents))
     else
       CommonService.response_format(ResponseCode.COMMON.FAILED)
     end
