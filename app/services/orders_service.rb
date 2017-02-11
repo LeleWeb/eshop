@@ -9,7 +9,7 @@ class OrdersService < BaseService
 
   def create_order(buyer, address, order_params, details)
     # 生成本系统订单
-    order_params[:order_number] = SecureRandom.hex
+    order_params[:order_number] = OrdersService.generate_order_number(buyer.id)
     order_params[:status] = Settings.ORDER.STATUS.PREPAY
     order_params[:pay_away] = 1
     order_params[:time_start] = Time.now.strftime("%Y%m%d%H%M%S")
@@ -60,7 +60,6 @@ class OrdersService < BaseService
 
   # 定时刷新订单状态，已发货的订单，超过七天后自动设置为已完成方法。
   def self.update_order_status
-    p 'a'*10,'update_order_status'
     # 查找所有状态为已发货的订单
     orders = Order.where(status: Settings.ORDER.STATUS.DELIVERED)
 
@@ -70,13 +69,24 @@ class OrdersService < BaseService
                                                    Settings.ORDER.STATUS.DELIVERED,
                                                    Time.zone.now - 7.day).first
       if !delivered_order_log.nil?
-        p 'b'*10,order,delivered_order_log
         # 唯一刷新订单状态为完成的地方
         order.update(status: Settings.ORDER.STATUS.COMPLETED)
 
         # 此处完成以当前订单的customer为分销节点为起始，往上两级的祖先节点的账户明细刷新.
         DistributionsService.update_customer_account_details(order)
       end
+    end
+  end
+
+  # 2017.2.11 修改订单编号编码规则为: 本系统用户id + 当前时间格式。
+  def self.generate_order_number(user_id)
+    "%05d" % user_id.to_i + Time.new.strftime("%Y%m%d%H%M%S")
+  end
+
+  # 2017.2.11 修改订单编号编码规则为: 本系统用户id + 当前时间格式。脚本方法。
+  def self.update_order_number
+    Order.all.each do |order|
+      order.update(order_number: self.generate_order_number(order.id))
     end
   end
 
