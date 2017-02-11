@@ -157,10 +157,9 @@ defaults: &defaults
   # 系统图片分类定义
   PICTURES_CATEGORY:
     PRODUCT:
-      轮播: 1
-      方正: 2
-      详情: 3
-      全尺寸: 4
+      轮播图片: 1
+      商品图片: 2
+      详情图片: 3
     STORE:
       广告轮播: 100
       新日新品: 101
