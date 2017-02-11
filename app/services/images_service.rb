@@ -4,6 +4,12 @@ class ImagesService < BaseService
   end
 
   def create_image(owner, image_params)
+    # 先删除该商品对应分类的所有图片
+    Image.where(owner_type: "#{owner.class.name}",
+                owner_id: owner.id,
+                category: image_params[:category]).destroy_all
+
+    # 新增改商品指定分类的图片
     image = owner.images.build(image_params)
     if image.save
       image_params[:document_data].each do |file|
