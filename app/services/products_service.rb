@@ -117,6 +117,17 @@ class ProductsService < BaseService
     end
     data
   end
+  
+  # 根据product id查询商品信息
+  def self.find_by_id(product_id)
+    product = Product.find_by(id: product_id)
+
+    if !product.nil?
+      product = self.find_product_data(product)
+    end
+
+    product
+  end
 
   def self.find_product_data(product, customer_id=nil)
     if product.nil?
