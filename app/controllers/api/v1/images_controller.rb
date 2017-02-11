@@ -11,11 +11,6 @@ class Api::V1::ImagesController < Api::V1::BaseController
     render json: ImagesService.new.create_image(@owner, image_params)
   end
 
-  # Uploading multiple files
-  def upload_multiple_files
-    render json: ImagesService.new.upload_multiple_files(@owner, image_params)
-  end
-
   private
 
   def set_owner
