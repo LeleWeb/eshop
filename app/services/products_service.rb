@@ -112,7 +112,7 @@ class ProductsService < BaseService
 
   def self.find_product_datas(store)
     data = []
-    store.products.each do |product|
+    store.products.where(is_deleted: false).each do |product|
       data << ProductsService.find_product_data(product)
     end
     data
