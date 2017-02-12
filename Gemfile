@@ -54,3 +54,6 @@ gem 'actionpack-xml_parser'
 gem 'whenever', :require => false
 
 gem 'carrierwave'
+
+# https://github.com/ctran/annotate_models
+gem 'annotate'
