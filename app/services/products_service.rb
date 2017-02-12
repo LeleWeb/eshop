@@ -141,7 +141,11 @@ class ProductsService < BaseService
     picture_data = {}
     pictures = product.images
     Settings.PICTURES_CATEGORY.PRODUCT.each do |key, value|
-      picture_data[key] = pictures.where(category: value).collect{|image| image.as_json.merge(:pictures => image.documents)}
+      documents = []
+      pictures.where(category: value).each do |image|
+        documents += image.documents
+      end
+      picture_data[value] = documents #pictures.where(category: value).collect{|image| image.as_json.merge(:pictures => image.documents)}
     end
 
     # 如果存在指定的用户,则判断用户是否收藏了该商品.

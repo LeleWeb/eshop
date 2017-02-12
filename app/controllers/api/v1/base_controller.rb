@@ -14,7 +14,7 @@ class Api::V1::BaseController < ApplicationController
 
   # API鉴权
   # 2017.2.10 为方便调试，去掉鉴权。后续需要回复。
-  before_action :authenticate_user!, except: [ :index, :show, :login, :create, :update, :delete, :upload_multiple_files ]
+  before_action :authenticate_user!, except: [ :index, :show, :login ]
 
   def authenticate_user!
     token, options = ActionController::HttpAuthentication::Token.token_and_options(request)
