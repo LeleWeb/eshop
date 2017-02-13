@@ -1,5 +1,4 @@
-﻿
-class ProductsService < BaseService
+﻿class ProductsService < BaseService
   def get_products(store, query_params)
     if !query_params[:category].blank? && !query_params[:limit].blank?
       CommonService.response_format(ResponseCode.COMMON.OK,
@@ -161,4 +160,4 @@ class ProductsService < BaseService
                           :pictures => picture_data,
                           :is_collected => is_collected)
   end
-
+end
