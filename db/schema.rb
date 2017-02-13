@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170209054441) do
+ActiveRecord::Schema.define(version: 20170211004048) do
 
   create_table "accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "uuid"
@@ -244,6 +244,27 @@ ActiveRecord::Schema.define(version: 20170209054441) do
     t.index ["rgt"], name: "index_distributions_on_rgt", using: :btree
   end
 
+  create_table "documents", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "image_id"
+    t.string   "document"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["image_id"], name: "index_documents_on_image_id", using: :btree
+  end
+
+  create_table "images", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "name"
+    t.integer  "imageable_id"
+    t.string   "imageable_type", limit: 50
+    t.string   "remark"
+    t.boolean  "is_deleted"
+    t.datetime "deleted_at"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.string   "picture"
+    t.integer  "category"
+  end
+
   create_table "order_details", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "order_id"
     t.integer  "product_id"
@@ -429,4 +450,5 @@ ActiveRecord::Schema.define(version: 20170209054441) do
     t.datetime "updated_at",                       null: false
   end
 
+  add_foreign_key "documents", "images"
 end

@@ -42,7 +42,7 @@ class ProductsService < BaseService
   end
 
   def destory_product(product)
-    product.destroy
+    product.update(is_deleted: true)
     CommonService.response_format(ResponseCode.COMMON.OK)
   end
 
@@ -112,7 +112,7 @@ class ProductsService < BaseService
 
   def self.find_product_datas(store)
     data = []
-    store.products.each do |product|
+    store.products.where(is_deleted: false).each do |product|
       data << ProductsService.find_product_data(product)
     end
     data
@@ -139,9 +139,13 @@ class ProductsService < BaseService
 
     # 获取商品所有图片,并按照产品图片分类展示.
     picture_data = {}
-    pictures = product.pictures
+    pictures = product.images
     Settings.PICTURES_CATEGORY.PRODUCT.each do |key, value|
-      picture_data[key] = pictures.where(category: value)
+      documents = []
+      pictures.where(category: value).each do |image|
+        documents += image.documents
+      end
+      picture_data[value] = documents #pictures.where(category: value).collect{|image| image.as_json.merge(:pictures => image.documents)}
     end
 
     # 如果存在指定的用户,则判断用户是否收藏了该商品.
