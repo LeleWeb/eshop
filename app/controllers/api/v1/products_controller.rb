@@ -1,3 +1,4 @@
+
 class Api::V1::ProductsController < Api::V1::BaseController
   before_action :set_product, only: [:show, :update, :destroy]
   before_action :set_account
@@ -57,3 +58,4 @@ class Api::V1::ProductsController < Api::V1::BaseController
                                     :status, :property, :category_id, :remark, :unit)
   end
 end
+
