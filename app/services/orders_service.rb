@@ -1,6 +1,12 @@
 class OrdersService < BaseService
   def get_orders(buyer)
-    CommonService.response_format(ResponseCode.COMMON.OK, OrdersService.get_order_datas(buyer.orders))
+    orders = []
+    if buyer.nil?
+      orders = OrdersService.get_order_datas(Order.all)
+    else
+      orders = OrdersService.get_order_datas(buyer.orders)
+    end
+    CommonService.response_format(ResponseCode.COMMON.OK, orders)
   end
 
   def get_order(order)

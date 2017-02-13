@@ -42,7 +42,7 @@ class Api::V1::OrdersController < Api::V1::BaseController
   end
 
   def set_buyer
-    @buyer = eval(params[:buyer_type]).find(params[:buyer_id])
+    @buyer = eval(params[:buyer_type]).find_by(params[:buyer_id])
   end
 
   # Use callbacks to share common setup or constraints between actions.
