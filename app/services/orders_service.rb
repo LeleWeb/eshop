@@ -2,8 +2,7 @@ class OrdersService < BaseService
   def get_orders(set_query_params)
     # 根据参数，解析所有查询条件
     orders = []
-    query_condition = ["1"]
-    # sql_str = "1"
+    query_condition = [" 1 AND 1 "]
 
     # 查询指定消费者的订单
     if set_query_params[:buyer_type].nil? && set_query_params[:buyer_id].nil?
