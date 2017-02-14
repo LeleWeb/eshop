@@ -5,20 +5,20 @@ class OrdersService < BaseService
     query_condition = [" 1 AND 1 "]
 
     # 查询指定消费者的订单
-    if set_query_params[:buyer_type].nil? && set_query_params[:buyer_id].nil?
+    if !set_query_params[:buyer_type].blank? && !set_query_params[:buyer_id].blank?
       query_condition[0] += " AND buyer_type = ? AND buyer_id = ? "
       query_condition << set_query_params[:buyer_type]
       query_condition << set_query_params[:buyer_id]
     end
 
     # 查询指定状态的订单
-    if set_query_params[:status].nil?
+    if !set_query_params[:status].blank?
       query_condition[0] += " AND status = ? "
       query_condition << set_query_params[:status]
     end
 
     # 查询指定时间区间的订单
-    if set_query_params[:begin_time].nil? && set_query_params[:end_time].nil?
+    if !set_query_params[:begin_time].blank? && !set_query_params[:end_time].blank?
       query_condition[0] += " AND created_at >= ? AND created_at <= ? "
       query_condition << set_query_params[:begin_time]
       query_condition << set_query_params[:end_time]
