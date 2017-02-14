@@ -26,13 +26,6 @@ class OrdersService < BaseService
 
     orders = Order.where(query_condition)
     CommonService.response_format(ResponseCode.COMMON.OK, orders)
-
-    # if buyer.nil?
-    #   orders = OrdersService.get_order_datas(Order.all)
-    # else
-    #   orders = OrdersService.get_order_datas(buyer.orders)
-    # end
-    # CommonService.response_format(ResponseCode.COMMON.OK, orders)
   end
 
   def get_order(order)
