@@ -18,7 +18,7 @@ class WxpayService < BaseService
 
     # 处理业务逻辑
     ## 1. 修改本地对应订单的状态
-    order.update(status: Settings.ORDER.STATUS.PAID)
+    order.update(status: Settings.ORDER.STATUS.PAID, payment_time: Time.now)
     ## 2. 保存支付结果到本地数据库
     WxpayNotification.create(wxpay_params.as_json.merge({:order_id => order.id}))
 
