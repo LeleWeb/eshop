@@ -24,6 +24,9 @@ class OrdersService < BaseService
       query_condition << set_query_params[:end_time]
     end
 
+    # 默认按照支付时间将序排列
+    query_condition[0] += " order by  "
+
     orders = Order.where(query_condition)
     CommonService.response_format(ResponseCode.COMMON.OK, orders)
   end
