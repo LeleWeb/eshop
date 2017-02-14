@@ -25,7 +25,7 @@ class OrdersService < BaseService
     end
 
     # 默认按照支付时间将序排列
-    query_condition[0] += " order by  "
+    query_condition[0] += " ORDER BY payment_time DESC "
 
     orders = Order.where(query_condition)
     CommonService.response_format(ResponseCode.COMMON.OK, orders)
