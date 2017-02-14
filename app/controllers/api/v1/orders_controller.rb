@@ -58,6 +58,6 @@ class Api::V1::OrdersController < Api::V1::BaseController
   # Only allow a trusted parameter "white list" through.
   def order_params
     params.require(:order).permit(:consignee_address, :consignee_name, :consignee_phone,
-                                  :total_price, :estimate, :remark)
+                                  :total_price, :estimate, :remark, :status)
   end
 end
