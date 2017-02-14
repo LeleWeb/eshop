@@ -1,12 +1,39 @@
 class OrdersService < BaseService
-  def get_orders(buyer)
+  def get_orders(set_query_params)
+    # 根据参数，解析所有查询条件
     orders = []
-    if buyer.nil?
-      orders = OrdersService.get_order_datas(Order.all)
-    else
-      orders = OrdersService.get_order_datas(buyer.orders)
+    query_condition = ["1"]
+    # sql_str = "1"
+
+    # 查询指定消费者的订单
+    if set_query_params[:buyer_type].nil? && set_query_params[:buyer_id].nil?
+      query_condition[0] += " AND buyer_type = ? AND buyer_id = ? "
+      query_condition << set_query_params[:buyer_type]
+      query_condition << set_query_params[:buyer_id]
     end
+
+    # 查询指定状态的订单
+    if set_query_params[:status].nil?
+      query_condition[0] += " AND status = ? "
+      query_condition << set_query_params[:status]
+    end
+
+    # 查询指定时间区间的订单
+    if set_query_params[:begin_time].nil? && set_query_params[:end_time].nil?
+      query_condition[0] += " AND created_at >= ? AND created_at <= ? "
+      query_condition << set_query_params[:begin_time]
+      query_condition << set_query_params[:end_time]
+    end
+
+    orders = Order.where(query_condition)
     CommonService.response_format(ResponseCode.COMMON.OK, orders)
+
+    # if buyer.nil?
+    #   orders = OrdersService.get_order_datas(Order.all)
+    # else
+    #   orders = OrdersService.get_order_datas(buyer.orders)
+    # end
+    # CommonService.response_format(ResponseCode.COMMON.OK, orders)
   end
 
   def get_order(order)

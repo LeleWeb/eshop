@@ -1,12 +1,13 @@
 class Api::V1::OrdersController < Api::V1::BaseController
   before_action :set_order, only: [:show, :update, :destroy]
-  before_action :set_buyer, only: [:create, :index]
+  before_action :set_buyer, only: [:create]
   before_action :set_details, only: [:create]
   before_action :set_address, only: [:create]
+  before_action :set_query_params, only: [:index, :show]
 
   # GET /accounts
   def index
-    render json: OrdersService.new.get_orders(@buyer)
+    render json: OrdersService.new.get_orders(set_query_params)
   end
 
   # GET /accounts/1
@@ -33,6 +34,10 @@ class Api::V1::OrdersController < Api::V1::BaseController
   end
 
   private
+  def set_query_params
+    @query_params = params.permit(:status, :buyer_type, :buyer_id, :begin_time, :end_time)
+  end
+
   def set_address
     @address = Address.find(params[:address_id])
   end
