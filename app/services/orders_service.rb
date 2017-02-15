@@ -40,7 +40,9 @@ class OrdersService < BaseService
     order_params[:pay_away] = 1
     order_params[:time_start] = Time.now.strftime("%Y%m%d%H%M%S")
     order_params[:time_expire] = (Time.now + Settings.ORDER.EXPIRE_TIME.to_i).strftime("%Y%m%d%H%M%S")
-    order = buyer.orders.create(order_params.merge("consignee_address" => address.detailed_address))
+    order = buyer.orders.create(order_params.merge("consignee_address" => address.address,
+                                                   "consignee_name" => address.name,
+                                                   "consignee_phone" => address.phone))
     # 暂时设置实际支付订单为订单总额
     order.update(pay_price: order.total_price)
 
