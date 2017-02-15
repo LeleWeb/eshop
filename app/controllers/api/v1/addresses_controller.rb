@@ -42,7 +42,7 @@ class Api::V1::AddressesController < Api::V1::BaseController
 
 # Only allow a trusted parameter "white list" through.
   def address_params
-    params.require(:address).permit(:mobile_number, :detailed_address, :is_default)
+    params.require(:address).permit(:name, :phone, :address, :is_default)
   end
 
 
