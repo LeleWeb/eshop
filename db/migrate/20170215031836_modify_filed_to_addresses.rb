@@ -3,5 +3,6 @@ class ModifyFiledToAddresses < ActiveRecord::Migration[5.0]
     rename_column(:addresses, :mobile_number, :phone)
     rename_column(:addresses, :detailed_address, :address)
     add_column(:addresses, :name, :string)
+    add_column(:addresses, :is_default, :boolean)
   end
 end
