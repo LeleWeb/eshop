@@ -57,3 +57,6 @@ gem 'carrierwave'
 
 # https://github.com/ctran/annotate_models
 gem 'annotate'
+
+# A Scope & Engine based, clean, powerful, customizable and sophisticated paginator for Ruby webapps
+gem 'kaminari'

@@ -18,7 +18,10 @@ class Api::V1::OrdersController < Api::V1::BaseController
 
   # POST /accounts
   def create
-    render json: OrdersService.new.create_order(@buyer, @address, order_params, set_details)
+    render json: OrdersService.new.create_order(@buyer,
+                                                @address,
+                                                order_params,
+                                                set_details)
   end
 
   # PATCH/PUT /accounts/1
@@ -35,7 +38,13 @@ class Api::V1::OrdersController < Api::V1::BaseController
 
   private
   def set_query_params
-    @query_params = params.permit(:status, :buyer_type, :buyer_id, :begin_time, :end_time)
+    @query_params = params.permit(:status,
+                                  :buyer_type,
+                                  :buyer_id,
+                                  :begin_time,
+                                  :end_time,
+                                  :page,
+                                  :per_page)
   end
 
   def set_address
@@ -57,7 +66,12 @@ class Api::V1::OrdersController < Api::V1::BaseController
 
   # Only allow a trusted parameter "white list" through.
   def order_params
-    params.require(:order).permit(:consignee_address, :consignee_name, :consignee_phone,
-                                  :total_price, :estimate, :remark, :status)
+    params.require(:order).permit(:consignee_address,
+                                  :consignee_name,
+                                  :consignee_phone,
+                                  :total_price,
+                                  :estimate,
+                                  :remark,
+                                  :status)
   end
 end

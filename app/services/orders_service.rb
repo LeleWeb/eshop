@@ -1,31 +1,37 @@
 class OrdersService < BaseService
-  def get_orders(set_query_params)
+  def get_orders(query_params)
     # 根据参数，解析所有查询条件
     orders = []
     query_condition = [" 1 AND 1 "]
 
     # 查询指定消费者的订单
-    if !set_query_params[:buyer_type].blank? && !set_query_params[:buyer_id].blank?
+    if !query_params[:buyer_type].blank? && !query_params[:buyer_id].blank?
       query_condition[0] += " AND buyer_type = ? AND buyer_id = ? "
-      query_condition << set_query_params[:buyer_type]
-      query_condition << set_query_params[:buyer_id]
+      query_condition << query_params[:buyer_type]
+      query_condition << query_params[:buyer_id]
     end
 
     # 查询指定状态的订单
-    if !set_query_params[:status].blank?
+    if !query_params[:status].blank?
       query_condition[0] += " AND status = ? "
-      query_condition << set_query_params[:status]
+      query_condition << query_params[:status]
     end
 
     # 查询指定时间区间的订单
-    if !set_query_params[:begin_time].blank? && !set_query_params[:end_time].blank?
+    if !query_params[:begin_time].blank? && !query_params[:end_time].blank?
       query_condition[0] += " AND created_at >= ? AND created_at <= ? "
-      query_condition << set_query_params[:begin_time]
-      query_condition << set_query_params[:end_time]
+      query_condition << query_params[:begin_time]
+      query_condition << query_params[:end_time]
     end
 
     # 默认按照支付时间将序排列
     orders = Order.where(query_condition).order(payment_time: :desc)
+
+    # 判断是否需要分页
+    if !query_params[:page].blank? && !query_params[:per_page].blank?
+      orders = orders.page(query_params[:page]).per(query_params[:per_page])
+    end
+    
     CommonService.response_format(ResponseCode.COMMON.OK, OrdersService.get_order_datas(orders))
   end
 
