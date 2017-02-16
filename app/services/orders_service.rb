@@ -28,11 +28,15 @@ class OrdersService < BaseService
     orders = Order.where(query_condition).order(payment_time: :desc)
 
     # 判断是否需要分页
+    total_count = nil
     if !query_params[:page].blank? && !query_params[:per_page].blank?
       orders = orders.page(query_params[:page]).per(query_params[:per_page])
+      total_count = orders.total_count
     end
-    
-    CommonService.response_format(ResponseCode.COMMON.OK, OrdersService.get_order_datas(orders))
+
+    orders = OrdersService.get_order_datas(orders)
+    CommonService.response_format(ResponseCode.COMMON.OK,
+                                  total_count.nil? ? orders : {"total_count" => total_count, "orders" => orders})
   end
 
   def get_order(order)
