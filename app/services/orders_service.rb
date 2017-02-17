@@ -93,7 +93,7 @@ class OrdersService < BaseService
       data << self.get_order(order)
     end
 
-    {"total_count" => total_count.nil? ? data.count : total_count, "orders" => data}
+    {"total_count" => total_count.nil? ? orders.length : total_count, "orders" => data}
   end
 
   # 定时刷新订单状态，已发货的订单，超过七天后自动设置为已完成方法。
