@@ -2,6 +2,8 @@ class OrdersService < BaseService
   def get_orders(query_params)
     # 根据参数，解析所有查询条件
     orders = []
+    total_count = nil
+
     query_condition = [" 1 AND 1 "]
 
     # 查询指定消费者的订单
@@ -28,19 +30,16 @@ class OrdersService < BaseService
     orders = Order.where(query_condition).order(payment_time: :desc)
 
     # 判断是否需要分页
-    total_count = nil
     if !query_params[:page].blank? && !query_params[:per_page].blank?
       orders = orders.page(query_params[:page]).per(query_params[:per_page])
       total_count = orders.total_count
     end
 
-    orders = OrdersService.get_order_datas(orders)
-    CommonService.response_format(ResponseCode.COMMON.OK,
-                                  total_count.nil? ? orders : {"total_count" => total_count, "orders" => orders})
+    CommonService.response_format(ResponseCode.COMMON.OK, OrdersService.get_orders(orders, total_count))
   end
 
   def get_order(order)
-    CommonService.response_format(ResponseCode.COMMON.OK, OrdersService.get_order_data(order))
+    CommonService.response_format(ResponseCode.COMMON.OK, OrdersService.get_order(order))
   end
 
   def create_order(buyer, address, order_params, details)
@@ -84,16 +83,17 @@ class OrdersService < BaseService
     CommonService.response_format(ResponseCode.COMMON.OK)
   end
 
-  def self.get_order_data(order)
+  def self.get_order(order)
     order.as_json.merge("order_details" => order.order_details.collect{|order_detail| order_detail.as_json.merge("product" => ProductsService.find_product_data(order_detail.product))})
   end
 
-  def self.get_order_datas(orders)
+  def self.get_orders(orders, total_count)
     data = []
     orders.each do |order|
-      data << self.get_order_data(order)
+      data << self.get_order(order)
     end
-    data
+
+    {"total_count" => total_count.nil? ? data.count : total_count, "orders" => data}
   end
 
   # 定时刷新订单状态，已发货的订单，超过七天后自动设置为已完成方法。
