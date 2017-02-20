@@ -34,9 +34,6 @@
     # 广告商品建立关联
     if !product_params.blank?
       advert_products = advert.products << Product.find(product_params["product_ids"])
-      # product_params["product_ids"].each do |product_id|
-      #   advert.products << Product.where("id in ?", product_params["product_ids"])
-      # end
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK,
@@ -44,26 +41,32 @@
   end
 
   def update_advert(advert, advert_params)
-    price_params = nil
-    advert_prices = advert.prices
+    product_params = nil
+    advert_products = advert.products
+
+    # 参数合法性检查
+    if advert.blank? || advert_params.blank?
+      return CommonService.response_format(ResponseCode.COMMON.FAILED,
+                                           "ERROR: advert: #{advert} or advert_params:#{advert_params.inspect} is blank!")
+    end
 
     # 解析商品价格参数
-    price_params = advert_params.extract!("prices")
+    product_params = advert_params.extract!("product_ids")
 
     # 更新商品信息
     advert.update(advert_params)
 
-    # 如果有价格列表，则删除原来的价格，新增参数中的价格。
-    if !price_params.blank?
-      # 先删除已有价格
-      advert.prices.destroy
+    # 如果有商品列表，则删除原来的商品列表，新增参数中的商品列表。
+    if !product_params.blank?
+      # 先删除已有商品
+      advert.products.destroy
 
-      # 新建参数传入的价格
-      advert_prices = advert.prices.create(price_params["prices"])
+      # 新建参数传入的商品
+      advert_products = advert.products << Product.find(product_params["product_ids"])
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK,
-                                  AdvertsService.advert_data_format(advert, advert_prices))
+                                  AdvertsService.advert_data_format(advert, advert_products))
   end
 
   def destory_advert(advert)
