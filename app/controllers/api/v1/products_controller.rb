@@ -62,7 +62,7 @@ class Api::V1::ProductsController < Api::V1::BaseController
                                     :property,
                                     :category_id,
                                     :remark,
-                                    :prices => [:price, :real_price, :unit, :is_default])
+                                    :prices => [:price,:real_price,:unit,:is_default,:display_quantity,:display_unit])
   end
 
 end
