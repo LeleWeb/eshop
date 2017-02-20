@@ -31,7 +31,7 @@
     product.categories << Category.find(product_params["category_id"])
     p '1'*10,price_params
     # 创建商品价格
-    product_prices = product.prices.create(price_params)
+    product_prices = product.prices.create(price_params["prices"])
     # price_params.each do |price|
     #   product_prices << product.prices.create(price)
     # end
