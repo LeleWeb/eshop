@@ -19,7 +19,7 @@
     # 参数合法性检查
     if store.blank? || product_params.blank? || price_params.blank?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "ERROR: store or product_params or price_params is blank!")
+                                           "ERROR: store:#{store} or product_params:#{product_params} or price_params:#{price_params} is blank!")
     end
 
     # 创建产品

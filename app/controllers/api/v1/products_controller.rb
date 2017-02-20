@@ -70,7 +70,7 @@ class Api::V1::ProductsController < Api::V1::BaseController
   end
 
   def price_params
-    params.permit[:prices]
+    params[:prices]
   end
 
 end
