@@ -18,9 +18,7 @@ class Api::V1::ProductsController < Api::V1::BaseController
 
   # POST /accounts
   def create
-    render json: ProductsService.new.create_product(@store,
-                                                    product_params,
-                                                    price_params)
+    render json: ProductsService.new.create_product(@store, product_params)
   end
 
   # PATCH/PUT /accounts/1
@@ -60,17 +58,11 @@ class Api::V1::ProductsController < Api::V1::BaseController
                                     :description,
                                     :detail,
                                     :stock,
-                                    :price,
-                                    :real_price,
                                     :status,
                                     :property,
                                     :category_id,
                                     :remark,
-                                    :unit)
-  end
-
-  def price_params
-    params[:prices]
+                                    :prices => [])
   end
 
 end

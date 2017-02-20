@@ -15,22 +15,25 @@
     CommonService.response_format(ResponseCode.COMMON.OK, ProductsService.find_product_data(product, query_params[:customer_id]))
   end
 
-  def create_product(store, product_params, price_params)
+  def create_product(store, product_params)
     # 参数合法性检查
-    if store.blank? || product_params.blank? || price_params.blank?
+    if store.blank? || product_params.blank?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "ERROR: store:#{store.inspect} or product_params:#{product_params.inspect} or price_params:#{price_params.inspect} is blank!")
+                                           "ERROR: store:#{store.inspect} or product_params:#{product_params.inspect} is blank!")
     end
+
+    # 解析商品价格参数
+    price_params = product_params.extract!("prices")
 
     # 创建产品
     product = store.products.create(product_params)
     product.categories << Category.find(product_params["category_id"])
 
     # 创建商品价格
-    product_prices = []
-    price_params.each do |price|
-      product_prices << product.prices.create(price)
-    end
+    product_prices = product.prices.create(price_params)
+    # price_params.each do |price|
+    #   product_prices << product.prices.create(price)
+    # end
 
     CommonService.response_format(ResponseCode.COMMON.OK,
                                   CustomersService.product_data_format(product, product_prices))
