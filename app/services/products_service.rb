@@ -28,13 +28,13 @@
     # 创建产品
     product = store.products.create(product_params)
     product.categories << Category.find(product_params["category_id"])
-
+    p '1'*10,price_params
     # 创建商品价格
     product_prices = product.prices.create(price_params)
     # price_params.each do |price|
     #   product_prices << product.prices.create(price)
     # end
-
+    p '2'*10,product_prices
     CommonService.response_format(ResponseCode.COMMON.OK,
                                   ProductsService.product_data_format(product, product_prices))
 
