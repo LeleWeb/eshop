@@ -16,6 +16,7 @@
   end
 
   def create_product(store, product_params)
+    p '0'*10,product_params
     # 参数合法性检查
     if store.blank? || product_params.blank?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
