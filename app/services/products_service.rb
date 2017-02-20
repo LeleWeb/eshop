@@ -16,7 +16,9 @@
   end
 
   def create_product(store, product_params)
-    p '0'*10,product_params
+    price_params = nil
+    product_prices = []
+
     # 参数合法性检查
     if store.blank? || product_params.blank?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
@@ -29,33 +31,37 @@
     # 创建产品
     product = store.products.create(product_params)
     product.categories << Category.find(product_params["category_id"])
-    p '1'*10,price_params
+    
     # 创建商品价格
-    product_prices = product.prices.create(price_params["prices"])
-    # price_params.each do |price|
-    #   product_prices << product.prices.create(price)
-    # end
-    p '2'*10,product_prices
+    if !price_params.blank?
+      product_prices = product.prices.create(price_params["prices"])
+    end
+
     CommonService.response_format(ResponseCode.COMMON.OK,
                                   ProductsService.product_data_format(product, product_prices))
-
-    # CommonService.response_format(ResponseCode.COMMON.OK, product)
-
-    # if product.save
-    #   CommonService.response_format(ResponseCode.COMMON.OK, product)
-    # else
-    #   ResponseCode.COMMON.FAILED.message = product.errors
-    #   CommonService.response_format(ResponseCode.COMMON.FAILED)
-    # end
   end
 
   def update_product(product, product_params)
-    if product.update(product_params)
-      CommonService.response_format(ResponseCode.COMMON.OK, product)
-    else
-      ResponseCode.COMMON.FAILED['message'] = product.errors
-      CommonService.response_format(ResponseCode.COMMON.FAILED)
+    price_params = nil
+    product_prices = product.prices
+
+    # 解析商品价格参数
+    price_params = product_params.extract!("prices")
+
+    # 更新商品信息
+    product.update(product_params)
+
+    # 如果有价格列表，则删除原来的价格，新增参数中的价格。
+    if !price_params.blank?
+      # 先删除已有价格
+      product.prices.destroy
+
+      # 新建参数传入的价格
+      product_prices = product.prices.create(price_params["prices"])
     end
+
+    CommonService.response_format(ResponseCode.COMMON.OK,
+                                  ProductsService.product_data_format(product, product_prices))
   end
 
   def destory_product(product)
