@@ -59,7 +59,7 @@
     # 如果有商品列表，则删除原来的商品列表，新增参数中的商品列表。
     if !product_params.blank?
       # 先删除已有商品
-      advert.products.destroy
+      advert.products.clear
 
       # 新建参数传入的商品
       advert_products = advert.products << Product.find(product_params["product_ids"])

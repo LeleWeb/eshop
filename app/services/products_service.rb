@@ -54,7 +54,7 @@
     # 如果有价格列表，则删除原来的价格，新增参数中的价格。
     if !price_params.blank?
       # 先删除已有价格
-      product.prices.destroy
+      product.prices.clear
 
       # 新建参数传入的价格
       product_prices = product.prices.create(price_params["prices"])
