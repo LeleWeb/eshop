@@ -18,6 +18,8 @@ class Api::V1::ProductsController < Api::V1::BaseController
 
   # POST /accounts
   def create
+    p '1'*10,params
+    p '2'*10,params[:prices],params.permit[:prices]
     render json: ProductsService.new.create_product(@store,
                                                     product_params,
                                                     price_params)
