@@ -33,7 +33,7 @@
     
     # 广告商品建立关联
     if !product_params.blank?
-      advert_products = advert.products << Product.where("id in ?", product_params["product_ids"])
+      advert_products = advert.products << Product.find(product_params["product_ids"])
       # product_params["product_ids"].each do |product_id|
       #   advert.products << Product.where("id in ?", product_params["product_ids"])
       # end
