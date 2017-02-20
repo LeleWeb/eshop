@@ -183,6 +183,14 @@ defaults: &defaults
     UNDERCARRIAGE: 0
     GROUNDING: 1
 
+  # 定义价格和价格计量单位
+  PRICE:
+    JIN: 0
+    GE: 1
+    FEN: 2
+    HE: 3
+    XIANG: 4
+
 development:
   <<: *defaults
   neat_setting: 800

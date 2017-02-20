@@ -15,14 +15,24 @@
     CommonService.response_format(ResponseCode.COMMON.OK, ProductsService.find_product_data(product, query_params[:customer_id]))
   end
 
-  def create_product(store, product_params)
+  def create_product(store, product_params, price_params)
+    # 参数合法性检查
+    if store.blank? || product_params.blank? || price_params.blank?
+      return CommonService.response_format(ResponseCode.COMMON.FAILED,
+                                           "ERROR: store or product_params or price_params is blank!")
+    end
+
+    # 创建产品
     product = store.products.create(product_params)
     product.categories << Category.find(product_params["category_id"])
 
-    # 创建产品详情
-    # product.product_details.create(product_params[:details])
+    # 创建商品价格
+    product_prices = product.prices.create(price_params)
 
-    CommonService.response_format(ResponseCode.COMMON.OK, product)
+    CommonService.response_format(ResponseCode.COMMON.OK,
+                                  CustomersService.product_data_format(product, product_prices))
+
+    # CommonService.response_format(ResponseCode.COMMON.OK, product)
 
     # if product.save
     #   CommonService.response_format(ResponseCode.COMMON.OK, product)
@@ -160,4 +170,10 @@
                           :pictures => picture_data,
                           :is_collected => is_collected)
   end
+
+  # 格式化产品返回数据为指定格式
+  def self.product_data_format(product, product_price)
+    product.as_json.merge("prices" => product_price)
+  end
+
 end

@@ -22,4 +22,7 @@ class Product < ApplicationRecord
            foreign_key: "group_id"
 
   belongs_to :group, class_name: "Product"
+
+  # 价格
+  has_many :prices
 end

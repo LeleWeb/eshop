@@ -18,7 +18,9 @@ class Api::V1::ProductsController < Api::V1::BaseController
 
   # POST /accounts
   def create
-    render json: ProductsService.new.create_product(@store, product_params)
+    render json: ProductsService.new.create_product(@store,
+                                                    product_params,
+                                                    price_params)
   end
 
   # PATCH/PUT /accounts/1
@@ -54,8 +56,22 @@ class Api::V1::ProductsController < Api::V1::BaseController
 
   # Only allow a trusted parameter "white list" through.
   def product_params
-    params.require(:product).permit(:name, :description, :detail, :stock, :price, :real_price,
-                                    :status, :property, :category_id, :remark, :unit)
+    params.require(:product).permit(:name,
+                                    :description,
+                                    :detail,
+                                    :stock,
+                                    :price,
+                                    :real_price,
+                                    :status,
+                                    :property,
+                                    :category_id,
+                                    :remark,
+                                    :unit)
   end
+
+  def price_params
+    params[:prices]
+  end
+
 end
 
