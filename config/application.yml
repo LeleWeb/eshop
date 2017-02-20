@@ -191,6 +191,16 @@ defaults: &defaults
     HE: 3
     XIANG: 4
 
+  # 定义广告分类和状态
+  ADVERT:
+    STATUS:
+      NOT_PUT: 0
+      PUTTING: 1
+      WITHDRAWED: 2
+    CATEGORY:
+      HOME_TOP: 0
+
+
 development:
   <<: *defaults
   neat_setting: 800
