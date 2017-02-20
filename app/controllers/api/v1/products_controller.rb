@@ -62,7 +62,7 @@ class Api::V1::ProductsController < Api::V1::BaseController
                                                     :property,
                                                     :category_id,
                                                     :remark,
-                                                    :prices)
+                                                    :prices => [:price, :real_price, :unit, :is_default])
     params.require(:product).permit(:name,
                                     :description,
                                     :detail,
