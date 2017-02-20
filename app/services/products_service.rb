@@ -16,11 +16,10 @@
   end
 
   def create_product(store, product_params, price_params)
-    p "3"*10,price_params
     # 参数合法性检查
     if store.blank? || product_params.blank? || price_params.blank?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "ERROR: store:#{store} or product_params:#{product_params} or price_params:#{price_params} is blank!")
+                                           "ERROR: store:#{store.inspect} or product_params:#{product_params.inspect} or price_params:#{price_params.inspect} is blank!")
     end
 
     # 创建产品
@@ -28,7 +27,10 @@
     product.categories << Category.find(product_params["category_id"])
 
     # 创建商品价格
-    product_prices = product.prices.create(price_params)
+    product_prices = []
+    price_params.each do |price|
+      product_prices << product.prices.create(price)
+    end
 
     CommonService.response_format(ResponseCode.COMMON.OK,
                                   CustomersService.product_data_format(product, product_prices))
