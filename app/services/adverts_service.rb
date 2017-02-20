@@ -69,9 +69,24 @@
                                   AdvertsService.advert_data_format(advert, advert_products))
   end
 
-  def destory_advert(advert)
-    advert.update(is_deleted: true)
+  def destroy_advert(advert, destroy_params)
+    # 单个删除
+    if !advert.nil?
+      advert.update(deleted_at: Time.now)
+    end
+
+    # 批量删除
+    if !destroy_params.blank?
+      destroy_params.each do |customer_id|
+        object = Customer.find_by(id: customer_id)
+        object.update(deleted_at: Time.now) if !object.nil?
+      end
+    end
+
     CommonService.response_format(ResponseCode.COMMON.OK)
+
+    # advert.update(is_deleted: true)
+    # CommonService.response_format(ResponseCode.COMMON.OK)
   end
 
   # private

@@ -30,7 +30,7 @@ class Api::V1::ProductsController < Api::V1::BaseController
   # DELETE /accounts/1
   def destroy
     authorize @product
-    render json: ProductsService.new.destory_product(@product)
+    render json: ProductsService.new.destroy_product(@product)
   end
 
   private

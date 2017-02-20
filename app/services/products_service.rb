@@ -64,7 +64,7 @@
                                   ProductsService.product_data_format(product, product_prices))
   end
 
-  def destory_product(product)
+  def destroy_product(product)
     product.update(is_deleted: true)
     CommonService.response_format(ResponseCode.COMMON.OK)
   end
