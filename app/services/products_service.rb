@@ -36,7 +36,7 @@
     # end
 
     CommonService.response_format(ResponseCode.COMMON.OK,
-                                  CustomersService.product_data_format(product, product_prices))
+                                  ProductsService.product_data_format(product, product_prices))
 
     # CommonService.response_format(ResponseCode.COMMON.OK, product)
 
