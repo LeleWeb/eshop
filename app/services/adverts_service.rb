@@ -113,8 +113,16 @@
 
   # 格式化产品返回数据为指定格式
   def self.advert_data_format(advert, advert_products)
+    documents = []
+
+    # 获取广告图片
+    advert.images.each do |image|
+      documents += image.documents
+    end
+
+    # 格式化返回数据
     advert.as_json.merge("products" => advert_products,
-                         "pictures" => advert.images)
+                         "pictures" => documents)
   end
 
   def self.get_adverts(adverts, total_count)
