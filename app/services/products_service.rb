@@ -165,6 +165,8 @@
   end
 
   def self.find_product_data(product, customer_id=nil)
+    data = nil
+
     if product.nil?
       return nil
     end
@@ -191,14 +193,21 @@
       is_collected = true if !collection.nil?
     end
 
-    product.as_json.merge(:categories => categories,
+    data = product.as_json.merge(:categories => categories,
                           :pictures => picture_data,
                           :is_collected => is_collected)
+
+    # 添加价格属性
+    ProductsService.product_data_format(data, product.prices)
   end
 
   # 格式化产品返回数据为指定格式
   def self.product_data_format(product, product_price)
     product.as_json.merge("prices" => product_price)
+  end
+
+  def self.get_products(products)
+    products.collect{|product| self.find_product_data(product)}
   end
 
 end

@@ -124,7 +124,7 @@
   end
 
   def self.get_advert(advert)
-    self.advert_data_format(advert, advert.products)
+    self.advert_data_format(advert, ProductsService.get_products(advert.products))
   end
 
 end
