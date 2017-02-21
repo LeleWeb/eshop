@@ -183,6 +183,12 @@ defaults: &defaults
     UNDERCARRIAGE: 0
     GROUNDING: 1
 
+#  # 定义商品属性
+#  PRODUCT_PROPERTY:
+#    SINGLE: 0
+#    TINY: 1
+#    BIG: 2
+
   # 定义价格和价格计量单位
   PRICE:
     JIN: 0
@@ -200,6 +206,15 @@ defaults: &defaults
     CATEGORY:
       HOME_TOP: 0
 
+  # 自动计算类别定义
+  COMPUTE:
+    CATEGORY:
+      TEAM_SETMEAL: 0  # 团队套餐推荐
+    STRATEGY:
+      CLASSIFY:
+        SINGLE: 0
+        PERSONAL: 1
+        GROUP: 2
 
 development:
   <<: *defaults
