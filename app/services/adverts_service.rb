@@ -113,7 +113,8 @@
 
   # 格式化产品返回数据为指定格式
   def self.advert_data_format(advert, advert_products)
-    advert.as_json.merge("products" => advert_products)
+    advert.as_json.merge("products" => advert_products,
+                         "pictures" => advert.images)
   end
 
   def self.get_adverts(adverts, total_count)
