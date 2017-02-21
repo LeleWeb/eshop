@@ -9,18 +9,18 @@
 
     # 按照广告分类检索
     if !query_params[:category].blank?
-      adverts = eval(customers.nil? ? "Advert" : "adverts").where(category: query_params[:category])
+      adverts = eval(adverts.nil? ? "Advert" : "adverts").where(category: query_params[:category])
     end
 
     # 按照广告状态检索
     if !query_params[:status].blank?
-      adverts = eval(customers.nil? ? "Advert" : "adverts").where(status: query_params[:status])
+      adverts = eval(adverts.nil? ? "Advert" : "adverts").where(status: query_params[:status])
     end
 
     # 如果存在分页参数,按照分页返回结果.
     total_count = nil
     if !query_params[:page].blank? && !query_params[:per_page].blank?
-      adverts = eval(customers.nil? ? "Advert" : "adverts").
+      adverts = eval(adverts.nil? ? "Advert" : "adverts").
                 page(query_params[:page]).
                 per(query_params[:per_page])
       total_count = adverts.total_count
