@@ -1,6 +1,7 @@
 ﻿class AdvertsService < BaseService
   def get_adverts(query_params)
-    adverts = nil
+    adverts = Advert.where.not(is_deleted: true)
+    total_count = nil
 
     # 按照商品检索
     if !query_params[:product].blank? && !(product = Product.find_by(id: query_params[:product])).nil?
@@ -18,17 +19,18 @@
     end
 
     # 如果存在分页参数,按照分页返回结果.
-    total_count = nil
     if !query_params[:page].blank? && !query_params[:per_page].blank?
       adverts = eval(adverts.nil? ? "Advert" : "adverts").
+                where.not(is_deleted: true).
                 page(query_params[:page]).
                 per(query_params[:per_page])
       total_count = adverts.total_count
+    else
+      adverts = adverts.where.not(is_deleted: true)
+      total_count = adverts.size
     end
 
-    CommonService.response_format(ResponseCode.COMMON.OK,
-    AdvertsService.get_adverts(adverts.nil? ? Advert.where.not(is_deleted: true) : adverts.where.not(is_deleted: true),
-                               total_count))
+    CommonService.response_format(ResponseCode.COMMON.OK, AdvertsService.get_adverts(adverts, total_count))
   end
 
   def get_advert(advert)
