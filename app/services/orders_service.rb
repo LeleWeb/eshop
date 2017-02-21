@@ -29,11 +29,23 @@ class OrdersService < BaseService
     # 默认按照支付时间将序排列
     orders = Order.where(query_condition).order(payment_time: :desc)
 
-    # 判断是否需要分页
+    # 如果存在分页参数,按照分页返回结果.
     if !query_params[:page].blank? && !query_params[:per_page].blank?
-      orders = orders.page(query_params[:page]).per(query_params[:per_page])
+      orders = eval(orders.nil? ? "Order" : "orders").
+               where.not(is_deleted: true).
+               page(query_params[:page]).
+               per(query_params[:per_page])
       total_count = orders.total_count
+    else
+      orders = orders.where.not(is_deleted: true)
+      total_count = orders.size
     end
+
+    # # 判断是否需要分页
+    # if !query_params[:page].blank? && !query_params[:per_page].blank?
+    #   orders = orders.page(query_params[:page]).per(query_params[:per_page])
+    #   total_count = orders.total_count
+    # end
 
     CommonService.response_format(ResponseCode.COMMON.OK, OrdersService.get_orders(orders, total_count))
   end
@@ -88,12 +100,14 @@ class OrdersService < BaseService
   end
 
   def self.get_orders(orders, total_count)
-    data = []
-    orders.each do |order|
-      data << self.get_order(order)
-    end
-
+    data = orders.collect{|order| self.get_order(order)}
     {"total_count" => total_count.nil? ? orders.length : total_count, "orders" => data}
+    # data = []
+    # orders.each do |order|
+    #   data << self.get_order(order)
+    # end
+    #
+    # {"total_count" => total_count.nil? ? orders.length : total_count, "orders" => data}
   end
 
   # 定时刷新订单状态，已发货的订单，超过七天后自动设置为已完成方法。
