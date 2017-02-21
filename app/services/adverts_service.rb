@@ -1,18 +1,38 @@
 ﻿class AdvertsService < BaseService
-  def get_adverts(store, query_params)
-    if !query_params[:category].blank? && !query_params[:limit].blank?
-      CommonService.response_format(ResponseCode.COMMON.OK,
-                                    self.find_by_category(store, query_params))
-    elsif !query_params[:search].blank?
-      CommonService.response_format(ResponseCode.COMMON.OK,
-                                    self.find_by_search(store, query_params))
-    else
-      CommonService.response_format(ResponseCode.COMMON.OK, AdvertsService.find_advert_datas(store))
+  def get_adverts(query_params)
+    adverts = nil
+
+    # 按照商品检索
+    if !query_params[:product].blank? && !(product = Product.find_by(id: query_params[:product])).nil?
+      adverts = product.adverts
     end
+
+    # 按照广告分类检索
+    if !query_params[:category].blank?
+      adverts = eval(customers.nil? ? "Advert" : "adverts").where(category: query_params[:category])
+    end
+
+    # 按照广告状态检索
+    if !query_params[:status].blank?
+      adverts = eval(customers.nil? ? "Advert" : "adverts").where(status: query_params[:status])
+    end
+
+    # 如果存在分页参数,按照分页返回结果.
+    total_count = nil
+    if !query_params[:page].blank? && !query_params[:per_page].blank?
+      adverts = eval(customers.nil? ? "Advert" : "adverts").
+                page(query_params[:page]).
+                per(query_params[:per_page])
+      total_count = adverts.total_count
+    end
+
+    CommonService.response_format(ResponseCode.COMMON.OK,
+    CustomersService.get_adverts(adverts.nil? ? Advert.where.not(is_deleted: true) : adverts.where.not(is_deleted: true), total_count))
   end
 
   def get_advert(advert, query_params)
-    CommonService.response_format(ResponseCode.COMMON.OK, AdvertsService.find_advert_data(advert, query_params[:customer_id]))
+    CommonService.response_format(ResponseCode.COMMON.OK,
+                                  AdvertsService.find_advert_data(advert, query_params[:customer_id]))
   end
 
   def create_advert(advert_params)
@@ -47,7 +67,7 @@
     # 参数合法性检查
     if advert.blank? || advert_params.blank?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "ERROR: advert: #{advert} or advert_params:#{advert_params.inspect} is blank!")
+      "ERROR: advert: #{advert} or advert_params:#{advert_params.inspect} is blank!")
     end
 
     # 解析商品价格参数
@@ -72,21 +92,18 @@
   def destroy_advert(advert, destroy_params)
     # 单个删除
     if !advert.nil?
-      advert.update(deleted_at: Time.now)
+      advert.update(is_deleted: true, deleted_at: Time.now)
     end
 
     # 批量删除
     if !destroy_params.blank?
-      destroy_params.each do |customer_id|
-        object = Customer.find_by(id: customer_id)
-        object.update(deleted_at: Time.now) if !object.nil?
+      destroy_params.each do |advert_id|
+        object = Advert.find_by(id: advert_id)
+        object.update(is_deleted: true, deleted_at: Time.now) if !object.nil?
       end
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK)
-
-    # advert.update(is_deleted: true)
-    # CommonService.response_format(ResponseCode.COMMON.OK)
   end
 
   # private

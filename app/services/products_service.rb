@@ -65,7 +65,19 @@
   end
 
   def destroy_product(product)
-    product.update(is_deleted: true)
+    # 单个删除
+    if !product.nil?
+      product.update(is_deleted: true, deleted_at: Time.now)
+    end
+
+    # 批量删除
+    if !destroy_params.blank?
+      destroy_params.each do |product_id|
+        object = Product.find_by(id: product_id)
+        object.update(is_deleted: true, deleted_at: Time.now) if !object.nil?
+      end
+    end
+
     CommonService.response_format(ResponseCode.COMMON.OK)
   end
 
