@@ -52,6 +52,8 @@ Rails.application.routes.draw do
       resources :images
       # 广告接口
       resources :adverts
+      # 计算接口
+      resources :computes
     end
   end
 end
