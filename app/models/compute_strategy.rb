@@ -1,0 +1,2 @@
+class ComputeStrategy < ApplicationRecord
+end
