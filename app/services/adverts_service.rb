@@ -63,8 +63,7 @@
       advert_products = advert.products << Product.find(product_params["product_ids"])
     end
 
-    CommonService.response_format(ResponseCode.COMMON.OK,
-                                  AdvertsService.advert_data_format(advert, advert_products))
+    CommonService.response_format(ResponseCode.COMMON.OK, AdvertsService.get_advert(advert))
   end
 
   def update_advert(advert, advert_params)
@@ -92,8 +91,7 @@
       advert_products = advert.products << Product.find(product_params["product_ids"])
     end
 
-    CommonService.response_format(ResponseCode.COMMON.OK,
-                                  AdvertsService.advert_data_format(advert, advert_products))
+    CommonService.response_format(ResponseCode.COMMON.OK, AdvertsService.get_advert(advert))
   end
 
   def destroy_advert(advert, destroy_params)
