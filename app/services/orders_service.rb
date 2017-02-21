@@ -32,12 +32,10 @@ class OrdersService < BaseService
     # 如果存在分页参数,按照分页返回结果.
     if !query_params[:page].blank? && !query_params[:per_page].blank?
       orders = eval(orders.nil? ? "Order" : "orders").
-               where.not(is_deleted: true).
                page(query_params[:page]).
                per(query_params[:per_page])
       total_count = orders.total_count
     else
-      orders = orders.where.not(is_deleted: true)
       total_count = orders.size
     end
 
