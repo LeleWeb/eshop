@@ -209,12 +209,9 @@ defaults: &defaults
   # 自动计算类别定义
   COMPUTE:
     CATEGORY:
-      TEAM_SETMEAL: 0  # 团队套餐推荐
-    STRATEGY:
-      CLASSIFY:
-        SINGLE: 0
-        PERSONAL: 1
-        GROUP: 2
+      SINGLE_SETMEAL: 0 # 单品
+      PERSONAL_SETMEAL: 1 # 个人套餐
+      TEAM_SETMEAL: 2  # 团队套餐推荐
 
 development:
   <<: *defaults

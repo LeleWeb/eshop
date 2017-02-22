@@ -25,4 +25,7 @@ class Product < ApplicationRecord
 
   # 价格
   has_many :prices
+
+  # 计算策略
+  has_many :compute_strategies
 end
