@@ -64,7 +64,7 @@
                                   ProductsService.product_data_format(product, product_prices))
   end
 
-  def destroy_product(product)
+  def destroy_product(product, destroy_params)
     # 单个删除
     if !product.nil?
       product.update(is_deleted: true, deleted_at: Time.now)
