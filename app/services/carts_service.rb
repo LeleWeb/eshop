@@ -1,6 +1,6 @@
 class CartsService < BaseService
   def get_carts(query_params)
-    carts = ShoppingCart.where.not(is_deleted: true)
+    carts = ShoppingCart.where(is_deleted: false)
     total_count = nil
 
     # 查询指定消费者的所有购物车项
@@ -11,12 +11,10 @@ class CartsService < BaseService
     # 如果存在分页参数,按照分页返回结果.
     if !query_params[:page].blank? && !query_params[:per_page].blank?
       carts = eval(carts.nil? ? "Cart" : "carts").
-              where.not(is_deleted: true).
               page(query_params[:page]).
               per(query_params[:per_page])
       total_count = carts.total_count
     else
-      carts = carts.where.not(is_deleted: true)
       total_count = carts.size
     end
 
