@@ -107,7 +107,7 @@ class CartsService < BaseService
   end
 
   def self.get_carts(carts, total_count)
-    data = carts.collect{|cart| self.get_cart(carts)}
+    data = carts.collect{|cart| self.get_cart(cart)}
     {"total_count" => total_count.nil? ? carts.length : total_count, "carts" => data}
   end
 
