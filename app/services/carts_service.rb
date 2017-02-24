@@ -20,7 +20,7 @@ class CartsService < BaseService
       total_count = carts.size
     end
 
-    CommonService.response_format(ResponseCode.COMMON.OK, AdvertsService.get_carts(carts, total_count))
+    CommonService.response_format(ResponseCode.COMMON.OK, CartsService.get_carts(carts, total_count))
   end
 
   def get_cart(cart)
@@ -86,15 +86,7 @@ class CartsService < BaseService
     CommonService.response_format(ResponseCode.COMMON.OK)
   end
 
-  private
-
-  def get_carts_data(carts)
-    data = []
-    carts.each do |cart|
-      data << get_cart_data(cart)
-    end
-    data
-  end
+  # private
 
   def get_cart_data(cart)
     cart.as_json.merge(:product => ProductsService.find_product_data(cart.product))
