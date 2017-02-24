@@ -1,6 +1,6 @@
 class CartsService < BaseService
   def get_carts(query_params)
-    carts = ShoppingCart.where(is_deleted: false, property: )
+    carts = ShoppingCart.where(is_deleted: false, property: Settings.CART_OR_ITEM.PROPERTY.CART_ITEM)
     total_count = nil
 
     # 查询指定消费者的所有购物车项
