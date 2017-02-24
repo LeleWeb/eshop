@@ -1,7 +1,5 @@
 class Api::V1::CartsController < Api::V1::BaseController
   before_action :set_cart, only: [:show, :update, :destroy]
-  before_action :set_owner, only: [:index, :create]
-  before_action :set_product, only: [:create]
 
   # GET /accounts
   def index
@@ -16,7 +14,7 @@ class Api::V1::CartsController < Api::V1::BaseController
 
   # POST /accounts
   def create
-    render json: CartsService.new.create_cart(@owner, @product, cart_params)
+    render json: CartsService.new.create_cart(cart_params)
   end
 
   # PATCH/PUT /accounts/1
@@ -33,21 +31,19 @@ class Api::V1::CartsController < Api::V1::BaseController
 
   private
 
-  def set_product
-    @product = Product.find(params[:product_id])
-  end
-
-  def set_owner
-    @owner = eval(params[:owner_type]).find(params[:owner_id])
-  end
-
   # Use callbacks to share common setup or constraints between actions.
   def set_cart
-    @cart = ShoppingCart.find(params[:id])
+    @cart = ShoppingCart.find_by(id: params[:id])
   end
 
   # Only allow a trusted parameter "white list" through.
   def cart_params
-    params.require(:cart).permit(:amount, :remark)
+    params.require(:cart).permit( :product_id,
+                                  :price_id,
+                                  :amount,
+                                  :total_price,
+                                  :owner_id,
+                                  :owner_type,
+                                  :remark)
   end
 end

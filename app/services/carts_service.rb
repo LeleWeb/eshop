@@ -12,17 +12,40 @@ class CartsService < BaseService
     CommonService.response_format(ResponseCode.COMMON.OK, cart)
   end
 
-  def create_cart(owner, product, cart_params)
-    if cart = owner.shopping_carts.where(product_id: product.id).first
-      # 购物车加入同一件商品，只修改数量
+  def create_cart(cart_params)
+    # 参数合法性检查
+    if cart_params.blank?
+      return CommonService.response_format(ResponseCode.COMMON.FAILED,
+                                           "ERROR: cart_params:#{cart_params} is blank!")
+    end
+
+    # 解析购物车所属对象
+    if (owner = eval(cart_params[:owner_type]).find_by(id: cart_params[:owner_id])).nil?
+      return CommonService.response_format(ResponseCode.COMMON.FAILED,
+                                           "ERROR: owner_type: #{cart_params[:owner_type]} or owner_id:#{cart_params[:owner_id]} is blank!")
+    end
+
+    # 解析购物车关联商品
+    if (product = Product.find_by(id: cart_params["product_id"])).nil?
+      return CommonService.response_format(ResponseCode.COMMON.FAILED,
+                                           "ERROR: product_id: #{cart_params["product_id"]} is blank!")
+    end
+
+    # 解析购物车关联商品的价格
+    if (price = Price.find_by(id: cart_params["price_id"])).nil?
+      return CommonService.response_format(ResponseCode.COMMON.FAILED,
+                                           "ERROR: price_id: #{cart_params["price_id"]} is blank!")
+    end
+
+    # 购物车纪录建立
+    if cart = owner.shopping_carts.where(product_id: product.id, price_id: price.id).first
+      # 如果是购物车加入同相同商品，相同价格的物品，则只修改数量。
       cart.update(amount: cart.amount + 1)
     else
       cart = owner.shopping_carts.create(cart_params)
-      cart.update(product_id: product.id)
     end
 
-    CommonService.response_format(ResponseCode.COMMON.OK, {:cart => cart,
-                                                           :cart_item_amount => owner.shopping_carts(force_reload = true).length})
+    CommonService.response_format(ResponseCode.COMMON.OK, CartsService.get_cart(cart))
   end
 
   def update_cart(cart, cart_params)
@@ -61,6 +84,12 @@ class CartsService < BaseService
         shopping_cart.destroy
       end
     end
+  end
+
+  def self.get_cart(cart)
+    # 格式化返回数据
+    cart.as_json.merge("product" => ProductsService.find_product_data(cart.product),
+                       "price" => cart.price)
   end
 
 end
