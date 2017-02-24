@@ -39,12 +39,6 @@ class OrdersService < BaseService
       total_count = orders.size
     end
 
-    # # 判断是否需要分页
-    # if !query_params[:page].blank? && !query_params[:per_page].blank?
-    #   orders = orders.page(query_params[:page]).per(query_params[:per_page])
-    #   total_count = orders.total_count
-    # end
-
     CommonService.response_format(ResponseCode.COMMON.OK, OrdersService.get_orders(orders, total_count))
   end
 
@@ -140,17 +134,24 @@ class OrdersService < BaseService
   #   CommonService.response_format(ResponseCode.COMMON.OK, {"order" => order, "prepay_data" => res})
   # end
 
-  def update_order(order, order_params)
-    if order.update(order_params)
-      CommonService.response_format(ResponseCode.COMMON.OK, order)
-    else
-      ResponseCode.COMMON.FAILED['message'] = order.errors
-      CommonService.response_format(ResponseCode.COMMON.FAILED)
-    end
-  end
+  # def update_order(order, order_params)
+  #   if order.update(order_params)
+  #     CommonService.response_format(ResponseCode.COMMON.OK, order)
+  #   else
+  #     ResponseCode.COMMON.FAILED['message'] = order.errors
+  #     CommonService.response_format(ResponseCode.COMMON.FAILED)
+  #   end
+  # end
 
   def destory_order(order)
-    order.destroy
+    # 参数合法性检查
+    if order.blank?
+      return CommonService.response_format(ResponseCode.COMMON.FAILED,
+                                           "ERROR: order:#{order.inspect} is blank!")
+    end
+
+    order.update(is_deleted: true, deleted_at: Time.now)
+
     CommonService.response_format(ResponseCode.COMMON.OK)
   end
 

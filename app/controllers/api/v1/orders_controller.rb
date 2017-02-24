@@ -1,9 +1,5 @@
 class Api::V1::OrdersController < Api::V1::BaseController
   before_action :set_order, only: [:show, :update, :destroy]
-  before_action :set_buyer, only: [:create]
-  before_action :set_details, only: [:create]
-  before_action :set_address, only: [:create]
-  before_action :set_query_params, only: [:index, :show]
 
   # GET /accounts
   def index
@@ -21,11 +17,11 @@ class Api::V1::OrdersController < Api::V1::BaseController
     render json: OrdersService.new.create_order(order_params)
   end
 
-  # PATCH/PUT /accounts/1
-  def update
-    authorize @order
-    render json: OrdersService.new.update_order(@order, order_params)
-  end
+  # # PATCH/PUT /accounts/1
+  # def update
+  #   authorize @order
+  #   render json: OrdersService.new.update_order(@order, order_params)
+  # end
 
   # DELETE /accounts/1
   def destroy
@@ -35,30 +31,18 @@ class Api::V1::OrdersController < Api::V1::BaseController
 
   private
   def set_query_params
-    @query_params = params.permit(:status,
-                                  :buyer_type,
-                                  :buyer_id,
-                                  :begin_time,
-                                  :end_time,
-                                  :page,
-                                  :per_page)
-  end
-
-  def set_address
-    @address = Address.find(params[:address_id])
-  end
-
-  def set_details
-    params.require(:shopping_cart_ids)
-  end
-
-  def set_buyer
-    @buyer = (params[:buyer_type].nil? || params[:buyer_id].nil?) ? nil : eval(params[:buyer_type]).find(params[:buyer_id])
+    params.permit(:status,
+                  :buyer_type,
+                  :buyer_id,
+                  :begin_time,
+                  :end_time,
+                  :page,
+                  :per_page)
   end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_order
-    @order = Order.find(params[:id])
+    @order = Order.find_by(id: params[:id])
   end
 
   # Only allow a trusted parameter "white list" through.
