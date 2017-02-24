@@ -9,7 +9,7 @@ class CartsService < BaseService
   end
 
   def get_cart(cart)
-    CommonService.response_format(ResponseCode.COMMON.OK, cart)
+    CommonService.response_format(ResponseCode.COMMON.OK, CartsService.get_cart(cart))
   end
 
   def create_cart(cart_params)
@@ -49,16 +49,25 @@ class CartsService < BaseService
   end
 
   def update_cart(cart, cart_params)
-    if cart.update(cart_params)
-      CommonService.response_format(ResponseCode.COMMON.OK, cart)
-    else
-      ResponseCode.COMMON.FAILED['message'] = cart.errors
-      CommonService.response_format(ResponseCode.COMMON.FAILED)
+    # 参数合法性检查
+    if cart_params.blank?
+      return CommonService.response_format(ResponseCode.COMMON.FAILED,
+                                           "ERROR: cart_params:#{cart_params} is blank!")
     end
+
+    if cart_params["amount"].blank? && cart_params["total_price"].blank?
+      return CommonService.response_format(ResponseCode.COMMON.FAILED,
+                                           "ERROR: amount:#{amount} or total_price:#{total_price} is blank!")
+    end
+
+    # 修改购物车项数量和总金额
+    cart.update(amount: cart_params["amount"], total_price: cart_params["total_price"])
+
+    CommonService.response_format(ResponseCode.COMMON.OK, CartsService.get_cart(cart))
   end
 
   def destory_cart(cart)
-    cart.destroy
+    cart.update(is_deleted: true, deleted_at: Time.now)
     CommonService.response_format(ResponseCode.COMMON.OK)
   end
 
