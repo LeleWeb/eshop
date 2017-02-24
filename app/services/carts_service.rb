@@ -1,11 +1,26 @@
 class CartsService < BaseService
-  def get_carts(owner)
-    carts = []
-    if !owner.nil?
-      carts = owner.shopping_carts
+  def get_carts(query_params)
+    carts = Cart.where.not(is_deleted: true)
+    total_count = nil
+
+    # 查询指定消费者的所有购物车项
+    if !query_params[:owner_type].blank? && !query_params[:owner_id].blank?
+      carts = carts.where(owner_type: query_params[:owner_type], owner_id: query_params[:owner_id])
     end
 
-    CommonService.response_format(ResponseCode.COMMON.OK, get_carts_data(carts))
+    # 如果存在分页参数,按照分页返回结果.
+    if !query_params[:page].blank? && !query_params[:per_page].blank?
+      carts = eval(carts.nil? ? "Cart" : "carts").
+              where.not(is_deleted: true).
+              page(query_params[:page]).
+              per(query_params[:per_page])
+      total_count = carts.total_count
+    else
+      carts = carts.where.not(is_deleted: true)
+      total_count = carts.size
+    end
+
+    CommonService.response_format(ResponseCode.COMMON.OK, AdvertsService.get_carts(carts, total_count))
   end
 
   def get_cart(cart)
@@ -99,6 +114,11 @@ class CartsService < BaseService
     # 格式化返回数据
     cart.as_json.merge("product" => ProductsService.find_product_data(cart.product),
                        "price" => cart.price)
+  end
+
+  def self.get_carts(carts, total_count)
+    data = carts.collect{|cart| self.get_cart(carts)}
+    {"total_count" => total_count.nil? ? carts.length : total_count, "carts" => data}
   end
 
 end

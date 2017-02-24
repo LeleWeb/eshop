@@ -3,7 +3,7 @@ class Api::V1::CartsController < Api::V1::BaseController
 
   # GET /accounts
   def index
-    render json: CartsService.new.get_carts(@owner)
+    render json: CartsService.new.get_carts(query_params)
   end
 
   # GET /accounts/1
@@ -46,4 +46,12 @@ class Api::V1::CartsController < Api::V1::BaseController
                                   :owner_type,
                                   :remark)
   end
+
+  def query_params
+    params.permit(:page,
+                  :per_page,
+                  :owner_type,
+                  :owner_id)
+  end
+
 end
