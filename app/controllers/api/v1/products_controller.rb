@@ -61,7 +61,8 @@ class Api::V1::ProductsController < Api::V1::BaseController
                                     :property,
                                     :category_id,
                                     :remark,
-                                    :prices => [:price,:real_price,:unit,:is_default,:display_quantity,:display_unit])
+                                    :prices => [:price,:real_price,:unit,:is_default,:display_quantity,:display_unit],
+                                    :compute_strategies => [:classify,:average_quantity,:average_unit,:remark])
   end
 
   def destroy_params

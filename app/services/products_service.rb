@@ -17,7 +17,9 @@
 
   def create_product(store, product_params)
     price_params = nil
+    compute_strategy_params = nil
     product_prices = []
+    compute_strategies = []
 
     # 参数合法性检查
     if store.blank? || product_params.blank?
@@ -25,8 +27,9 @@
                                            "ERROR: store:#{store.inspect} or product_params:#{product_params.inspect} is blank!")
     end
 
-    # 解析商品价格参数
+    # 解析商品价格参数, 计算策略参数.
     price_params = product_params.extract!("prices")
+    compute_strategy_params = product_params.extract!("compute_strategies")
 
     # 创建产品
     product = store.products.create(product_params)
@@ -37,16 +40,24 @@
       product_prices = product.prices.create(price_params["prices"])
     end
 
+    # 创建商品计算策略
+    if !compute_strategy_params.blank?
+      compute_strategies = product.compute_strategies.create(compute_strategy_params["compute_strategies"])
+    end
+
     CommonService.response_format(ResponseCode.COMMON.OK,
-                                  ProductsService.product_data_format(product, product_prices))
+                                  ProductsService.product_data_format(product, product_prices, compute_strategies))
   end
 
   def update_product(product, product_params)
     price_params = nil
+    compute_strategy_params = nil
     product_prices = product.prices
+    compute_strategies = product.compute_strategies
 
-    # 解析商品价格参数
+    # 解析商品价格参数, 计算策略参数.
     price_params = product_params.extract!("prices")
+    compute_strategy_params = product_params.extract!("compute_strategies")
 
     # 更新商品信息
     product.update(product_params)
@@ -60,14 +71,28 @@
       product_prices = product.prices.create(price_params["prices"])
     end
 
+    # 如果有计算策略列表，则删除原来的计算策略，新增参数中的计算策略。
+    if !compute_strategy_params.blank?
+      # 先删除已有计算策略
+      product.compute_strategies.clear
+
+      # 新建参数传入的计算策略
+      compute_strategies = product.compute_strategies.create(compute_strategy_params["compute_strategies"])
+    end
+
     CommonService.response_format(ResponseCode.COMMON.OK,
-                                  ProductsService.product_data_format(product, product_prices))
+                                  ProductsService.product_data_format(product, product_prices, compute_strategies))
   end
 
   def destroy_product(product, destroy_params)
     # 单个删除
     if !product.nil?
+      # 删除产品本身
       product.update(is_deleted: true, deleted_at: Time.now)
+      # 删除产品价格
+      product.prices.each {|price| price.update(is_deleted: true, deleted_at: Time.now)}
+      # 删除产品计算策略
+      product.compute_strategies.each {|compute_strategy| compute_strategy.update(is_deleted: true, deleted_at: Time.now)}
     end
 
     # 批量删除
@@ -198,12 +223,13 @@
                           :is_collected => is_collected)
 
     # 添加价格属性
-    ProductsService.product_data_format(data, product.prices)
+    ProductsService.product_data_format(data, product.prices, product.compute_strategies)
   end
 
   # 格式化产品返回数据为指定格式
-  def self.product_data_format(product, product_price)
-    product.as_json.merge("prices" => product_price)
+  def self.product_data_format(product, product_price, compute_strategies)
+    product.as_json.merge("prices" => product_price,
+                          "compute_strategies" => compute_strategies)
   end
 
   def self.get_products(products)
