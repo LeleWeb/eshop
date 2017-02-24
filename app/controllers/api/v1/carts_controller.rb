@@ -44,7 +44,8 @@ class Api::V1::CartsController < Api::V1::BaseController
                                   :total_price,
                                   :owner_id,
                                   :owner_type,
-                                  :remark)
+                                  :remark,
+                                  :property)
   end
 
   def query_params

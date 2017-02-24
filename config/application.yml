@@ -213,6 +213,12 @@ defaults: &defaults
       PERSONAL_SETMEAL: 1 # 个人套餐
       TEAM_SETMEAL: 2  # 团队套餐推荐
 
+  # 购物车项属性常量定义
+  CART_ITEM:
+    PROPERTY:
+      CART_ITEM: 0            # 购物车详情项
+      ORDER_DETAILS_ITEM: 1   # 订单详情项
+
 development:
   <<: *defaults
   neat_setting: 800
