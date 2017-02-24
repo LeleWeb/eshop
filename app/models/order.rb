@@ -6,4 +6,6 @@ class Order < ApplicationRecord
 
   # 订单操作日志
   has_many :order_logs
+  # 订单项
+  has_many :shopping_carts
 end

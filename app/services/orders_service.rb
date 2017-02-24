@@ -52,32 +52,93 @@ class OrdersService < BaseService
     CommonService.response_format(ResponseCode.COMMON.OK, OrdersService.get_order(order))
   end
 
-  def create_order(buyer, address, order_params, details)
+  # 创建订单
+  def create_order(order_params)
+    buyer = nil
+    address = nil
+    shopping_carts = nil
+
+    # 参数合法性检查
+    if order_params.blank?
+      return CommonService.response_format(ResponseCode.COMMON.FAILED,
+                                           "ERROR: order_params:#{order_params} is blank!")
+    end
+
+    # 解析下单用户
+    if (buyer = Customer.find_by(:id order_params["buyer_id"])).nil?
+      return CommonService.response_format(ResponseCode.COMMON.FAILED,
+                                           "ERROR: buyer_id:#{buyer_id} is invalid!")
+    end
+
+    # 解析收货地址对象
+    if (address = Address.find_by(:id order_params["address_id"])).nil?
+      return CommonService.response_format(ResponseCode.COMMON.FAILED,
+                                           "ERROR: address_id:#{address_id} is invalid!")
+    end
+
+    # 解析订单详情项(此处为了复用，实际为购物车项)
+    begin
+      if order_params["shopping_cart_ids"].blank? || (shopping_carts = ShoppingCart.find(order_params["shopping_cart_ids"])).blank?
+        return CommonService.response_format(ResponseCode.COMMON.FAILED,
+                                             "ERROR: address_id:#{address_id} is invalid!")
+      end
+    rescue => e
+      return CommonService.response_format(ResponseCode.COMMON.FAILED, "ERROR: #{e}")
+    end
+
     # 生成本系统订单
-    order_params[:order_number] = OrdersService.generate_order_number(buyer.id)
-    order_params[:status] = Settings.ORDER.STATUS.PREPAY
-    order_params[:pay_away] = 1
-    order_params[:time_start] = Time.now.strftime("%Y%m%d%H%M%S")
-    order_params[:time_expire] = (Time.now + Settings.ORDER.EXPIRE_TIME.to_i).strftime("%Y%m%d%H%M%S")
+    order_params["order_number"] = OrdersService.generate_order_number(buyer.id)
+    order_params["status"] = Settings.ORDER.STATUS.PREPAY
+    order_params["pay_away"] = 1
+    order_params["time_start"] = Time.now.strftime("%Y%m%d%H%M%S")
+    order_params["time_expire"] = (Time.now + Settings.ORDER.EXPIRE_TIME.to_i).strftime("%Y%m%d%H%M%S")
     order = buyer.orders.create(order_params.merge("consignee_address" => address.address,
                                                    "consignee_name" => address.name,
                                                    "consignee_phone" => address.phone))
+
     # 暂时设置实际支付订单为订单总额
     order.update(pay_price: order.total_price)
 
     # 生成对应的订单详情项
-    details.each do |detail|
-      order.order_details.create(detail.permit(:product_id, :quantity, :price))
+    shopping_carts.each do |shopping_cart|
+      # 先设置购物车项的property属性为：1-订单详情项
+      shopping_cart.update(property: Settings.CART_OR_ITEM.PROPERTY.ORDER_DETAILS_ITEM)
+      # 与订单建立关联
+      order.shopping_carts << shopping_cart
     end
-
-    # 删除订单对应的购物车商品
-    CartsService.delete_shopping_cart(buyer, order)
 
     # 调用微信统一接口,生成预付订单.
     res = WechatService.create_unifiedorder(order)
 
     CommonService.response_format(ResponseCode.COMMON.OK, {"order" => order, "prepay_data" => res})
   end
+
+  # def create_order(buyer, address, order_params, details)
+  #   # 生成本系统订单
+  #   order_params[:order_number] = OrdersService.generate_order_number(buyer.id)
+  #   order_params[:status] = Settings.ORDER.STATUS.PREPAY
+  #   order_params[:pay_away] = 1
+  #   order_params[:time_start] = Time.now.strftime("%Y%m%d%H%M%S")
+  #   order_params[:time_expire] = (Time.now + Settings.ORDER.EXPIRE_TIME.to_i).strftime("%Y%m%d%H%M%S")
+  #   order = buyer.orders.create(order_params.merge("consignee_address" => address.address,
+  #                                                  "consignee_name" => address.name,
+  #                                                  "consignee_phone" => address.phone))
+  #   # 暂时设置实际支付订单为订单总额
+  #   order.update(pay_price: order.total_price)
+  #
+  #   # 生成对应的订单详情项
+  #   details.each do |detail|
+  #     order.order_details.create(detail.permit(:product_id, :quantity, :price))
+  #   end
+  #
+  #   # 删除订单对应的购物车商品
+  #   CartsService.delete_shopping_cart(buyer, order)
+  #
+  #   # 调用微信统一接口,生成预付订单.
+  #   res = WechatService.create_unifiedorder(order)
+  #
+  #   CommonService.response_format(ResponseCode.COMMON.OK, {"order" => order, "prepay_data" => res})
+  # end
 
   def update_order(order, order_params)
     if order.update(order_params)
