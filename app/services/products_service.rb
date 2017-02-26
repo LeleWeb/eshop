@@ -5,7 +5,7 @@
     total_count = nil
 
     # 是否按照查询类型检索
-    if query_params["type"] == "home"
+    if query_params["tpye"] == "home"
       return ProductsService.get_home_products(store, query_params["customer"])
     end
 
