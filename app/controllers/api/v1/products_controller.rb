@@ -37,7 +37,7 @@ class Api::V1::ProductsController < Api::V1::BaseController
     params.permit(:category,
                   :search,
                   :customer,
-                  :tpye,
+                  :type,
                   :page,
                   :per_page)
   end
