@@ -10,12 +10,12 @@
 
     # 按照产品分类检索
     if !query_params[:category].blank?
-      products = eval(products.blank? ? "Product" : "products").where(category: query_params[:category])
+      products = eval(products.blank? ? "Product" : "products").where("products.category = ?", query_params[:category])
     end
 
     # 按照产品属性检索
     if !query_params[:property].blank?
-      products = eval(products.blank? ? "Product" : "products").where(property: query_params[:property])
+      products = eval(products.blank? ? "Product" : "products").where("products.property = ?", query_params[:property])
     end
 
     # 如果存在分页参数,按照分页返回结果.
