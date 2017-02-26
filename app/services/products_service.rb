@@ -29,7 +29,7 @@
       total_count = products.size
     end
 
-    CommonService.response_format(ResponseCode.COMMON.OK, AdvertsService.get_adverts(products, total_count))
+    CommonService.response_format(ResponseCode.COMMON.OK, ProductsService.get_products(products, total_count))
     # if !query_params[:category].blank? && !query_params[:limit].blank?
     #   CommonService.response_format(ResponseCode.COMMON.OK,
     #                                 self.find_by_category(store, query_params))
@@ -262,8 +262,11 @@
                           "compute_strategies" => compute_strategies)
   end
 
-  def self.get_products(products)
-    products.collect{|product| self.find_product_data(product)}
+  def self.get_products(products, total_count)
+    # products.collect{|product| self.find_product_data(product)}
+
+    data = products.collect{|product| self.find_product_data(product)}
+    {"total_count" => total_count.nil? ? products.length : total_count, "products" => data}
   end
 
   def self.get_home_products(store, customer_id)
