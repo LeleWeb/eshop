@@ -48,7 +48,7 @@ class OrdersService < BaseService
 
   # 创建订单
   def create_order(order_params)
-    buyer = nil
+      buyer = nil
     address = nil
     shopping_carts = nil
 
