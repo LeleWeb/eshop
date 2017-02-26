@@ -1,5 +1,6 @@
 ﻿class ProductsService < BaseService
   def get_products(store, query_params)
+    p '1'*10,query_params
     # 是否按照查询类型检索
     if query_params["type"] == "home"
       return ProductsService.get_home_products(store, query_params["customer"])
@@ -7,7 +8,7 @@
 
     products = store.products.where(is_deleted: false)
     total_count = nil
-
+    p '2'*10,products
     # 按照产品分类检索
     if !query_params[:category].blank?
       products = eval(products.blank? ? "Product" : "products").where(category: query_params[:category])
@@ -15,9 +16,9 @@
 
     # 按照产品属性检索
     if !query_params[:property].blank?
-      products = eval(products.blank? ? "Product" : "products").where(status: query_params[:property])
+      products = eval(products.blank? ? "Product" : "products").where(property: query_params[:property])
     end
-
+    p '3'*10,query_params[:property],products
     # 如果存在分页参数,按照分页返回结果.
     if !query_params[:page].blank? && !query_params[:per_page].blank?
       products = eval(products.blank? ? "Product" : "products").
