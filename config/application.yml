@@ -180,11 +180,10 @@ defaults: &defaults
     UNDERCARRIAGE: 0
     GROUNDING: 1
 
-#  # 定义商品属性
-#  PRODUCT_PROPERTY:
-#    SINGLE: 0
-#    TINY: 1
-#    BIG: 2
+  # 定义商品属性
+  PRODUCT_PROPERTY:
+    COMMON_PRODUCT: 1
+    ADVERT_PRODUCT: 2
 
   # 定义价格和价格计量单位
   PRICE:
@@ -201,7 +200,7 @@ defaults: &defaults
       PUTTING: 1
       WITHDRAWED: 2
     CATEGORY:
-      HOME_TOP: 0
+      HOME_TOP: 1
 
 #  # 自动计算类别定义
 #  COMPUTE:

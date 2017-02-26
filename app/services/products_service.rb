@@ -7,7 +7,6 @@
     if query_params["type"] == "home"
       return ProductsService.get_home_products(store, query_params["customer"])
     end
-    
 
     # 按照商品检索
     if !query_params[:product].blank? && !(product = Product.find_by(id: query_params[:product])).nil?
@@ -273,12 +272,27 @@
     products.collect{|product| self.find_product_data(product)}
   end
 
-  def self.get_home_products(store)
+  def self.get_home_products(store, customer_id)
+    home_adverts = []
+
     # 首页广告及其关联的商品数据
+    adverts = Advert.where(category: Settings.ADVERT.CATEGORY.HOME_TOP,
+                           status: Settings.ADVERT.STATUS.PUTTING,
+                           is_deleted: false)
+    adverts.each do |advert|
+      home_adverts << {"advert" => AdvertsService.get_advert(advert),
+                       "products" => self.get_products(advert.products)}
+    end
 
     # 首页商品列表数据
+    home_products = self.get_products(store.products.where(property: Settings.PRODUCT_PROPERTY.COMMON_PRODUCT,
+                                                           is_deleted: false))
 
     # 购物车项
+    carts = CartsService.get_customer_carts(customer_id)
+
+    # 组织输出首页数据
+    {"adverts" => home_adverts, "products"=> home_products, "customer_carts"=> carts}
   end
 
 end

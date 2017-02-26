@@ -112,4 +112,16 @@ class CartsService < BaseService
     {"total_count" => total_count.nil? ? carts.length : total_count, "carts" => data}
   end
 
+  def self.get_customer_carts(customer_id)
+    carts = []
+
+    if (customer = Customer.find_by(id: customer_id)).nil?
+      return carts
+    end
+
+    carts = customer.shopping_carts.where(is_deleted: false,
+                                          property: Settings.CART_OR_ITEM.PROPERTY.CART_ITEM)
+    self.get_carts(carts, carts.size)
+  end
+
 end
