@@ -268,6 +268,10 @@
     {"total_count" => total_count.nil? ? products.length : total_count, "products" => data}
   end
 
+  def self.get_products_no_count(products)
+    products.collect{|product| self.find_product_data(product)}
+  end
+
   def self.get_home_products(store, customer_id)
     home_adverts = []
 
@@ -277,7 +281,7 @@
                            is_deleted: false)
     adverts.each do |advert|
       home_adverts << {"advert" => AdvertsService.get_advert(advert),
-                       "products" => self.get_products(advert.products)}
+                       "products" => self.get_products_no_count(advert.products)}
     end
 
     # 首页商品列表数据
