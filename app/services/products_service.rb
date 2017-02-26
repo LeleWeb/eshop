@@ -1,5 +1,6 @@
 ﻿class ProductsService < BaseService
   def get_products(store, query_params)
+    p '1'*10,query_params
     products = store.products.where(is_deleted: false)
     total_count = nil
 
