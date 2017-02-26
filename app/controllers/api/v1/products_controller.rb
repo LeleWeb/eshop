@@ -35,7 +35,7 @@ class Api::V1::ProductsController < Api::V1::BaseController
 
   def query_params
     params.permit(:category,
-                  :search,
+                  :property,
                   :customer,
                   :type,
                   :page,
