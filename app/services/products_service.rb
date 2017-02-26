@@ -285,8 +285,7 @@
     end
 
     # 首页商品列表数据
-    home_products = self.get_products(store.products.where(property: Settings.PRODUCT_PROPERTY.COMMON_PRODUCT,
-                                                           is_deleted: false))
+    home_products = self.get_products_no_count(store.products.where(property: Settings.PRODUCT_PROPERTY.COMMON_PRODUCT, is_deleted: false))
 
     # 购物车项
     carts = CartsService.get_customer_carts(customer_id)
