@@ -48,7 +48,7 @@ class OrdersService < BaseService
 
   # 创建订单
   def create_order(order_params)
-      buyer = nil
+    buyer = nil
     address = nil
     shopping_carts = nil
 
@@ -59,13 +59,13 @@ class OrdersService < BaseService
     end
 
     # 解析下单用户
-    if (buyer = Customer.find_by(:id order_params["buyer_id"])).nil?
+    if (buyer = Customer.find_by(id: order_params["buyer_id"])).nil?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
                                            "ERROR: buyer_id:#{buyer_id} is invalid!")
     end
 
     # 解析收货地址对象
-    if (address = Address.find_by(:id order_params["address_id"])).nil?
+    if (address = Address.find_by(id: order_params["address_id"])).nil?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
                                            "ERROR: address_id:#{address_id} is invalid!")
     end
