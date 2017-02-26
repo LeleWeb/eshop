@@ -1,14 +1,51 @@
 ﻿class ProductsService < BaseService
   def get_products(store, query_params)
-    if !query_params[:category].blank? && !query_params[:limit].blank?
-      CommonService.response_format(ResponseCode.COMMON.OK,
-                                    self.find_by_category(store, query_params))
-    elsif !query_params[:search].blank?
-      CommonService.response_format(ResponseCode.COMMON.OK,
-                                    self.find_by_search(store, query_params))
-    else
-      CommonService.response_format(ResponseCode.COMMON.OK, ProductsService.find_product_datas(store))
+    products = store.products.where(is_deleted: false)
+    total_count = nil
+
+    # 是否按照查询类型检索
+    if query_params["type"] == "home"
+      return ProductsService.get_home_products(store, query_params["customer"])
     end
+    
+
+    # 按照商品检索
+    if !query_params[:product].blank? && !(product = Product.find_by(id: query_params[:product])).nil?
+      adverts = product.adverts
+    end
+
+    # 按照广告分类检索
+    if !query_params[:category].blank?
+      adverts = eval(adverts.nil? ? "Advert" : "adverts").where(category: query_params[:category])
+    end
+
+    # 按照广告状态检索
+    if !query_params[:status].blank?
+      adverts = eval(adverts.nil? ? "Advert" : "adverts").where(status: query_params[:status])
+    end
+
+    # 如果存在分页参数,按照分页返回结果.
+    if !query_params[:page].blank? && !query_params[:per_page].blank?
+      adverts = eval(adverts.nil? ? "Advert" : "adverts").
+          where.not(is_deleted: true).
+          page(query_params[:page]).
+          per(query_params[:per_page])
+      total_count = adverts.total_count
+    else
+      adverts = adverts.where.not(is_deleted: true)
+      total_count = adverts.size
+    end
+
+    CommonService.response_format(ResponseCode.COMMON.OK, AdvertsService.get_adverts(adverts, total_count))
+    # if !query_params[:category].blank? && !query_params[:limit].blank?
+    #   CommonService.response_format(ResponseCode.COMMON.OK,
+    #                                 self.find_by_category(store, query_params))
+    # elsif !query_params[:search].blank?
+    #   CommonService.response_format(ResponseCode.COMMON.OK,
+    #                                 self.find_by_search(store, query_params))
+    # else
+    #   CommonService.response_format(ResponseCode.COMMON.OK, ProductsService.find_product_datas(store))
+    # end
   end
 
   def get_product(product, query_params)
@@ -234,6 +271,14 @@
 
   def self.get_products(products)
     products.collect{|product| self.find_product_data(product)}
+  end
+
+  def self.get_home_products(store)
+    # 首页广告及其关联的商品数据
+
+    # 首页商品列表数据
+
+    # 购物车项
   end
 
 end
