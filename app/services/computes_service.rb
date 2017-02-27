@@ -3,7 +3,7 @@
     p '0'*10, compute_params
     case compute_params["category"]
     when Settings.COMPUTE.CATEGORY.TEAM_SETMEAL
-        self.compute_team_setmeal(compute_params["params"])
+        self.compute_team_setmeal(compute_params)
     else
       CommonService.response_format(ResponseCode.COMMON.FAILED, "ERROR: params is invalid!")
     end
