@@ -1,8 +1,9 @@
 ﻿class ComputesService < BaseService
   def create_compute(compute_params)
-    case compute_params[:category]
+    p '0'*10, compute_params
+    case compute_params["category"]
     when Settings.COMPUTE.CATEGORY.TEAM_SETMEAL
-        self.compute_team_setmeal(compute_params[:params])
+        self.compute_team_setmeal(compute_params["params"])
     else
       CommonService.response_format(ResponseCode.COMMON.FAILED, "ERROR: params is invalid!")
     end
@@ -13,7 +14,7 @@
     plans = []
 
     # 参数合法性检查
-    if compute_params[:money].blank? || compute_params[:number].blank?
+    if compute_params["money"].blank? || compute_params["number"].blank?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
                                            %Q{ ERROR: params money: #{compute_params[:money]}
                                                or number:#{compute_params[:number].inspect} is blank!})
