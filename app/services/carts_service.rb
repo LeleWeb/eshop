@@ -63,7 +63,10 @@ class CartsService < BaseService
       cart = parent_cart
     else
       # 购物车纪录建立
-      if cart = owner.shopping_carts.where(product_id: product.id, price_id: price.id, is_deleted: false).first
+      if cart = owner.shopping_carts.where(product_id: product.id,
+                                           price_id: price.id,
+                                           property: Settings.CART_OR_ITEM.PROPERTY.CART_ITEM,
+                                           is_deleted: false).first
       # 如果是购物车加入同相同商品，相同价格的物品，则只修改数量。
       cart.update(amount: cart.amount + cart_params["amount"].to_i,
                   total_price: cart.total_price + cart_params["total_price"].to_f)
