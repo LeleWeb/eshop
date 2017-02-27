@@ -53,10 +53,10 @@
   end
 
   def compute_quantity_price(product, money, number, compute_strategy)
-    data = {}
+    data = compute_strategy.as_json
     data["product"] = product.name
     data["quantity"] = compute_strategy.average_quantity * number
-    data["price"] = quantity * product.prices.where(unit: compute_strategy.average_unit).real_price
+    data["price"] = data["quantity"].to_f * product.prices.where(unit: compute_strategy.average_unit).real_price
 
     data["price"].to_f > money.to_f ? nil : data
   end
