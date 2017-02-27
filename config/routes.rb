@@ -10,7 +10,10 @@ Rails.application.routes.draw do
       end
 
       resources :categories
-      resources :orders
+      resources :orders do
+        # 订单添加打印小票接口
+        post '/print', to: 'orders#print'
+      end
       resources :pictures
       resources :carts
       resources :collections
