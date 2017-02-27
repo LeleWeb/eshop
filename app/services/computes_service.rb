@@ -2,7 +2,8 @@
   def create_compute(compute_params)
     case compute_params["category"]
     when Settings.COMPUTE.CATEGORY.TEAM_SETMEAL
-        self.compute_team_setmeal(compute_params["params"])
+        plans = self.compute_team_setmeal(compute_params["params"])
+        CommonService.response_format(ResponseCode.COMMON.OK, plans)
     else
       CommonService.response_format(ResponseCode.COMMON.FAILED, "ERROR: params is invalid!")
     end
