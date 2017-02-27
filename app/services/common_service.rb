@@ -1,4 +1,5 @@
 require 'csv'
+require 'net/http'
 
 class CommonService < BaseService
   def self.response_format(response_code, data=nil)
@@ -70,6 +71,17 @@ class CommonService < BaseService
     # 获取前30个商品
     Product.limit(30).each do |product|
       CategoriesProduct.create(product_id: product.id, category_id: Settings.PRODUCT_CATEGORY.HOME)
+    end
+  end
+
+  # http请求接口
+  def self.post(url, params)
+    uri = URI(url)
+    res = Net::HTTP.post_form(uri, params)
+    if res.is_a?(Net::HTTPSuccess)
+      res.body
+    else
+      nil
     end
   end
 

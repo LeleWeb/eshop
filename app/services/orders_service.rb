@@ -165,8 +165,22 @@ class OrdersService < BaseService
     CommonService.response_format(ResponseCode.COMMON.OK)
   end
 
+  def print_order(order)
+    # 参数合法性检查
+    if order.blank?
+      return CommonService.response_format(ResponseCode.COMMON.FAILED,
+                                           "ERROR: order:#{order.inspect} is blank!")
+    end
+
+    # 打印订单小票
+    res = OrdersService.print_order(order)
+
+    CommonService.response_format(ResponseCode.COMMON.OK, res)
+  end
+
   def self.get_order(order)
-    order.as_json.merge("order_details" => order.order_details.collect{|order_detail| order_detail.as_json.merge("product" => ProductsService.find_product_data(order_detail.product))})
+    order.as_json.merge("order_details" => CartsService.get_carts_no_count(order.shopping_carts))
+    # order.as_json.merge("order_details" => order.order_details.collect{|order_detail| order_detail.as_json.merge("product" => ProductsService.find_product_data(order_detail.product))})
   end
 
   def self.get_orders(orders, total_count)
@@ -212,4 +226,52 @@ class OrdersService < BaseService
     end
   end
 
+  def self.print_order(order)
+    # 收集订单相关数据
+    order_info = self.get_order(order)
+
+    # 格式化为打印机可以接受的数据格式
+    content = self.format_print_data(order_info)
+
+    # 调用打印机接口打印
+    self.printcenter_365_s2(content)
+  end
+
+  def self.format_print_data(order)
+    content =  ""
+    # 头部信息
+    content += "<CB>舌尖生鲜</CB><BR>"
+    content += "--------------------------------<BR>"
+    content += "订单号：#{order.order_number}<BR>"
+    content += "操作员：张伟<BR>"
+    content += "下单时间：#{order.created_at.strftime('%Y-%m-%d %H:%M:%S').to_s}<BR>"
+
+    # 商品清单列表
+    content += "--------------------------------<BR>"
+    content += "名称        单价      数量    金额<BR>"
+    content += "--------------------------------<BR>"
+    # TODO
+    content += ""
+
+    content += "--------------------------------<BR>"
+    content += "                  合计：    200.0<BR>"
+    content += "--------------------------------<BR>"
+    # 商家信息
+    content += "公司： 西安当夏网络科技有限公司<BR>"
+    content += "地址： 西安市雁塔区东滩社区31排5号<BR>"
+    content += "电话： 18161234589<BR>"
+    # 二维码
+    content += "<QR>http://open.printcenter.cn</QR><BR>"
+    content
+  end
+
+  def self.printcenter_365_s2(content)
+    params = LocalConfig.ORDER_PRINT.PRINTCENTER_365_S2.INFO.as_json
+    params["printContent"] = content
+    res = CommonService.post(LocalConfig.ORDER_PRINT.PRINTCENTER_365_S2.URL, params)
+    if !res.blank? && res["responseCode"] != Settings.PRINTCENTER.RESPONSE.OK
+      #TODO 执行打印异常，打印log记录，调用异常处理方法。
+    end
+    res
+  end
 end

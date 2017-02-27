@@ -215,6 +215,11 @@ defaults: &defaults
       CART_ITEM: 0            # 购物车详情项
       ORDER_DETAILS_ITEM: 1   # 订单详情项
 
+  # 打印机执行打印返回结果错误码定义
+  PRINTCENTER:
+    RESPONSE:
+      OK: 0
+
 development:
   <<: *defaults
   neat_setting: 800

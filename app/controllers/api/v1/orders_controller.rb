@@ -1,5 +1,5 @@
 class Api::V1::OrdersController < Api::V1::BaseController
-  before_action :set_order, only: [:show, :update, :destroy]
+  before_action :set_order, only: [:show, :update, :destroy, :print]
 
   # GET /accounts
   def index
@@ -27,6 +27,10 @@ class Api::V1::OrdersController < Api::V1::BaseController
   def destroy
     authorize @order
     render json: OrdersService.new.destory_order(@order)
+  end
+
+  def print
+    render json: OrdersService.new.print_order(@order)
   end
 
   private
