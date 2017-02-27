@@ -9,6 +9,7 @@
   end
 
   def compute_team_setmeal(compute_params)
+    p '1'*10, compute_params
     plans = []
 
     # 参数合法性检查
@@ -19,7 +20,8 @@
     end
 
     # 遍历所有在售水果种类，计算每种水果满足当前人数的数量和金额。SINGLE商品，按个计算。TINY,BIG商品根据cms预设区间计算。
-    products = ProductsService.get_products(Product.where.not(is_deleted: true))
+    products = ProductsService.get_products(Product.where(is_deleted: false))
+    p '2'*10, products
     products.each do |product|
       # 根据商品价格规格计算满足当前人数的所需要的数量和价格
 
