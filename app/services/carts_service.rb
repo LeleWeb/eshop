@@ -53,7 +53,7 @@ class CartsService < BaseService
     # 解析是否是多商品购物车项
     if !cart_params["subitems"].blank?
       # 对于多商品购物车项，由于复杂性目前先不判断重复项，直接新建。
-      subitems = cart_params.extract!("subitems")
+      subitems = cart_params.extract!("subitems")["subitems"]
       parent_cart = owner.shopping_carts.create(cart_params)
       subitems.each do |subitem|
         parent_cart.subitems.create(subitem)
