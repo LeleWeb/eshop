@@ -8,6 +8,6 @@ class Api::V1::ComputesController < Api::V1::BaseController
   # Only allow a trusted parameter "white list" through.
   def compute_params
     params.require(:compute).permit(:category,
-                                    :params => {:money, :number})
+                                    :params => {})
   end
 end
