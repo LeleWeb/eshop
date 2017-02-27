@@ -46,11 +46,11 @@
     total_plans.map! do |plan|
       total_price = 0.0
       plan.collect{|item| total_price += item["price"]}
-      {"plans" => plan , "total_plans" => total_price}
+      {"plans" => plan , "total_price" => total_price}
     end
 
     # 过滤无效推荐项
-    total_plans.select!{|plan| plan["total_plans"].to_f < compute_params[:money].to_f + compute_params[:money].to_f * 0.3}
+    total_plans.select!{|plan| plan["total_plans"].to_f <= compute_params[:money].to_f + compute_params[:money].to_f * 0.3 && plan["total_plans"].to_f >= compute_params[:money].to_f - compute_params[:money].to_f * 0.3}
   end
 
   def compute_quantity_price(product, money, number, compute_strategy)
