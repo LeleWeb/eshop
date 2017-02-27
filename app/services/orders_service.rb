@@ -59,22 +59,25 @@ class OrdersService < BaseService
     end
 
     # 解析下单用户
-    if (buyer = Customer.find_by(id: order_params["buyer_id"])).nil?
+    buyer_id = order_params.extract!("buyer_id")["buyer_id"]
+    if (buyer = Customer.find_by(id: buyer_id)).nil?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "ERROR: buyer_id:#{order_params["buyer_id"]} is invalid!")
+                                           "ERROR: buyer_id:#{buyer_id} is invalid!")
     end
 
     # 解析收货地址对象
-    if (address = Address.find_by(id: order_params["address_id"])).nil?
+    address_id = order_params.extract!("address_id")["address_id"]
+    if (address = Address.find_by(id: address_id)).nil?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "ERROR: address_id:#{order_params["address_id"]} is invalid!")
+                                           "ERROR: address_id:#{address_id} is invalid!")
     end
 
     # 解析订单详情项(此处为了复用，实际为购物车项)
     begin
-      if order_params["shopping_cart_ids"].blank? || (shopping_carts = ShoppingCart.find(order_params["shopping_cart_ids"])).blank?
+      shopping_cart_ids = order_params.extract!("shopping_cart_ids")["shopping_cart_ids"]
+      if shopping_cart_ids.blank? || (shopping_carts = ShoppingCart.find(shopping_cart_ids)).blank?
         return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                             "ERROR: shopping_cart_ids:#{order_params["shopping_cart_ids"]} is invalid!")
+                                             "ERROR: shopping_cart_ids:#{shopping_cart_ids} is invalid!")
       end
     rescue => e
       return CommonService.response_format(ResponseCode.COMMON.FAILED, "ERROR: #{e}")
