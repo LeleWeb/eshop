@@ -202,12 +202,12 @@ defaults: &defaults
     CATEGORY:
       HOME_TOP: 1
 
-#  # 自动计算类别定义
-#  COMPUTE:
-#    CATEGORY:
-#      SINGLE_SETMEAL: 0 # 单品
-#      PERSONAL_SETMEAL: 1 # 个人套餐
-#      TEAM_SETMEAL: 2  # 团队套餐推荐
+  # 自动计算类别定义
+  COMPUTE:
+    CATEGORY:
+      SINGLE_SETMEAL: 0 # 单品
+      PERSONAL_SETMEAL: 1 # 个人套餐
+      TEAM_SETMEAL: 2  # 团队套餐推荐
 
   # 购物车项属性常量定义
   CART_OR_ITEM:
