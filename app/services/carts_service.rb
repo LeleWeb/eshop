@@ -49,14 +49,25 @@ class CartsService < BaseService
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
                                            "ERROR: price_id: #{cart_params["price_id"]} is blank!")
     end
-
-    # 购物车纪录建立
-    if cart = owner.shopping_carts.where(product_id: product.id, price_id: price.id, is_deleted: false).first
+    
+    # 解析是否是多商品购物车项
+    if !cart_params["subitems"].blank?
+      # 对于多商品购物车项，由于复杂性目前先不判断重复项，直接新建。
+      subitems = cart_params.extract!("subitems")
+      parent_cart = owner.shopping_carts.create(cart_params)
+      subitems.each do |subitem|
+        parent_cart.subitems.create(subitem)
+      end
+      cart = parent_cart
+    else
+      # 购物车纪录建立
+      if cart = owner.shopping_carts.where(product_id: product.id, price_id: price.id, is_deleted: false).first
       # 如果是购物车加入同相同商品，相同价格的物品，则只修改数量。
       cart.update(amount: cart.amount + cart_params["amount"].to_i,
                   total_price: cart.total_price + cart_params["total_price"].to_f)
-    else
-      cart = owner.shopping_carts.create(cart_params)
+      else
+        cart = owner.shopping_carts.create(cart_params)
+      end
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK, CartsService.get_cart(cart))
@@ -104,12 +115,19 @@ class CartsService < BaseService
   def self.get_cart(cart)
     # 格式化返回数据
     cart.as_json.merge("product" => ProductsService.find_product_data(cart.product),
-                       "price" => cart.price)
+                       "price" => cart.price,
+                       "subitems" => self.get_carts_no_count(cart.subitems))
   end
 
+  # 批量返回时携带记录总数，用于分页显示调用。
   def self.get_carts(carts, total_count)
     data = carts.collect{|cart| self.get_cart(cart)}
     {"total_count" => total_count.nil? ? carts.length : total_count, "carts" => data}
+  end
+
+  # 批量返回时无记录总数，用于正常请求数据调用。
+  def self.get_carts_no_count(carts)
+    carts.collect{|cart| self.get_cart(cart)}
   end
 
   def self.get_customer_carts(customer_id)

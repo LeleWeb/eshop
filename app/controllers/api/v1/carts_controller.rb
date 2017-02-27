@@ -45,7 +45,15 @@ class Api::V1::CartsController < Api::V1::BaseController
                                   :owner_id,
                                   :owner_type,
                                   :remark,
-                                  :property)
+                                  :property,
+                                  :subitems => [:product_id,
+                                                :price_id,
+                                                :amount,
+                                                :total_price,
+                                                :owner_id,
+                                                :owner_type,
+                                                :remark,
+                                                :property,])
   end
 
   def query_params
