@@ -56,6 +56,8 @@ class CartsService < BaseService
       subitems = cart_params.extract!("subitems")["subitems"]
       parent_cart = owner.shopping_carts.create(cart_params)
       subitems.each do |subitem|
+        # 对于自关联的购物车项的非根节点记录，都不用指定owner，减少根据customer查询购物车时的冗余数据。
+        subitem.extract!("owner_type", "owner_id")
         parent_cart.subitems.create(subitem)
       end
       cart = parent_cart

@@ -48,9 +48,9 @@ class OrdersService < BaseService
 
   # 创建订单
   def create_order(order_params)
-    buyer = nil
-    address = nil
-    shopping_carts = nil
+    # buyer = nil
+    # address = nil
+    # shopping_carts = nil
 
     # 参数合法性检查
     if order_params.blank?
@@ -99,6 +99,13 @@ class OrdersService < BaseService
       shopping_cart.update(property: Settings.CART_OR_ITEM.PROPERTY.ORDER_DETAILS_ITEM)
       # 与订单建立关联
       order.shopping_carts << shopping_cart
+
+      # 如果是多商品购物车，则需要将该节点下的子项设置由购物车项为订单项。
+      if !shopping_cart.subitems.blank?
+        shopping_cart.subitems.each do |subitem|
+          subitem.update(property: Settings.CART_OR_ITEM.PROPERTY.ORDER_DETAILS_ITEM)
+        end
+      end
     end
 
     # 调用微信统一接口,生成预付订单.
