@@ -57,10 +57,9 @@
     data["product"] = product.name
     data["quantity"] = compute_strategy.average_quantity * number
     # 根据设置的计量规格，查找对应规格的商品价格。
-    if (price = product.prices.where(unit: compute_strategy.average_unit)).first.blank?
+    if (price = product.prices.where(unit: compute_strategy.average_unit).first).blank?
       return nil
     end
-    p '1'*10,price.inspect
     data["price"] = data["quantity"].to_f * price.real_price
     data["price"].to_f > money.to_f ? nil : data
   end
