@@ -76,13 +76,19 @@ class CommonService < BaseService
 
   # http请求接口
   def self.post(url, params)
+    p '4'*10,url, params
     uri = URI(url)
+    p '5'*10,uri
     req = Net::HTTP::Post.new(uri)
+    p '6'*10,req
     req.content_type = 'application/x-www-form-urlencoded'
+    p '7'*10,req
     req.set_form_data(params)
-
+    p '8'*10,req
     res = Net::HTTP.start(uri.hostname, uri.port) do |http|
+      p '9'*10,http,req
       http.request(req)
+      p '10'*10,req
     end
 
     case res
