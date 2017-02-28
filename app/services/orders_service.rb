@@ -231,7 +231,7 @@ class OrdersService < BaseService
     p '2'*10,order
     # 收集订单相关数据
     order_info = self.get_order(order)
-
+    p '3'*10,order,order_info
     # 格式化为打印机可以接受的数据格式
     content = self.format_print_data(order_info)
     p 'a'*10,content
