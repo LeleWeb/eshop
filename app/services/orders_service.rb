@@ -229,14 +229,14 @@ class OrdersService < BaseService
 
   def self.print_order(order)
     p '2'*10,order
-    # # 收集订单相关数据
-    # order_info = self.get_order(order)
-    #
-    # # 格式化为打印机可以接受的数据格式
-    # content = self.format_print_data(order_info)
+    # 收集订单相关数据
+    order_info = self.get_order(order)
 
-    # 调用打印机接口打印
-    self.printcenter_365_s2("zhangweitest")
+    # 格式化为打印机可以接受的数据格式
+    content = self.format_print_data(order_info)
+    p 'a'*10,content
+    # # 调用打印机接口打印
+    # self.printcenter_365_s2(content)
   end
 
   def self.format_print_data(order)
