@@ -242,22 +242,20 @@ class OrdersService < BaseService
     p 'b'*10,order["created_at"],order["created_at"].class
     content =  ""
     # 头部信息
-    content += "<CB>舌尖生鲜</CB><BR>"
+    content += "<CB>舌尖生鲜</CB>"
     content += "<C>Fresh Town</C>"
     content += "--------------------------------<BR>"
     content += "单号：#{order["order_number"]}<BR>"
     content += "员工：张伟<BR>"
     content += "时间：#{order["created_at"].strftime('%Y-%m-%d %H:%M:%S')}<BR>"
-    content += "<BR>"
-    content += "<BR>"
 
     # 商品清单列表
     content += "--------------------------------<BR>"
-    content += "名称         单价     数量   金额<BR>"
+    content += "名称         单价     数量  金额<BR>"
     content += "--------------------------------<BR>"
     # TODO
     content += "红富士苹果    4.5      1     4.5<BR>"
-    content += "个人套餐：                       <BR>"
+    content += "个人套餐："
     content += "  瘦身型     5.0       1     5.0<BR>"
     content += "  美容型     4.5       1     4.5<BR>"
 
