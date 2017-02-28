@@ -231,7 +231,6 @@ class OrdersService < BaseService
     p '2'*10,order
     # 收集订单相关数据
     order_info = self.get_order(order)
-    p '3'*10,order,order_info
     # 格式化为打印机可以接受的数据格式
     content = self.format_print_data(order_info)
     p 'a'*10,content
@@ -245,9 +244,10 @@ class OrdersService < BaseService
     content += "<CB>舌尖生鲜</CB><BR>"
     content += "<CB>Fresh Town</CB><BR>"
     content += "--------------------------------<BR>"
-    content += "订单号：#{order.order_number}<BR>"
+    content += "订单号：#{order["order_number"]}<BR>"
     content += "操作员：张伟<BR>"
-    content += "下单时间：#{order.created_at.strftime('%Y-%m-%d %H:%M:%S').to_s}<BR>"
+    # content += "下单时间：#{order["created_at"].strftime('%Y-%m-%d %H:%M:%S').to_s}<BR>"
+    content += "下单时间：#{order["created_at"]}<BR>"
     content += "<BR>"
     content += "<BR>"
 
