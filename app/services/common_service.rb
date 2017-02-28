@@ -1,5 +1,6 @@
 require 'csv'
 require 'net/http'
+require 'json'
 
 class CommonService < BaseService
   def self.response_format(response_code, data=nil)
@@ -78,7 +79,7 @@ class CommonService < BaseService
   def self.post(url, params)
     uri = URI(url)
     res = Net::HTTP.post_form(uri, params)
-    res.body
+    JSON.parse(res.body)
   end
 
 end
