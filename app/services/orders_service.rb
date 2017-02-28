@@ -235,14 +235,15 @@ class OrdersService < BaseService
     # 格式化为打印机可以接受的数据格式
     content = self.format_print_data(order_info)
     p 'a'*10,content
-    # # 调用打印机接口打印
-    # self.printcenter_365_s2(content)
+    # 调用打印机接口打印
+    self.printcenter_365_s2(content)
   end
 
   def self.format_print_data(order)
     content =  ""
     # 头部信息
-    content += "<CB>Fresh town</CB><BR>"
+    content += "<CB>舌尖生鲜</CB><BR>"
+    content += "<CB>Fresh Town</CB><BR>"
     # content += "--------------------------------<BR>"
     # content += "订单号：#{order.order_number}<BR>"
     # content += "操作员：张伟<BR>"
