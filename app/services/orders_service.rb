@@ -51,6 +51,7 @@ class OrdersService < BaseService
     # buyer = nil
     # address = nil
     # shopping_carts = nil
+    order_total_price = 0.0
 
     # 参数合法性检查
     if order_params.blank?
@@ -93,13 +94,12 @@ class OrdersService < BaseService
                                                    "consignee_name" => address.name,
                                                    "consignee_phone" => address.phone))
 
-    # 暂时设置实际支付订单为订单总额
-    order.update(pay_price: order.total_price)
-
     # 生成对应的订单详情项
     shopping_carts.each do |shopping_cart|
       # 先设置购物车项的property属性为：1-订单详情项
       shopping_cart.update(property: Settings.CART_OR_ITEM.PROPERTY.ORDER_DETAILS_ITEM)
+      # 累加订单总金额
+      order_total_price += shopping_cart.total_price
       # 与订单建立关联
       order.shopping_carts << shopping_cart
 
@@ -107,9 +107,14 @@ class OrdersService < BaseService
       if !shopping_cart.subitems.blank?
         shopping_cart.subitems.each do |subitem|
           subitem.update(property: Settings.CART_OR_ITEM.PROPERTY.ORDER_DETAILS_ITEM)
+          # 累加订单总金额
+          order_total_price += subitem.total_price
         end
       end
     end
+
+    # 暂时设置实际支付订单为订单总额
+    order.update(pay_price: order_total_price, total_price: order_total_price)
 
     # 调用微信统一接口,生成预付订单.
     res = WechatService.create_unifiedorder(order)
@@ -166,7 +171,6 @@ class OrdersService < BaseService
   end
 
   def print_order(order)
-    p '1'*10,order
     # 参数合法性检查
     if order.blank?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
@@ -228,51 +232,47 @@ class OrdersService < BaseService
   end
 
   def self.print_order(order)
-    p '2'*10,order
     # 收集订单相关数据
     order_info = self.get_order(order)
     # 格式化为打印机可以接受的数据格式
     content = self.format_print_data(order_info)
-    p 'a'*10,content
     # 调用打印机接口打印
     self.printcenter_365_s2(content)
   end
 
   def self.format_print_data(order)
-    p 'b'*10,order["created_at"],order["created_at"].class
     content =  ""
-    # 头部信息
-    content += "<CB>舌尖生鲜</CB>"
-    content += "<C>Fresh Town</C>"
-    content += "--------------------------------<BR>"
-    content += "单号：#{order["order_number"]}<BR>"
-    content += "员工：张伟<BR>"
-    content += "时间：#{order["created_at"].strftime('%Y-%m-%d %H:%M:%S')}<BR>"
-
+    # # 头部信息
+    # content += "<CB>舌尖生鲜</CB>"
+    # content += "<C>Fresh Town</C>"
+    # content += "--------------------------------<BR>"
+    # content += "单号：#{order["order_number"]}<BR>"
+    # content += "员工：张伟<BR>"
+    # content += "时间：#{order["created_at"].strftime('%Y-%m-%d %H:%M:%S')}<BR>"
     # 商品清单列表
+               "名称名称名称名称名称名称名称名称名称"
     content += "--------------------------------<BR>"
     content += "名称         单价     数量  金额<BR>"
     content += "--------------------------------<BR>"
     # TODO
     content += "红富士苹果    4.5      1     4.5<BR>"
-    content += "个人套餐："
-    content += "  瘦身型     5.0       1     5.0<BR>"
-    content += "  美容型     4.5       1     4.5<BR>"
-
-    content += "--------------------------------<BR>"
-    content += "                    合计： 200.0<BR>"
-    content += "--------------------------------<BR>"
-    # 商家信息
-    content += "公司：西安当夏网络科技有限公司<BR>"
-    content += "地址：丈八西路东滩社区31排5号<BR>"
-    content += "电话：18161803190"
-    # 二维码
-    content += "<QR>http://open.printcenter.cn</QR>"
+    # content += "个人套餐：  <BR>"
+    # content += "  瘦身型     5.0       1     5.0<BR>"
+    # content += "  美容型     4.5       1     4.5<BR>"
+    #
+    # content += "--------------------------------<BR>"
+    # content += "                    合计： 200.0<BR>"
+    # content += "--------------------------------<BR>"
+    # # 商家信息
+    # content += "公司：西安当夏网络科技有限公司<BR>"
+    # content += "地址：丈八西路东滩社区31排5号<BR>"
+    # content += "电话：18161803190"
+    # # 二维码
+    # content += "<QR>http://open.printcenter.cn</QR>"
     content
   end
 
   def self.printcenter_365_s2(content)
-    p '3'*10,content
     params = LocalConfig.ORDER_PRINT.PRINTCENTER_365_S2.INFO.as_json
     params["printContent"] = content
     res = CommonService.post(LocalConfig.ORDER_PRINT.PRINTCENTER_365_S2.URL, params)
