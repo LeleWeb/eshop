@@ -265,9 +265,9 @@ class OrdersService < BaseService
     # 商家信息
     content += "公司：西安当夏网络科技有限公司<BR>"
     content += "地址：丈八西路东滩社区31排5号<BR>"
-    content += "电话：18161803190<BR>"
+    content += "电话：18161803190"
     # 二维码
-    content += "<QR>http://open.printcenter.cn</QR><BR>"
+    content += "<QR>http://open.printcenter.cn</QR>"
     content
   end
 
