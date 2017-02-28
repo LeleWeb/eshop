@@ -232,10 +232,9 @@ class OrdersService < BaseService
     #
     # # 格式化为打印机可以接受的数据格式
     # content = self.format_print_data(order_info)
-    #
-    # # 调用打印机接口打印
-    # self.printcenter_365_s2(content)
-    self.test_print
+
+    # 调用打印机接口打印
+    self.printcenter_365_s2("<CB>舌尖生鲜</CB><BR>")
   end
 
   def self.format_print_data(order)
@@ -276,8 +275,4 @@ class OrdersService < BaseService
     res
   end
 
-  def self.test_print()
-    content = "公司： 西安当夏网络科技有限公司<BR>"
-
-  end
 end
