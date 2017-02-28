@@ -244,27 +244,29 @@ class OrdersService < BaseService
     # 头部信息
     content += "<CB>舌尖生鲜</CB><BR>"
     content += "<CB>Fresh Town</CB><BR>"
-    # content += "--------------------------------<BR>"
-    # content += "订单号：#{order.order_number}<BR>"
-    # content += "操作员：张伟<BR>"
-    # content += "下单时间：#{order.created_at.strftime('%Y-%m-%d %H:%M:%S').to_s}<BR>"
-    #
-    # # 商品清单列表
-    # content += "--------------------------------<BR>"
-    # content += "名称        单价      数量    金额<BR>"
-    # content += "--------------------------------<BR>"
+    content += "--------------------------------<BR>"
+    content += "订单号：#{order.order_number}<BR>"
+    content += "操作员：张伟<BR>"
+    content += "下单时间：#{order.created_at.strftime('%Y-%m-%d %H:%M:%S').to_s}<BR>"
+    content += "<BR>"
+    content += "<BR>"
+
+    # 商品清单列表
+    content += "--------------------------------<BR>"
+    content += "名称         单间       数量    金额<BR>"
+    content += "--------------------------------<BR>"
     # # TODO
     # content += ""
     #
-    # content += "--------------------------------<BR>"
-    # content += "                  合计：    200.0<BR>"
-    # content += "--------------------------------<BR>"
-    # # 商家信息
-    # content += "公司： 西安当夏网络科技有限公司<BR>"
-    # content += "地址： 西安市雁塔区东滩社区31排5号<BR>"
-    # content += "电话： 18161234589<BR>"
-    # # 二维码
-    # content += "<QR>http://open.printcenter.cn</QR><BR>"
+    content += "--------------------------------<BR>"
+    content += "                    合计：    200.0<BR>"
+    content += "--------------------------------<BR>"
+    # 商家信息
+    content += "公司：西安当夏网络科技有限公司<BR>"
+    content += "地址：西安市雁塔区东滩社区31排5号<BR>"
+    content += "电话：18161803190<BR>"
+    # 二维码
+    content += "<QR>http://open.printcenter.cn</QR><BR>"
     content
   end
 
