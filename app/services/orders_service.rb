@@ -268,7 +268,7 @@ class OrdersService < BaseService
   end
 
   def self.printcenter_365_s2(content)
-    p '3'*10,order
+    p '3'*10,content
     params = LocalConfig.ORDER_PRINT.PRINTCENTER_365_S2.INFO.as_json
     params["printContent"] = content
     res = CommonService.post(LocalConfig.ORDER_PRINT.PRINTCENTER_365_S2.URL, params)
