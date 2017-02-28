@@ -77,12 +77,28 @@ class CommonService < BaseService
   # http请求接口
   def self.post(url, params)
     uri = URI(url)
-    res = Net::HTTP.post_form(uri, params)
-    if res.is_a?(Net::HTTPSuccess)
-      res.body
-    else
-      nil
+    req = Net::HTTP::Post.new(uri)
+    req.content_type = 'application/x-www-form-urlencoded'
+    req.set_form_data(params)
+
+    res = Net::HTTP.start(uri.hostname, uri.port) do |http|
+      http.request(req)
     end
+
+    case res
+      when Net::HTTPSuccess, Net::HTTPRedirection
+        res.body
+      else
+        res.value
+    end
+
+    # uri = URI(url)
+    # res = Net::HTTP.post_form(uri, params)
+    # if res.is_a?(Net::HTTPSuccess)
+    #   res.body
+    # else
+    #   nil
+    # end
   end
 
 end

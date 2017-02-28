@@ -227,14 +227,15 @@ class OrdersService < BaseService
   end
 
   def self.print_order(order)
-    # 收集订单相关数据
-    order_info = self.get_order(order)
-
-    # 格式化为打印机可以接受的数据格式
-    content = self.format_print_data(order_info)
-
-    # 调用打印机接口打印
-    self.printcenter_365_s2(content)
+    # # 收集订单相关数据
+    # order_info = self.get_order(order)
+    #
+    # # 格式化为打印机可以接受的数据格式
+    # content = self.format_print_data(order_info)
+    #
+    # # 调用打印机接口打印
+    # self.printcenter_365_s2(content)
+    self.test_print
   end
 
   def self.format_print_data(order)
@@ -273,5 +274,10 @@ class OrdersService < BaseService
       #TODO 执行打印异常，打印log记录，调用异常处理方法。
     end
     res
+  end
+
+  def self.test_print()
+    content = "公司： 西安当夏网络科技有限公司<BR>"
+
   end
 end
