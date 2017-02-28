@@ -103,7 +103,7 @@ class CommonService < BaseService
     uri = URI(url)
     p '5'*10,uri
     res = Net::HTTP.post_form(uri, params)
-    p '6'*10,res
+    p '6'*10,res,res.body
     if res.is_a?(Net::HTTPSuccess)
       res.body
     else
