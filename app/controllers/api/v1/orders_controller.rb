@@ -1,5 +1,6 @@
 class Api::V1::OrdersController < Api::V1::BaseController
-  before_action :set_order, only: [:show, :update, :destroy, :print]
+  before_action :set_order, only: [:show, :update, :destroy]
+  before_action :set_print_order, only: [:print]
 
   # GET /accounts
   def index
@@ -47,6 +48,10 @@ class Api::V1::OrdersController < Api::V1::BaseController
   # Use callbacks to share common setup or constraints between actions.
   def set_order
     @order = Order.find_by(id: params[:id])
+  end
+
+  def set_print_order
+    @order = Order.find_by(id: params[:order_id])
   end
 
   # Only allow a trusted parameter "white list" through.
