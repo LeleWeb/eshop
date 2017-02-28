@@ -90,13 +90,14 @@ class CommonService < BaseService
       http.request(req)
       p '10'*10,req
     end
-
-    case res
-      when Net::HTTPSuccess, Net::HTTPRedirection
-        res.body
-      else
-        res.value
-    end
+    p '10'*10,res,res.body
+    res.body
+    # case res
+    #   when Net::HTTPSuccess, Net::HTTPRedirection
+    #     res.body
+    #   else
+    #     res.value
+    # end
 
     # uri = URI(url)
     # res = Net::HTTP.post_form(uri, params)
