@@ -234,7 +234,7 @@ class OrdersService < BaseService
     # content = self.format_print_data(order_info)
 
     # 调用打印机接口打印
-    self.printcenter_365_s2("舌尖生鲜")
+    self.printcenter_365_s2("zhangweitest")
   end
 
   def self.format_print_data(order)
