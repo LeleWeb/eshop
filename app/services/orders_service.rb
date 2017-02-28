@@ -243,26 +243,26 @@ class OrdersService < BaseService
     content =  ""
     # 头部信息
     content += "<CB>舌尖生鲜</CB><BR>"
-    content += "<C>Fresh Town</C><BR>"
+    content += "<C>Fresh Town</C>"
     content += "--------------------------------<BR>"
-    content += "订单号：#{order["order_number"]}<BR>"
-    content += "操作员：张伟<BR>"
-    content += "下单时间：#{order["created_at"].strftime('%Y-%m-%d %H:%M:%S')}<BR>"
+    content += "单号：#{order["order_number"]}<BR>"
+    content += "员工：张伟<BR>"
+    content += "时间：#{order["created_at"].strftime('%Y-%m-%d %H:%M:%S')}<BR>"
     content += "<BR>"
     content += "<BR>"
 
     # 商品清单列表
     content += "--------------------------------<BR>"
-    content += "名称         单价     数量    金额<BR>"
+    content += "名称         单价     数量   金额<BR>"
     content += "--------------------------------<BR>"
     # TODO
-    content += "红富士苹果    4.5      1      4.5<BR>"
+    content += "红富士苹果    4.5      1     4.5<BR>"
     content += "个人套餐：                       <BR>"
-    content += "  瘦身型     5.0       1      5.0<BR>"
-    content += "  美容型     4.5       1      4.5<BR>"
+    content += "  瘦身型     5.0       1     5.0<BR>"
+    content += "  美容型     4.5       1     4.5<BR>"
 
     content += "--------------------------------<BR>"
-    content += "                    合计：  200.0<BR>"
+    content += "                    合计： 200.0<BR>"
     content += "--------------------------------<BR>"
     # 商家信息
     content += "公司：西安当夏网络科技有限公司<BR>"
