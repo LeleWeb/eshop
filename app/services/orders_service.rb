@@ -240,9 +240,9 @@ class OrdersService < BaseService
   end
 
   def self.format_print_data(order)
-    # content =  ""
-    # # 头部信息
-    # content += "<CB>舌尖生鲜</CB><BR>"
+    content =  ""
+    # 头部信息
+    content += "<CB>Fresh town</CB><BR>"
     # content += "--------------------------------<BR>"
     # content += "订单号：#{order.order_number}<BR>"
     # content += "操作员：张伟<BR>"
@@ -264,7 +264,7 @@ class OrdersService < BaseService
     # content += "电话： 18161234589<BR>"
     # # 二维码
     # content += "<QR>http://open.printcenter.cn</QR><BR>"
-    # content
+    content
   end
 
   def self.printcenter_365_s2(content)
