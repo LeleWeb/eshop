@@ -246,7 +246,7 @@ class OrdersService < BaseService
     content += "--------------------------------<BR>"
     content += "订单号：#{order["order_number"]}<BR>"
     content += "操作员：张伟<BR>"
-    content += "下单时间：#{Date.parse(order["created_at"]).strftime('%Y-%m-%d %H:%M:%S')}<BR>"
+    content += "下单时间：#{order["created_at"].strftime('%Y-%m-%d %H:%M:%S')}<BR>"
     content += "<BR>"
     content += "<BR>"
 
