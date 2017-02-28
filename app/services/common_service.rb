@@ -85,10 +85,11 @@ class CommonService < BaseService
     p '7'*10,req
     req.set_form_data(params)
     p '8'*10,req
+    res = nil
     res = Net::HTTP.start(uri.hostname, uri.port) do |http|
       p '9'*10,http,req
-      http.request(req)
-      p '10'*10,req
+      res = http.request(req)
+      p '10'*10,res
     end
     p '10'*10,res,res.body
     res.body
