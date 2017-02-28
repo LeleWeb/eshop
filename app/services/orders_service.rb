@@ -239,6 +239,7 @@ class OrdersService < BaseService
   end
 
   def self.format_print_data(order)
+    p 'b'*10,order["created_at"],order["created_at"].class
     content =  ""
     # 头部信息
     content += "<CB>舌尖生鲜</CB><BR>"
