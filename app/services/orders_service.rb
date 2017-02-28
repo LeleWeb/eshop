@@ -251,7 +251,7 @@ class OrdersService < BaseService
     # content += "时间：#{order["created_at"].strftime('%Y-%m-%d %H:%M:%S')}<BR>"
     # 商品清单列表
     content += "--------------------------------<BR>"
-    content += format("%-12s", "名称") + format("%3s", "单价") + format("%3s", "数量") + format("%3s", "金额") + "<BR>"
+    content += format("%-15s", "名称") + format("%3s", "单价") + format("%3s", "数量") + format("%3s", "金额") + "<BR>"
     content += "名称         单价     数量  金额<BR>"
     content += "--------------------------------<BR>"
     # TODO
