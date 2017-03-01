@@ -255,9 +255,9 @@ class OrdersService < BaseService
     content += self.format_product_name("名称") + self.format_head("单价") + self.format_head("数量") + self.format_head("金额") + "<BR>"
     content += "--------------------------------<BR>"
     # TODO
-    content += self.format_product_name("红富士苹果脆甜可口不打啦") + self.format_price_amount("99.9") + self.format_price_amount("99.9") + self.format_price_amount("99.9") + "<BR>"
-    content += self.format_product_name("香蕉") + self.format_price_amount("1") + self.format_price_amount("2.3") + self.format_price_amount("2") + "<BR>"
-    content += self.format_product_name("火龙果") + self.format_price_amount("1.0") + self.format_price_amount("20.3") + self.format_price_amount("9") + "<BR>"
+    content += self.format_product_name("红富士苹果脆甜可口不打啦") + "<BR>"#+ self.format_price_amount("99.9") + self.format_price_amount("99.9") + self.format_price_amount("99.9") + "<BR>"
+    content += self.format_product_name("香蕉") + "<BR>"#+ self.format_price_amount("1") + self.format_price_amount("2.3") + self.format_price_amount("2") + "<BR>"
+    content += self.format_product_name("火龙果") #+ self.format_price_amount("1.0") + self.format_price_amount("20.3") + self.format_price_amount("9") + "<BR>"
     # content += "红富士苹果    4.5      1     4.5"
     # content += "个人套餐：  <BR>"
     # content += "  瘦身型     5.0       1     5.0<BR>"
