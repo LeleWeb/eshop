@@ -252,7 +252,7 @@ class OrdersService < BaseService
     # 商品清单列表
     content += format("%-16s", "一二三四五六七八九十一二三四五六") + "<BR>"
     content += "--------------------------------<BR>"
-    content += format("%-7s", "名称") + format("%3s", "单价") + format("|%3s", "数量") + format("%3s", "金额") + "<BR>"
+    content += format("%-7s", "名称") + format("%3s", "单价") + format("%3s", "数量") + format("%3s", "金额") + "<BR>"
     content += "--------------------------------<BR>"
     # TODO
     content += self.format_product_name("红富士苹果脆甜可口不打啦")
