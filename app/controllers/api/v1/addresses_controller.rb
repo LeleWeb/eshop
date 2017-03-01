@@ -1,10 +1,9 @@
 class Api::V1::AddressesController < Api::V1::BaseController
   before_action :set_address, only: [:show, :update, :destroy]
-  before_action :set_customer, only: [:create, :index]
 
 # GET /addresses
   def index
-    render json: AddressesService.new.get_addresses(@customer)
+    render json: AddressesService.new.get_addresses(query_params)
   end
 
 # GET /addresses/1
@@ -15,7 +14,7 @@ class Api::V1::AddressesController < Api::V1::BaseController
 
 # POST /api/v1/addresses
   def create
-    render json: AddressesService.new.create_address(@customer, address_params)
+    render json: AddressesService.new.create_address(address_params)
   end
 
 # PATCH/PUT /addresses/1
@@ -32,18 +31,21 @@ class Api::V1::AddressesController < Api::V1::BaseController
 
   private
 # Use callbacks to share common setup or constraints between actions.
-  def set_customer
-    @customer = Customer.find(params[:customer_id])
-  end
-
   def set_address
-    @address = Address.find(params[:id])
+    @address = Address.find_by(id: params[:id])
   end
 
 # Only allow a trusted parameter "white list" through.
   def address_params
-    params.require(:address).permit(:name, :phone, :address, :is_default)
+    params.require(:address).permit(:name,
+                                    :phone,
+                                    :address,
+                                    :is_default,
+                                    :customer_id)
   end
 
+  def query_params
+    params.permit(:customer_id)
+  end
 
 end
