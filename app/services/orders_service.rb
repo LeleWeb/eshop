@@ -292,7 +292,7 @@ class OrdersService < BaseService
 
   def self.format_price_amount(value)
     value = value[0,3]
-    format("%#{3 + 3 - value.length}s", value)
+    format("%#{3}s", value)
   end
 
 end
