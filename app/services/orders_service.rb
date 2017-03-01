@@ -255,7 +255,7 @@ class OrdersService < BaseService
     content += self.format_product_name("名称") + self.format_head("单价") + self.format_head("数量") + self.format_head("金额") + "<BR>"
     content += "--------------------------------<BR>"
     # TODO
-    content += self.format_product_name("红富士苹果脆甜可口不打啦") + self.format_value("99.9") + self.format_value("99.9") + self.format_value("99.9") + "<BR>"
+    content += self.format_product_name("红富士苹果脆甜可口不打啦") + self.format_value("999.9") + self.format_value("999.9") + self.format_value("999.9") + "<BR>"
     content += self.format_product_name("香蕉") + self.format_value("1") + self.format_value("2.3") + self.format_value("2") + "<BR>"
     content += self.format_product_name("火龙果") + self.format_value("1.0") + self.format_value("20.3") + self.format_value("9")# + "<BR>"
     # content += "红富士苹果    4.5      1     4.5"
@@ -299,7 +299,7 @@ class OrdersService < BaseService
 
   # 格式化商品价格信息
   def self.format_value(value)
-    format("%4s", value)
+    format("%6s", value)
   end
 
 end
