@@ -185,18 +185,11 @@ class OrdersService < BaseService
 
   def self.get_order(order)
     order.as_json.merge("order_details" => CartsService.get_carts_no_count(order.shopping_carts))
-    # order.as_json.merge("order_details" => order.order_details.collect{|order_detail| order_detail.as_json.merge("product" => ProductsService.find_product_data(order_detail.product))})
   end
 
   def self.get_orders(orders, total_count)
     data = orders.collect{|order| self.get_order(order)}
     {"total_count" => total_count.nil? ? orders.length : total_count, "orders" => data}
-    # data = []
-    # orders.each do |order|
-    #   data << self.get_order(order)
-    # end
-    #
-    # {"total_count" => total_count.nil? ? orders.length : total_count, "orders" => data}
   end
 
   # 定时刷新订单状态，已发货的订单，超过七天后自动设置为已完成方法。
@@ -242,13 +235,13 @@ class OrdersService < BaseService
 
   def self.format_print_data(order)
     content =  ""
-    # # 头部信息
-    # content += "<CB>舌尖生鲜</CB>"
-    # content += "<C>Fresh Town</C>"
-    # content += "--------------------------------<BR>"
-    # content += "单号：#{order["order_number"]}<BR>"
-    # content += "员工：张伟<BR>"
-    # content += "时间：#{order["created_at"].strftime('%Y-%m-%d %H:%M:%S')}<BR>"
+    # 头部信息
+    content += "<CB>舌尖生鲜</CB>"
+    content += "<C>Fresh Town</C>"
+    content += "--------------------------------<BR>"
+    content += "单号：#{order["order_number"]}<BR>"
+    content += "员工：张伟<BR>"
+    content += "时间：#{order["created_at"].strftime('%Y-%m-%d %H:%M:%S')}<BR>"
     # 商品清单列表
     content += "--------------------------------<BR>"
     content += self.format_content("名称") + self.format_head("单价") + self.format_head("数量") + self.format_head("金额") + "<BR>"
@@ -274,15 +267,15 @@ class OrdersService < BaseService
     # content += self.format_content("瘦身型", 1, 6) + self.format_value("999.9") + self.format_value("999.9") + self.format_value("999.9") + "<BR>"
     # content += self.format_content("美容型超长测试测试", 1, 6) + self.format_value("999.9") + self.format_value("999.9") + self.format_value("999.9") + "<BR>"
     #
-    # content += "--------------------------------<BR>"
-    # content += self.format_content("") + self.format_head("合计：") + format("%12s", order["pay_price"].to_s) + "<BR>"
-    # content += "--------------------------------<BR>"
-    # # 商家信息
-    # content += "公司：西安当夏网络科技有限公司<BR>"
-    # content += "地址：丈八西路东滩社区31排5号<BR>"
-    # content += "电话：18161803190"
-    # # 二维码
-    # content += "<QR>http://open.printcenter.cn</QR>"
+    content += "--------------------------------<BR>"
+    content += self.format_content("") + self.format_head("合计：") + format("%12s", order["pay_price"].to_s) + "<BR>"
+    content += "--------------------------------<BR>"
+    # 商家信息
+    content += "公司：西安当夏网络科技有限公司<BR>"
+    content += "地址：丈八西路东滩社区31排5号<BR>"
+    content += "电话：18161803190"
+    # 二维码
+    content += "<QR>http://open.printcenter.cn</QR>"
     content
   end
 
