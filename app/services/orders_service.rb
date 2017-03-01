@@ -304,7 +304,7 @@ class OrdersService < BaseService
   end
 
   def self.format_content(name, prefix_offset=0, total=7)
-    total -= prefix_offset
+    # total -= prefix_offset
     name = name[0, total]
     " "*prefix_offset*2 + format("%-#{total + total - name.length}s", name)
   end
