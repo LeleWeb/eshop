@@ -253,28 +253,30 @@ class OrdersService < BaseService
     content += "--------------------------------<BR>"
     content += self.format_content("名称") + self.format_head("单价") + self.format_head("数量") + self.format_head("金额") + "<BR>"
     content += "--------------------------------<BR>"
-    # TODO
+    order["order_details"].each do |order_detail|
+      # 区分是否是团队套餐
+      if !order_detail["subitems"].blank?
+        # 团队套餐
+        content += self.get_team_content(order_detail)
+      else
+        # 单品
+        content += self.get_single_content(order_detail)
+      end
+    end
 
-    content += self.format_content("红富士苹果脆甜可口不打啦") + self.format_value("999.9") + self.format_value("999.9") + self.format_value("999.9") + "<BR>"
-    content += self.format_content("香蕉") + self.format_value("1") + self.format_value("2.3") + self.format_value("2") + "<BR>"
-    content += self.format_content("火龙果") + self.format_value("1.0") + self.format_value("20.3") + self.format_value("9") + "<BR>"
-
-    # 个人套餐
-    # content += self.format_product_name("个人套餐：") + "<BR>"
-    content += self.format_content("个人套餐：") + "<BR>"
-    content += self.format_content("瘦身型", 1, 6) + self.format_value("999.9") + self.format_value("999.9") + self.format_value("999.9") + "<BR>"
-    content += self.format_content("美容型超长测试测试", 1, 6) + self.format_value("999.9") + self.format_value("999.9") + self.format_value("999.9") + "<BR>"
-
-    # 团队套餐
-    content += self.format_content("团队套餐：") + "<BR>"
-    content += self.format_content("5人50元套餐", 1, 9) + "<BR>"
-    content += self.format_content("草莓", 2, 5) + self.format_value("999.9") + self.format_value("999.9") + self.format_value("999.9") + "<BR>"
-    content += self.format_content("苹果", 2, 5) + self.format_value("999.9") + self.format_value("999.9") + self.format_value("999.9") + "<BR>"
-
-    content += "--------------------------------<BR>"
-    # content += "                    合计： 200.0<BR>"
-    content += self.format_content("") + self.format_head("合计：") + format("%12s", order["pay_price"].to_s) + "<BR>"
-    content += "--------------------------------<BR>"
+    # content += self.format_content("红富士苹果脆甜可口不打啦") + self.format_value("999.9") + self.format_value("999.9") + self.format_value("999.9") + "<BR>"
+    # content += self.format_content("香蕉") + self.format_value("1") + self.format_value("2.3") + self.format_value("2") + "<BR>"
+    # content += self.format_content("火龙果") + self.format_value("1.0") + self.format_value("20.3") + self.format_value("9") + "<BR>"
+    #
+    # # 个人套餐
+    # # content += self.format_product_name("个人套餐：") + "<BR>"
+    # content += self.format_content("个人套餐：") + "<BR>"
+    # content += self.format_content("瘦身型", 1, 6) + self.format_value("999.9") + self.format_value("999.9") + self.format_value("999.9") + "<BR>"
+    # content += self.format_content("美容型超长测试测试", 1, 6) + self.format_value("999.9") + self.format_value("999.9") + self.format_value("999.9") + "<BR>"
+    #
+    # content += "--------------------------------<BR>"
+    # content += self.format_content("") + self.format_head("合计：") + format("%12s", order["pay_price"].to_s) + "<BR>"
+    # content += "--------------------------------<BR>"
     # # 商家信息
     # content += "公司：西安当夏网络科技有限公司<BR>"
     # content += "地址：丈八西路东滩社区31排5号<BR>"
@@ -311,6 +313,21 @@ class OrdersService < BaseService
     format("%6s", value)
   end
 
+  def self.get_single_content(order_detail)
+    self.format_content(order_detail["product"]["name"]) +
+        self.format_value(order_detail["price"]["real_price"]) +
+        self.format_value(order_detail["amount"]) +
+        self.format_value(order_detail["total_price"]) +
+        "<BR>"
+  end
 
+  def self.get_team_content(order_detail)
+    content = ""
+    content += self.format_content("团队套餐：") + "<BR>"
+    order_detail["subitems"].each do |subitem|
+      content += self.get_single_content(subitem)
+    end
+    content
+  end
 
 end
