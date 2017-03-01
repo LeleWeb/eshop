@@ -273,7 +273,8 @@ class OrdersService < BaseService
 
     content += "--------------------------------<BR>"
     # content += "                    合计： 200.0<BR>"
-    content += self.format_content("合计：9999.9", 8, total=8) + "<BR>"
+
+    content += format("%19s", "合计："+"9999.9") + "<BR>"
     content += "--------------------------------<BR>"
     # # 商家信息
     # content += "公司：西安当夏网络科技有限公司<BR>"
