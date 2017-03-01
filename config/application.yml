@@ -219,6 +219,10 @@ defaults: &defaults
   PRINTCENTER:
     RESPONSE:
       OK: 0
+    FORMAT:
+      MAX_LINE_NUM:
+        CHINESE: 16  # 打印机一行最多显示的汉字数量为16个
+        ENGLISH: 32  # 打印机一行最多显示的英文数量为32个
 
 development:
   <<: *defaults
