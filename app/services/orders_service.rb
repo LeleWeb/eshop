@@ -251,13 +251,13 @@ class OrdersService < BaseService
     # content += "时间：#{order["created_at"].strftime('%Y-%m-%d %H:%M:%S')}<BR>"
     # 商品清单列表
     content += format("%-16s", "一二三四五六七八九十一二三四五六") + "<BR>"
-    content += format("%-15s", "一二三四五六七八九十一二三四五六") + "<BR>"
     content += "--------------------------------<BR>"
-    content += format("%-15s|", "名称")+ "<BR>" #+ format("%3s", "单价") + format("|%3s", "数量") + format("%3s", "金额") + "<BR>"
-    content += format("%-15s|", "红富士苹果脆甜可口不打啦"[0,7])+ "<BR>"# + format("|%3s", "99.9") + format("%3s", "99.9") + format("%3s", "99.9") + "<BR>"
+    content += format("%-7s", "名称")+ "<BR>" + format("%3s", "单价") + format("|%3s", "数量") + format("%3s", "金额") + "<BR>"
     content += "--------------------------------<BR>"
     # TODO
-    content += "红富士苹果    4.5      1     4.5"
+    name = "红富士苹果脆甜可口不打啦"[0,7]
+    content += format("%-#{16+16-name.length}s", name)+ "<BR>"# + format("|%3s", "99.9") + format("%3s", "99.9") + format("%3s", "99.9") + "<BR>"
+    # content += "红富士苹果    4.5      1     4.5"
     # content += "个人套餐：  <BR>"
     # content += "  瘦身型     5.0       1     5.0<BR>"
     # content += "  美容型     4.5       1     4.5<BR>"
