@@ -252,7 +252,7 @@ class OrdersService < BaseService
     # 商品清单列表
     content += format("%-16s", "一二三四五六七八九十一二三四五六") + "<BR>"
     content += "--------------------------------<BR>"
-    content += self.format_product_name("名称名称名称名称名称名称名称名称") + format("%3s", "单价") + format("%3s", "数量") + format("%3s", "金额") + "<BR>"
+    content += self.format_product_name("名称") + format("%3s", "单价") + format("%3s", "数量") + format("%3s", "金额") + "<BR>"
     content += "--------------------------------<BR>"
     # TODO
     content += self.format_product_name("红富士苹果脆甜可口不打啦")
@@ -287,7 +287,12 @@ class OrdersService < BaseService
 
   def self.format_product_name(name)
     name = name[0,7]
-    format("%-#{Settings.PRINTCENTER.FORMAT.MAX_LINE_NUM.CHINESE + Settings.PRINTCENTER.FORMAT.MAX_LINE_NUM.CHINESE - name.length}s", name)+ "<BR>"
+    format("%-#{7 + 7 - name.length}s", name)
+  end
+
+  def self.format_price_amount(value)
+    value = value[0,3]
+    format("%-#{3 + 3 - value.length}s", value)
   end
 
 end
