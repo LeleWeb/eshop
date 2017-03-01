@@ -251,14 +251,25 @@ class OrdersService < BaseService
     # content += "时间：#{order["created_at"].strftime('%Y-%m-%d %H:%M:%S')}<BR>"
     # 商品清单列表
     content += "--------------------------------<BR>"
-    content += self.format_content("名称") + self.format_head("单价") + self.format_head("数量") + self.format_head("金额") + "<BR>"
+    content += self.format_product_name("名称") + self.format_head("单价") + self.format_head("数量") + self.format_head("金额") + "<BR>"
     content += "--------------------------------<BR>"
     # TODO
 
-    content += self.format_content("红富士苹果脆甜可口不打啦") + self.format_value("999.9") + self.format_value("999.9") + self.format_value("999.9") + "<BR>"
-    content += self.format_content("香蕉") + self.format_value("1") + self.format_value("2.3") + self.format_value("2") + "<BR>"
-    content += self.format_content("火龙果") + self.format_value("1.0") + self.format_value("20.3") + self.format_value("9") + "<BR>"
+    content += self.format_product_name("红富士苹果脆甜可口不打啦") + self.format_value("999.9") + self.format_value("999.9") + self.format_value("999.9") + "<BR>"
+    content += self.format_product_name("香蕉") + self.format_value("1") + self.format_value("2.3") + self.format_value("2") + "<BR>"
+    content += self.format_product_name("火龙果") + self.format_value("1.0") + self.format_value("20.3") + self.format_value("9") + "<BR>"
 
+    # 个人套餐
+    # content += self.format_product_name("个人套餐：") + "<BR>"
+    content += self.format_content("个人套餐：") + "<BR>"
+    content += self.format_content("瘦身型", 1, 6) + self.format_value("999.9") + self.format_value("999.9") + self.format_value("999.9") + "<BR>"
+    content += self.format_content("美容型超长测试测试", 1, 6) + self.format_value("999.9") + self.format_value("999.9") + self.format_value("999.9") + "<BR>"
+
+    # 团队套餐
+    content += self.format_content("团队套餐：") + "<BR>"
+    content += self.format_content("5人50元套餐", 1, 9) + "<BR>"
+    content += self.format_content("草莓", 2, 5) + self.format_value("999.9") + self.format_value("999.9") + self.format_value("999.9") + "<BR>"
+    content += self.format_content("苹果", 2, 5) + self.format_value("999.9") + self.format_value("999.9") + self.format_value("999.9") + "<BR>"
     # content += "红富士苹果    4.5      1     4.5"
     # content += "个人套餐：  <BR>"
     # content += "  瘦身型     5.0       1     5.0<BR>"
@@ -295,7 +306,7 @@ class OrdersService < BaseService
   def self.format_content(name, prefix_offset=0, total=7)
     total -= prefix_offset
     name = name[0, total]
-    format(" "*prefix_offset + "%-#{total + total - name.length}s", name)
+    format(" "*prefix_offset*2 + "%-#{total + total - name.length}s", name)
   end
 
   # 格式化商品列表头信息
