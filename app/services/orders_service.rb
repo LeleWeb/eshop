@@ -252,12 +252,12 @@ class OrdersService < BaseService
     # 商品清单列表
     content += format("%-16s", "一二三四五六七八九十一二三四五六") + "<BR>"
     content += "--------------------------------<BR>"
-    content += self.format_product_name("名称") + format("%3s", "单价") + format("%3s", "数量") + format("%3s", "金额") + "<BR>"
+    content += self.format_product_name("名称") + self.format_price_amount("单价") + self.format_price_amount("数量") + self.format_price_amount("金额") + "<BR>"
     content += "--------------------------------<BR>"
     # TODO
-    content += self.format_product_name("红富士苹果脆甜可口不打啦")
-    content += self.format_product_name("香蕉")
-    content += self.format_product_name("火龙果")
+    content += self.format_product_name("红富士苹果脆甜可口不打啦") + self.format_price_amount("99.9") + self.format_price_amount("99.9") + self.format_price_amount("99.9") + "<BR>"
+    content += self.format_product_name("香蕉") + self.format_price_amount("1") + self.format_price_amount("2.3") + self.format_price_amount("2") + "<BR>"
+    content += self.format_product_name("火龙果") + self.format_price_amount("1.0") + self.format_price_amount("20.3") + self.format_price_amount("9") + "<BR>"
     # content += "红富士苹果    4.5      1     4.5"
     # content += "个人套餐：  <BR>"
     # content += "  瘦身型     5.0       1     5.0<BR>"
