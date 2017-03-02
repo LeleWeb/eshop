@@ -117,11 +117,11 @@ class OrdersService < BaseService
     order.update(pay_price: order_total_price, total_price: order_total_price)
 
     # 此处根据支付方式不同做相应处理
-    if order.pay_away == Settings.ORDER.PAY_AWAY.WXPAY
+    if order.pay_away == Settings.ORDER.PAY_AWAY.WXPAY.VALUE
       # 调用微信统一接口,生成预付订单.
       res = WechatService.create_unifiedorder(order)
       CommonService.response_format(ResponseCode.COMMON.OK, {"order" => order, "prepay_data" => res})
-    else
+    elsif order.pay_away == Settings.ORDER.PAY_AWAY.COD.VALUE
       # 货到付款
       order.update(status: Settings.ORDER.STATUS.PREPAY)
       CommonService.response_format(ResponseCode.COMMON.OK, {"order" => order})
@@ -247,10 +247,12 @@ class OrdersService < BaseService
     content += "--------------------------------<BR>"
     content += "单号：#{order["order_number"]}<BR>"
     # content += "员工：张伟<BR>"
-    content += "时间：#{order["created_at"].strftime('%Y-%m-%d %H:%M:%S')}<BR>"
+    content += "下单时间：#{order["created_at"].strftime('%Y-%m-%d %H:%M:%S')}<BR>"
     content += "收货人：#{order["consignee_name"]}<BR>"
     content += "电话：#{order["consignee_phone"]}<BR>"
     content += "地址：#{order["consignee_address"]}<BR>"
+    content += "配送时间：#{order["delivery_time"]}<BR>"
+    content += "支付方式：#{self.get_pay_way(order["pay_away"])}<BR>"
     # 商品清单列表
     content += "--------------------------------<BR>"
     content += self.format_content("名称") + self.format_head("单价") + self.format_head("数量") + self.format_head("金额") + "<BR>"
@@ -330,6 +332,17 @@ class OrdersService < BaseService
       content += self.get_single_content(subitem)
     end
     content
+  end
+
+  def self.get_pay_way(value)
+    case value
+    when Settings.ORDER.PAY_AWAY.WXPAY.VALUE
+      Settings.ORDER.PAY_AWAY.WXPAY.TEXT
+    when Settings.ORDER.PAY_AWAY.COD.VALUE
+      Settings.ORDER.PAY_AWAY.COD.TEXT
+    else
+      ''
+    end
   end
 
 end

@@ -31,8 +31,12 @@ defaults: &defaults
   # 订单状态
   ORDER:
     PAY_AWAY:
-      WXPAY: 1
-      COD: 2
+      WXPAY:
+        VALUE: 1
+        TEXT: "在线支付(微信支付)"
+      COD:
+        VALUE: 2
+        TEXT: "货到付款"
     STATUS:
       CANCEL: 0     # 已取消
       PREPAY: 1     # 未付款
