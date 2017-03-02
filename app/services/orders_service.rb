@@ -87,7 +87,7 @@ class OrdersService < BaseService
     # 生成本系统订单
     order_params["order_number"] = OrdersService.generate_order_number(buyer.id)
     order_params["status"] = Settings.ORDER.STATUS.PREPAY
-    order_params["pay_away"] = 1
+    # order_params["pay_away"] = 1 # 改为由前端参数传入，用来支持货到付款方式。
     order_params["time_start"] = Time.now.strftime("%Y%m%d%H%M%S")
     order_params["time_expire"] = (Time.now + Settings.ORDER.EXPIRE_TIME.to_i).strftime("%Y%m%d%H%M%S")
     order = buyer.orders.create(order_params.merge("consignee_address" => address.address,
@@ -116,10 +116,16 @@ class OrdersService < BaseService
     # 暂时设置实际支付订单为订单总额
     order.update(pay_price: order_total_price, total_price: order_total_price)
 
-    # 调用微信统一接口,生成预付订单.
-    res = WechatService.create_unifiedorder(order)
-
-    CommonService.response_format(ResponseCode.COMMON.OK, {"order" => order, "prepay_data" => res})
+    # 此处根据支付方式不同做相应处理
+    if order.pay_away == Settings.ORDER.PAY_AWAY.WXPAY
+      # 调用微信统一接口,生成预付订单.
+      res = WechatService.create_unifiedorder(order)
+      CommonService.response_format(ResponseCode.COMMON.OK, {"order" => order, "prepay_data" => res})
+    else
+      # 货到付款
+      order.update(status: Settings.ORDER.STATUS.PREPAY)
+      CommonService.response_format(ResponseCode.COMMON.OK, {"order" => order})
+    end
   end
 
   # def create_order(buyer, address, order_params, details)
@@ -240,8 +246,11 @@ class OrdersService < BaseService
     content += "<C>Fresh Town</C>"
     content += "--------------------------------<BR>"
     content += "单号：#{order["order_number"]}<BR>"
-    content += "员工：张伟<BR>"
+    # content += "员工：张伟<BR>"
     content += "时间：#{order["created_at"].strftime('%Y-%m-%d %H:%M:%S')}<BR>"
+    content += "收货人：#{order["consignee_name"]}<BR>"
+    content += "电话：#{order["consignee_phone"]}<BR>"
+    content += "地址：#{order["consignee_address"]}<BR>"
     # 商品清单列表
     content += "--------------------------------<BR>"
     content += self.format_content("名称") + self.format_head("单价") + self.format_head("数量") + self.format_head("金额") + "<BR>"
