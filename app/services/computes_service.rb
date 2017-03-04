@@ -51,7 +51,7 @@
     end
     p '3'*10,total_plans.size
     # 过滤无效推荐项
-    total_plans#.select!{|plan| plan["total_price"].to_f < compute_params[:money].to_f + compute_params[:money].to_f * 0.3 && plan["total_price"].to_f >= compute_params[:money].to_f - compute_params[:money].to_f * 0.3}
+    total_plans.select!{|plan| plan["total_price"].to_f < compute_params[:money].to_f + compute_params[:money].to_f * 0.3 && plan["total_price"].to_f >= compute_params[:money].to_f - compute_params[:money].to_f * 0.3}
     total_plans
   end
 
