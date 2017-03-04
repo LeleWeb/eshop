@@ -86,14 +86,10 @@
   end
 
   def update_product(product, product_params)
-    price_params = nil
-    compute_strategy_params = nil
-    product_prices = product.prices
-    compute_strategies = product.compute_strategies
-
     # 解析商品价格参数, 计算策略参数.
-    price_params = product_params.extract!("prices")
-    compute_strategy_params = product_params.extract!("compute_strategies")
+    price_params = product_params.extract!("prices")["prices"]
+    compute_strategy_params = product_params.extract!("compute_strategies")["compute_strategies"]
+    group_buying = price_params.extract!("group_buying")["group_buying"]
 
     # 更新商品信息
     product.update(product_params)
@@ -104,7 +100,7 @@
       product.prices.clear
 
       # 新建参数传入的价格
-      product_prices = product.prices.create(price_params["prices"])
+      product.prices.create(price_params)
     end
 
     # 如果有计算策略列表，则删除原来的计算策略，新增参数中的计算策略。
@@ -113,7 +109,16 @@
       product.compute_strategies.clear
 
       # 新建参数传入的计算策略
-      compute_strategies = product.compute_strategies.create(compute_strategy_params["compute_strategies"])
+      product.compute_strategies.create(compute_strategy_params)
+    end
+
+    # 如果有团购数据，则删除原来的团购数据，新增参数中的团购数据。
+    if !group_buying.blank?
+      # 先删除已有计算策略
+      product.group_buying.clear
+
+      # 新建参数传入的计算策略
+      product.create_group_buying(group_buying)
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK, ProductsService.product_data_format(product))
