@@ -46,8 +46,8 @@
     # 计算组合推荐项的总金额
     total_plans.map! do |plan|
       total_price = 0.0
-      plan.collect{|item| total_price += item["price"]}
-      {"plans" => plan , "total_price" => total_price}
+      plan.collect{|item| total_price += item["total_price"]}
+      {"plans" => plan , "sum_price" => total_price}
     end
     p '3'*10,total_plans.size
     # 过滤无效推荐项
