@@ -1,0 +1,2 @@
+class GroupBuying < ApplicationRecord
+end
