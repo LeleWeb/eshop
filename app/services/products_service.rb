@@ -133,6 +133,8 @@
       product.prices.each {|price| price.update(is_deleted: true, deleted_at: Time.now)}
       # 删除产品计算策略
       product.compute_strategies.each {|compute_strategy| compute_strategy.update(is_deleted: true, deleted_at: Time.now)}
+      # 删除产品团购数据
+      product.group_buying.update(is_deleted: true, deleted_at: Time.now)
     end
 
     # 批量删除
