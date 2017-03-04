@@ -1,0 +1,2 @@
+class PanicBuying < ApplicationRecord
+end
