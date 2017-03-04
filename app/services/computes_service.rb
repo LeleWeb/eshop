@@ -42,16 +42,16 @@
     for i in 1..plans.size
       total_plans += plans.combination(i).to_a
     end
-    p '2'*10,total_plans
+    p '2'*10,total_plans.size
     # 计算组合推荐项的总金额
     total_plans.map! do |plan|
       total_price = 0.0
       plan.collect{|item| total_price += item["price"]}
       {"plans" => plan , "total_price" => total_price}
     end
-    p '3'*10,total_plans
+    p '3'*10,total_plans.size
     # 过滤无效推荐项
-    total_plans.select!{|plan| plan["total_price"].to_f < compute_params[:money].to_f + compute_params[:money].to_f * 0.3 && plan["total_price"].to_f >= compute_params[:money].to_f - compute_params[:money].to_f * 0.3}
+    total_plans#.select!{|plan| plan["total_price"].to_f < compute_params[:money].to_f + compute_params[:money].to_f * 0.3 && plan["total_price"].to_f >= compute_params[:money].to_f - compute_params[:money].to_f * 0.3}
     total_plans
   end
 
