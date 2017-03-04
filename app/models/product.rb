@@ -31,4 +31,7 @@ class Product < ApplicationRecord
 
   # 团购
   has_one :group_buying
+
+  # 限时抢购
+  has_and_belongs_to_many :panic_buyings
 end
