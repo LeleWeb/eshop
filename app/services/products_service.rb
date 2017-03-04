@@ -45,16 +45,22 @@
   end
 
   def create_product(store, product_params)
+    p '1'*10,store, product_params
     price_params = nil
     compute_strategy_params = nil
     product_prices = []
     compute_strategies = []
+    group_buying = nil
 
     # 参数合法性检查
     if store.blank? || product_params.blank?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
                                            "ERROR: store:#{store.inspect} or product_params:#{product_params.inspect} is blank!")
     end
+
+    # 解析商品团购信息
+    group_buying = product_params.extract!("group_buying")
+    p '2'*10,group_buying, product_params
 
     # 解析商品价格参数, 计算策略参数.
     price_params = product_params.extract!("prices")
@@ -74,8 +80,14 @@
       compute_strategies = product.compute_strategies.create(compute_strategy_params["compute_strategies"])
     end
 
+    # 创建商品团购数据
+    if !group_buying.blank?
+      group_buying = product.create_group_buying(group_buying["group_buying"])
+    end
+    p '3'*10,group_buying, product_params
     CommonService.response_format(ResponseCode.COMMON.OK,
-                                  ProductsService.product_data_format(product, product_prices, compute_strategies))
+                                  ProductsService.product_data_format(product, product_prices,
+                                                                      compute_strategies))
   end
 
   def update_product(product, product_params)
@@ -258,7 +270,8 @@
   # 格式化产品返回数据为指定格式
   def self.product_data_format(product, product_price, compute_strategies)
     product.as_json.merge("prices" => product_price,
-                          "compute_strategies" => compute_strategies)
+                          "compute_strategies" => compute_strategies,
+                          "group_buying" => product.group_buying)
   end
 
   def self.get_products(products, total_count)
