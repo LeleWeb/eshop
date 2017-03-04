@@ -120,11 +120,11 @@ class OrdersService < BaseService
     if order.pay_away == Settings.ORDER.PAY_AWAY.WXPAY.VALUE
       # 调用微信统一接口,生成预付订单.
       res = WechatService.create_unifiedorder(order)
-      CommonService.response_format(ResponseCode.COMMON.OK, {"order" => order, "prepay_data" => res})
+      CommonService.response_format(ResponseCode.COMMON.OK, {"order" => self.get_order(order), "prepay_data" => res})
     elsif order.pay_away == Settings.ORDER.PAY_AWAY.COD.VALUE
       # 货到付款
       order.update(status: Settings.ORDER.STATUS.PREPAY)
-      CommonService.response_format(ResponseCode.COMMON.OK, {"order" => order})
+      CommonService.response_format(ResponseCode.COMMON.OK, {"order" => self.get_order(order)})
     end
   end
 
@@ -196,6 +196,10 @@ class OrdersService < BaseService
   def self.get_orders(orders, total_count)
     data = orders.collect{|order| self.get_order(order)}
     {"total_count" => total_count.nil? ? orders.length : total_count, "orders" => data}
+  end
+
+  def self.get_orders_no_count(orders)
+    orders.collect{|order| self.get_order(order)}
   end
 
   # 定时刷新订单状态，已发货的订单，超过七天后自动设置为已完成方法。
