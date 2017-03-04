@@ -89,7 +89,7 @@
     # 解析商品价格参数, 计算策略参数.
     price_params = product_params.extract!("prices")["prices"]
     compute_strategy_params = product_params.extract!("compute_strategies")["compute_strategies"]
-    group_buying = price_params.extract!("group_buying")["group_buying"]
+    group_buying = product_params.extract!("group_buying")["group_buying"]
 
     # 更新商品信息
     product.update(product_params)
