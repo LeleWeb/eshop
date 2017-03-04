@@ -68,8 +68,9 @@
     data["total_price"] = data["amount"].to_f * price.real_price
 
     data["product"] = product.name
-    data["price"] = data["quantity"].to_f * price.real_price
-    data["price"].to_f > money.to_f ? nil : data
+    # data["price"] = data["quantity"].to_f * price.real_price
+    # data["price"].to_f > money.to_f ? nil : data
+    data["total_price"].to_f > money.to_f ? nil : data
   end
 
 end
