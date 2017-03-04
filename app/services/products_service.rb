@@ -45,12 +45,6 @@
   end
 
   def create_product(store, product_params)
-    price_params = nil
-    compute_strategy_params = nil
-    product_prices = []
-    compute_strategies = []
-    group_buying = nil
-
     # 参数合法性检查
     if store.blank? || product_params.blank?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
@@ -58,11 +52,10 @@
     end
 
     # 解析商品团购信息
-    group_buying = product_params.extract!("group_buying")
-
+    group_buying = product_params.extract!("group_buying")["group_buying"]
     # 解析商品价格参数, 计算策略参数.
-    price_params = product_params.extract!("prices")
-    compute_strategy_params = product_params.extract!("compute_strategies")
+    price_params = product_params.extract!("prices")["prices"]
+    compute_strategy_params = product_params.extract!("compute_strategies")["compute_strategies"]
 
     # 创建产品
     product = store.products.create(product_params)
@@ -70,17 +63,17 @@
     
     # 创建商品价格
     if !price_params.blank?
-      product_prices = product.prices.create(price_params["prices"])
+      product.prices.create(price_params)
     end
 
     # 创建商品计算策略
     if !compute_strategy_params.blank?
-      compute_strategies = product.compute_strategies.create(compute_strategy_params["compute_strategies"])
+      product.compute_strategies.create(compute_strategy_params)
     end
 
     # 创建商品团购数据
     if !group_buying.blank?
-      group_buying = product.create_group_buying(group_buying["group_buying"])
+      product.create_group_buying(group_buying)
     end
     CommonService.response_format(ResponseCode.COMMON.OK, ProductsService.product_data_format(product))
   end
