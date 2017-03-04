@@ -189,8 +189,10 @@ defaults: &defaults
 
   # 定义商品属性
   PRODUCT_PROPERTY:
-    COMMON_PRODUCT: 1
-    ADVERT_PRODUCT: 2
+    COMMON_PRODUCT: 1  # 普通商品
+    ADVERT_PRODUCT: 2  # 广告商品
+    GROUP_PRODUCT: 3  # 团购商品
+    TIMELIMIT_PRODUCT: 4  #秒杀商品
 
   # 定义价格和价格计量单位
   PRICE:

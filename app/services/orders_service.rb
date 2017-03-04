@@ -295,7 +295,7 @@ class OrdersService < BaseService
     params["printContent"] = content
     res = CommonService.post(LocalConfig.ORDER_PRINT.PRINTCENTER_365_S2.URL, params)
     if !res.blank? && res["responseCode"] != Settings.PRINTCENTER.RESPONSE.OK
-      #TODO 执行打印异常，打印log记录，调用异常处理方法。
+      # TODO 执行打印异常，打印log记录，调用异常处理方法。
     end
     res
   end

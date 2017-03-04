@@ -55,13 +55,18 @@
   end
 
   def compute_quantity_price(product, money, number, compute_strategy)
-    data = compute_strategy.as_json
-    data["product"] = product.name
-    data["quantity"] = compute_strategy.average_quantity * number
     # 根据设置的计量规格，查找对应规格的商品价格。
     if (price = product.prices.where(unit: compute_strategy.average_unit).first).blank?
       return nil
     end
+
+    data = compute_strategy.as_json
+    # 收集新建购物车所需字段
+    data["price_id"] = price.id
+    data["amount"] = compute_strategy.average_quantity * number
+    data["total_price"] = data["amount"].to_f * price.real_price
+
+    data["product"] = product.name
     data["price"] = data["quantity"].to_f * price.real_price
     data["price"].to_f > money.to_f ? nil : data
   end
