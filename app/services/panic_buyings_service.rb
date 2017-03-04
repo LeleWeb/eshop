@@ -123,7 +123,7 @@
   end
 
   def self.get_panic_buying(panic_buying)
-    self.panic_buying_data_format(panic_buying, ProductsService.get_products_no_count(panic_buying.products.where(property: Settings.PRODUCT_PROPERTY.TIMELIMIT_PRODUCT)))
+    self.panic_buying_data_format(panic_buying, ProductsService.get_products_no_count(panic_buying.products))
   end
 
 end
