@@ -114,7 +114,7 @@
   # 格式化产品返回数据为指定格式
   def self.panic_buying_data_format(panic_buying, panic_buying_products)
     # 格式化返回数据
-    advert.as_json.merge("products" => panic_buying_products)
+    panic_buying.as_json.merge("products" => panic_buying_products)
   end
 
   def self.get_panic_buyings(panic_buyings, total_count)
