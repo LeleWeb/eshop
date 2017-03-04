@@ -28,4 +28,7 @@ class Product < ApplicationRecord
 
   # 计算策略
   has_many :compute_strategies
+
+  # 团购
+  has_one :group_buying
 end
