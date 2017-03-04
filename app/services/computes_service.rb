@@ -35,23 +35,22 @@
         plans << single_product_plan if !single_product_plan.blank?
       end
     end
-    p '1'*10,plans
 
     # 组合所有水果种类，并按照总价格,合理的组合水果种类，库存进行过滤，选出满足条件的方案。
     total_plans = []
     for i in 1..plans.size
       total_plans += plans.combination(i).to_a
     end
-    p '2'*10,total_plans.size
+
     # 计算组合推荐项的总金额
     total_plans.map! do |plan|
       total_price = 0.0
       plan.collect{|item| total_price += item["total_price"]}
       {"plans" => plan , "sum_price" => total_price}
     end
-    p '3'*10,total_plans.size
+    
     # 过滤无效推荐项
-    total_plans.select!{|plan| plan["total_price"].to_f < compute_params[:money].to_f + compute_params[:money].to_f * 0.3 && plan["total_price"].to_f >= compute_params[:money].to_f - compute_params[:money].to_f * 0.3}
+    total_plans.select!{|plan| plan["sum_price"].to_f < compute_params[:money].to_f + compute_params[:money].to_f * 0.3 && plan["sum_price"].to_f >= compute_params[:money].to_f - compute_params[:money].to_f * 0.3}
     total_plans
   end
 
