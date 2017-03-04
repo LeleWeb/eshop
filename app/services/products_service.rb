@@ -45,7 +45,6 @@
   end
 
   def create_product(store, product_params)
-    p '1'*10,store, product_params
     price_params = nil
     compute_strategy_params = nil
     product_prices = []
@@ -60,7 +59,6 @@
 
     # 解析商品团购信息
     group_buying = product_params.extract!("group_buying")
-    p '2'*10,group_buying, product_params
 
     # 解析商品价格参数, 计算策略参数.
     price_params = product_params.extract!("prices")
@@ -84,10 +82,7 @@
     if !group_buying.blank?
       group_buying = product.create_group_buying(group_buying["group_buying"])
     end
-    p '3'*10,group_buying, product_params
-    CommonService.response_format(ResponseCode.COMMON.OK,
-                                  ProductsService.product_data_format(product, product_prices,
-                                                                      compute_strategies))
+    CommonService.response_format(ResponseCode.COMMON.OK, ProductsService.product_data_format(product))
   end
 
   def update_product(product, product_params)
@@ -121,8 +116,7 @@
       compute_strategies = product.compute_strategies.create(compute_strategy_params["compute_strategies"])
     end
 
-    CommonService.response_format(ResponseCode.COMMON.OK,
-                                  ProductsService.product_data_format(product, product_prices, compute_strategies))
+    CommonService.response_format(ResponseCode.COMMON.OK, ProductsService.product_data_format(product))
   end
 
   def destroy_product(product, destroy_params)
@@ -259,18 +253,16 @@
       is_collected = true if !collection.nil?
     end
 
-    data = product.as_json.merge(:categories => categories,
-                          :pictures => picture_data,
-                          :is_collected => is_collected)
-
     # 添加价格属性
-    ProductsService.product_data_format(data, product.prices, product.compute_strategies)
+    product_data = ProductsService.product_data_format(product)
+
+    product_data.merge(:categories => categories, :pictures => picture_data, :is_collected => is_collected)
   end
 
   # 格式化产品返回数据为指定格式
-  def self.product_data_format(product, product_price, compute_strategies)
-    product.as_json.merge("prices" => product_price,
-                          "compute_strategies" => compute_strategies,
+  def self.product_data_format(product)
+    product.as_json.merge("prices" => product.prices,
+                          "compute_strategies" => product.compute_strategies,
                           "group_buying" => product.group_buying)
   end
 
