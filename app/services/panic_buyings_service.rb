@@ -67,9 +67,6 @@
   end
 
   def update_panic_buying(panic_buying, panic_buying_params)
-    product_params = nil
-    advert_products = advert.products
-
     # 参数合法性检查
     if panic_buying.blank? || panic_buying_params.blank?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
