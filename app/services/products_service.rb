@@ -299,4 +299,22 @@
     {"adverts" => home_adverts, "products"=> home_products, "customer_carts"=> carts}
   end
 
+  # 用户购买团购商品后，自动更新团购商品的数据接口。
+  def self.update_product_data(order)
+    group_buying_products = order.products.where(property: Settings.PRODUCT_PROPERTY.GROUP_PRODUCT)
+    group_buying_products.each do |product|
+      # 获取该商品对应的订单详情项
+      order_detail = order.shopping_carts.where(product_id: product.id).first
+
+      # 团购
+      group_buying = product.group_buying
+      if !group_buying.blank?
+        current_amount = group_buying.current_amount + order_detail.amount
+        product.group_buying.update(current_number: group_buying.current_number+1,
+                                    completion_rate: current_amount/group_buying.target_amount,
+                                    current_amount: current_amount)
+      end
+    end
+  end
+
 end

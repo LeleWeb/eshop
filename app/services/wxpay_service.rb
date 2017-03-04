@@ -21,6 +21,8 @@ class WxpayService < BaseService
     order.update(status: Settings.ORDER.STATUS.PAID, payment_time: Time.now)
     ## 2. 保存支付结果到本地数据库
     WxpayNotification.create(wxpay_params.as_json.merge({:order_id => order.id}))
+    ## 执行订单关联商品的回调事件
+    OrdersService.wxpay_notify_callback(order)
 
     #返回结果成功给微信服务器
     Settings.WECHAT.WXPAY_NOTIFY.RETURN_CODE.OK

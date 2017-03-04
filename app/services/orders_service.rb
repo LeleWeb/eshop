@@ -345,4 +345,10 @@ class OrdersService < BaseService
     end
   end
 
+  # 订单支付成功后的回调事件接口
+  def self.wxpay_notify_callback(order)
+    # 团购商品支付成功后的数据更新
+    ProductsService.update_product_data(order)
+  end
+
 end
