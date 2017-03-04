@@ -57,6 +57,8 @@ Rails.application.routes.draw do
       resources :adverts
       # 计算接口
       resources :computes
+      # 限时抢购接口
+      resources :panic_buyings
     end
   end
 end
