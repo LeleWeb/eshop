@@ -51,7 +51,7 @@
 
     # 过滤无效推荐项
     total_plans.select!{|plan| plan["sum_price"].to_f < compute_params[:money].to_f + compute_params[:money].to_f * 0.3 && plan["sum_price"].to_f >= compute_params[:money].to_f * 0.8}
-    total_plans
+    total_plans.first
   end
 
   def compute_quantity_price(product, money, number, compute_strategy)
