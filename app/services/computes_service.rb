@@ -50,8 +50,10 @@
     end
 
     # 过滤无效推荐项
-    total_plans.select!{|plan| plan["sum_price"].to_f < compute_params[:money].to_f + compute_params[:money].to_f * 0.3 && plan["sum_price"].to_f >= compute_params[:money].to_f * 0.8}
-    total_plans.first
+    total_plans.select!{|plan| plan["sum_price"].to_f < compute_params[:money].to_f + compute_params[:money].to_f * 0.1 && plan["sum_price"].to_f >= compute_params[:money].to_f}
+    # 按照总金额升序排列
+    total_plans = total_plans.sort{|x,y| x["sum_price"].to_f <=> y["sum_price"].to_f}[0..4]
+    total_plans
   end
 
   def compute_quantity_price(product, money, number, compute_strategy)
