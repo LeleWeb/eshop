@@ -90,19 +90,45 @@
       "ERROR: panic_buying: #{panic_buying} or panic_buying_params:#{panic_buying_params.inspect} is blank!")
     end
 
-    # 解析商品价格参数
-    product_params = panic_buying_params.extract!("product_ids")["product_ids"]
+    begin
+      # 解析商品列表参数
+      product_params = panic_buying_params.extract!("product_ids")["product_ids"]
 
-    # 更新商品信息
-    panic_buying.update(panic_buying_params)
+      PanicBuying.transaction do
+        # 修改限时抢购
+        begin
+          panic_buying.update!(panic_buying_params)
+        rescue Exception => e
+          # TODO 更新限时抢购失败，打印对应log
+          # "Error: update panic_buying failed! Details: #{e.backtrace.inspect} #{e.message}"
 
-    # 如果有商品列表，则删除原来的商品列表，新增参数中的商品列表。
-    if !product_params.blank?
-      # 先删除已有商品
-      panic_buying.products.clear
+          # 继续向上层抛出异常
+          raise e
+        end
 
-      # 新建参数传入的商品
-      panic_buying.products << Product.find(product_params)
+        # 修改限时抢购与商品关联关系
+        begin
+          if !product_params.blank?
+            # 先删除已有商品
+            objs = panic_buying.products
+            objs.clear if !objs.empty?
+
+            # 新建参数传入的商品
+            panic_buying.products << Product.find(product_params)
+          end
+        rescue Exception => e
+          # TODO 修改限时抢购与商品关联关系失败，打印对应log
+          # "Error: update panic_buying products relation failed! Details: #{e.backtrace.inspect} #{e.message}"
+
+          # 继续向上层抛出异常
+          raise e
+        end
+      end
+    rescue Exception => e
+      # TODO 打印log
+      # "Error: 修改限时抢购商品失败! Details: #{e.backtrace.inspect} #{e.message}"
+
+      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: 修改限时抢购商品失败!")
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK, PanicBuyingsService.get_panic_buying(panic_buying))
