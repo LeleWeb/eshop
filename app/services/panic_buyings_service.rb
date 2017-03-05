@@ -43,24 +43,41 @@
   end
 
   def create_panic_buying(panic_buying_params)
-    product_params = nil
-    advert_products = []
+    panic_buying = nil
 
-    # 参数合法性检查
-    if panic_buying_params.blank?
-      return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "ERROR: panic_buying_params:#{panic_buying_params.inspect} is blank!")
-    end
+    begin
+      # 解析商品列表参数
+      product_params = panic_buying_params.extract!("product_ids")["product_ids"]
 
-    # 解析商品列表参数
-    product_params = panic_buying_params.extract!("product_ids")["product_ids"]
+      PanicBuying.transaction do
+        # 创建限时抢购
+        begin
+          panic_buying = PanicBuying.create!(panic_buying_params)
+        rescue Exception => e
+          # TODO 创建限时抢购失败，打印对应log
+          # "Error: create panic_buying failed! Details: #{e.backtrace.inspect} #{e.message}"
 
-    # 创建广告
-    panic_buying = PanicBuying.create(panic_buying_params)
+          # 继续向上层抛出异常
+          raise e
+        end
 
-    # 广告商品建立关联
-    if !product_params.blank?
-      panic_buying.products << Product.find(product_params)
+        # 创建限时抢购与商品关联关系
+        begin
+          if !product_params.blank?
+            panic_buying.products << Product.find(product_params)
+          end
+        rescue Exception => e
+          # TODO 创建限时抢购与商品关联关系失败，打印对应log
+          # "Error: create panic_buying products relation failed! Details: #{e.backtrace.inspect} #{e.message}"
+
+          raise e
+        end
+      end
+    rescue Exception => e
+      # TODO 打印log
+      # "Error: 新建限时抢购商品失败! Details: #{e.backtrace.inspect} #{e.message}"
+
+      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: 新建限时抢购商品失败!")
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK, PanicBuyingsService.get_panic_buying(panic_buying))

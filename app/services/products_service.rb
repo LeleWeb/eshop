@@ -108,7 +108,7 @@
     # 如果有团购数据，则删除原来的团购数据，新增参数中的团购数据。
     if !group_buying.blank?
       # 先删除已有计算策略
-      product.group_buying.destroy
+      product.group_buying.destroy if !product.group_buying.blank?
 
       # 新建参数传入的计算策略
       product.create_group_buying(group_buying)
