@@ -26,8 +26,9 @@ class AddressesService < BaseService
     begin
       # 查询对应的用户
       begin
-        p '1'*10,address_params,address_params.extract!("customer_id"),address_params.extract!("customer_id")["customer_id"]
-        customer = Customer.find(address_params.extract!("customer_id")["customer_id"])
+        customer_id = address_params.extract!("customer_id")["customer_id"]
+        p '1'*10,customer_id
+        customer = Customer.find(customer_id)
       rescue Exception => e
         # TODO 查询用户失败，打印对应log
         puts "Error: customer is nil! Details: #{e.message}"
