@@ -1,5 +1,8 @@
 class AddressesService < BaseService
   def get_addresses(query_params)
+    p __FILE__,__LINE__,__method__,%Q{params:
+                                      query_params: #{query_params.inspect}}
+
     if (customer = Customer.find_by(id: query_params["customer_id"])).blank?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
                                            "ERROR: customer:#{customer.inspect} is blank!")
@@ -8,6 +11,9 @@ class AddressesService < BaseService
   end
 
   def get_address(address)
+    p __FILE__,__LINE__,__method__,%Q{params:
+                                      address: #{address.inspect}}
+
     CommonService.response_format(ResponseCode.COMMON.OK, address)
   end
 
@@ -72,8 +78,8 @@ class AddressesService < BaseService
 
   def update_address(address, address_params)
     p __FILE__,__LINE__,__method__,%Q{params:
-                                      address: #{address},
-                                      address_params: #{address_params}}
+                                      address: #{address.inspect},
+                                      address_params: #{address_params.inspect}}
 
     # 参数合法性检查
     if address.blank? || address_params.blank?
@@ -121,6 +127,9 @@ class AddressesService < BaseService
   end
 
   def destory_address(address)
+    p __FILE__,__LINE__,__method__,%Q{params:
+                                      address: #{address.inspect}}
+
     if !address.nil?
       address.destroy
     end
