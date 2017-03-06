@@ -50,6 +50,6 @@ class Api::V1::AdvertsController < Api::V1::BaseController
   end
 
   def destroy_params
-    params[:adverts]
+    params.permit(:products_delete)
   end
 end
