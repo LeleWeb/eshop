@@ -12,6 +12,8 @@ class AddressesService < BaseService
   end
 
   def create_address(address_params)
+    p __FILE__,__LINE__,%Q{ method: create_address
+                            params: #{address_params.inspect} }
     # address = nil
     # customer = nil
 
