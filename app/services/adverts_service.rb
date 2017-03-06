@@ -43,8 +43,8 @@
   end
 
   def create_advert(advert_params)
-    p __FILE__,__LINE__,__method__,%Q{params:
-                                      advert_params: #{advert_params.inspect}}
+    puts __FILE__,__LINE__,__method__,%Q{params:
+                                         advert_params: #{advert_params.inspect}}
 
     advert = nil
 
@@ -95,9 +95,9 @@
   end
 
   def update_advert(advert, advert_params)
-    p __FILE__,__LINE__,__method__,%Q{params:
-                                      advert: #{advert.inspect},
-                                      advert_params: #{advert_params.inspect}}
+    puts __FILE__,__LINE__,__method__,%Q{params:
+                                         advert: #{advert.inspect},
+                                         advert_params: #{advert_params.inspect}}
 
     # 参数合法性检查
     if advert.blank? || advert_params.blank?
@@ -149,9 +149,9 @@
   end
 
   def destroy_advert(advert, destroy_params)
-    p __FILE__,__LINE__,__method__,%Q{params:
-                                      advert: #{advert.inspect},
-                                      destroy_params: #{destroy_params.inspect}}
+    puts __FILE__,__LINE__,__method__,%Q{params:
+                                         advert: #{advert.inspect},
+                                         destroy_params: #{destroy_params.inspect}}
 
     begin
       PanicBuying.transaction do
