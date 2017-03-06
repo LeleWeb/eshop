@@ -157,13 +157,21 @@
         end
 
         # TODO 删除限时抢购与商品关联关系
+        begin
+          panic_buying.products.map{|x| x.update!(is_deleted: true, deleted_at: Time.now)}
+        rescue Exception => e
+          # TODO 删除限时抢购与商品关联关系失败，打印对应log
+          puts "Error: destroy panic_buying and product relation failed! Details: #{e.message}"
 
+          # 继续向上层抛出异常
+          raise e
+        end
       end
     rescue Exception => e
       # TODO 打印log
       # "Error: 删除限时抢购商品失败! Details: #{e.backtrace.inspect} #{e.message}"
 
-      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: 删除限时抢购商品失败!")
+      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: 删除限时抢购与商品关联关系!")
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK)
