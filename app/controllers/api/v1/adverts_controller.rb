@@ -38,6 +38,7 @@ class Api::V1::AdvertsController < Api::V1::BaseController
                                     :status,
                                     :category,
                                     :remark,
+                                    :is_deleted,
                                     :product_ids => [])
   end
 
