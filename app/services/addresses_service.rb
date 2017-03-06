@@ -27,7 +27,7 @@ class AddressesService < BaseService
         customer = Customer.find(address_params.extract!("customer_id")["customer_id"])
       rescue Exception => e
         # TODO 查询用户失败，打印对应log
-        # "Error: customer is nil! Details: #{e.backtrace.inspect} #{e.message}"
+        puts "Error: customer is nil! Details: #{e.backtrace.inspect} #{e.message}"
 
         # 继续向上层抛出异常
         raise e
@@ -41,18 +41,27 @@ class AddressesService < BaseService
           end
         rescue Exception => e
           # TODO 处理默认地址唯一性失败，打印对应log
-          # "Error: set address default failed! Details: #{e.backtrace.inspect} #{e.message}"
+          puts "Error: set address default failed! Details: #{e.backtrace.inspect} #{e.message}"
 
           # 继续向上层抛出异常
           raise e
         end
 
-        # TODO 创建用户收货地址
-        address = customer.addresses.create!(address_params)
+        # 创建用户收货地址
+        begin
+          address = customer.addresses.create!(address_params)
+        rescue Exception => e
+          # TODO 创建用户收货地址失败，打印对应log
+          puts "Error: create address failed! Details: #{e.backtrace.inspect} #{e.message}"
+
+          # 继续向上层抛出异常
+          raise e
+        end
+
       end
     rescue Exception => e
       # TODO 打印log
-      # "Error: 删除限时抢购商品失败! Details: #{e.backtrace.inspect} #{e.message}"
+      puts "Error: 删除限时抢购商品失败! Details: #{e.backtrace.inspect} #{e.message}"
 
       return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: 创建用户收货地址失败!")
     end
@@ -95,27 +104,26 @@ class AddressesService < BaseService
           end
         rescue Exception => e
           # TODO 处理默认地址唯一性失败，打印对应log
-          # "Error: set address default failed! Details: #{e.backtrace.inspect} #{e.message}"
+          puts "Error: set address default failed! Details: #{e.backtrace.inspect} #{e.message}"
 
           # 继续向上层抛出异常
           raise e
         end
 
-        # TODO 修改用户收货地址
+        # 修改用户收货地址
         begin
           address.update!(address_params)
         rescue Exception => e
           # TODO 修改用户收货地址失败，打印对应log
-          # "Error: update address failed! Details: #{e.backtrace.inspect} #{e.message}"
+          puts "Error: update address failed! Details: #{e.backtrace.inspect} #{e.message}"
 
           # 继续向上层抛出异常
           raise e
         end
-
       end
     rescue Exception => e
       # TODO 打印log
-      # "Error: 修改用户收货地址失败! Details: #{e.backtrace.inspect} #{e.message}"
+      puts "Error: 修改用户收货地址失败! Details: #{e.backtrace.inspect} #{e.message}"
 
       return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: 修改用户收货地址失败!")
     end
