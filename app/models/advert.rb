@@ -3,7 +3,7 @@ class Advert < ApplicationRecord
   has_many :images, as: :imageable
 
   # 模型层数据验证
-  validates :title, :description, :status, :category, :is_deleted, presence: true, on: :create
+  validates :title, :description, :status, :category, presence: true, on: :create
   validates :title, :description, :remark, length: { maximum: 256 }
   validates :status, inclusion: { in: [Settings.ADVERT.STATUS.NOT_PUT, Settings.ADVERT.STATUS.PUTTING, Settings.ADVERT.STATUS.WITHDRAWED] }
   validates :category, inclusion: { in: [Settings.ADVERT.CATEGORY.HOME_TOP] }
