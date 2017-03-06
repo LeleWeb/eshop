@@ -61,6 +61,7 @@
       Advert.transaction do
         # 创建广告
         begin
+          p '1'*10,advert_params
           advert = Advert.create!(advert_params)
         rescue Exception => e
           # TODO 创建广告失败，打印对应log
