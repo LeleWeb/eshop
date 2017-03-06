@@ -61,7 +61,6 @@
       Advert.transaction do
         # 创建广告
         begin
-          p '1'*10,advert_params
           advert = Advert.create!(advert_params)
         rescue Exception => e
           # TODO 创建广告失败，打印对应log
@@ -74,7 +73,7 @@
         # 广告与商品建立关联
         begin
           if !product_params.blank?
-            advert.products << Product.find(product_params["product_ids"])
+            advert.products << Product.find(product_params["product_ids"]).map!{|x| x.update(property: Settings.PRODUCT_PROPERTY.ADVERT_PRODUCT)}
           end
         rescue Exception => e
           # TODO 广告与商品建立关联失败，打印对应log
