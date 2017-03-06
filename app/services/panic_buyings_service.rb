@@ -135,17 +135,35 @@
   end
 
   def destroy_panic_buying(panic_buying, destroy_params)
-    # 单个删除
-    if !panic_buying.nil?
-      panic_buying.update(is_deleted: true, deleted_at: Time.now)
+    # 参数合法性检查
+    if panic_buying.blank?
+      return CommonService.response_format(ResponseCode.COMMON.FAILED,
+                                           "ERROR: panic_buying: #{panic_buying} or destroy_params:#{destroy_params.inspect} is blank!")
     end
 
-    # 批量删除
-    if !destroy_params.blank?
-      destroy_params.each do |panic_buying_id|
-        object = PanicBuying.find_by(id: panic_buying_id)
-        object.update(is_deleted: true, deleted_at: Time.now) if !object.nil?
+    begin
+      PanicBuying.transaction do
+        # 删除限时抢购
+        begin
+          if !panic_buying.nil?
+            panic_buying.update!(is_deleted: true, deleted_at: Time.now)
+          end
+        rescue Exception => e
+          # TODO 删除限时抢购失败，打印对应log
+          # "Error: destroy panic_buying failed! Details: #{e.backtrace.inspect} #{e.message}"
+
+          # 继续向上层抛出异常
+          raise e
+        end
+
+        # TODO 删除限时抢购与商品关联关系
+
       end
+    rescue Exception => e
+      # TODO 打印log
+      # "Error: 删除限时抢购商品失败! Details: #{e.backtrace.inspect} #{e.message}"
+
+      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: 删除限时抢购商品失败!")
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK)
