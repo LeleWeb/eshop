@@ -26,10 +26,11 @@ class AddressesService < BaseService
     begin
       # 查询对应的用户
       begin
+        p '1'*10,address_params,address_params.extract!("customer_id"),address_params.extract!("customer_id")["customer_id"]
         customer = Customer.find(address_params.extract!("customer_id")["customer_id"])
       rescue Exception => e
         # TODO 查询用户失败，打印对应log
-        puts "Error: customer is nil! Details: #{e.backtrace.inspect} #{e.message}"
+        puts "Error: customer is nil! Details: #{e.message}"
 
         # 继续向上层抛出异常
         raise e
@@ -43,7 +44,7 @@ class AddressesService < BaseService
           end
         rescue Exception => e
           # TODO 处理默认地址唯一性失败，打印对应log
-          puts "Error: set address default failed! Details: #{e.backtrace.inspect} #{e.message}"
+          puts "Error: set address default failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -54,7 +55,7 @@ class AddressesService < BaseService
           address = customer.addresses.create!(address_params)
         rescue Exception => e
           # TODO 创建用户收货地址失败，打印对应log
-          puts "Error: create address failed! Details: #{e.backtrace.inspect} #{e.message}"
+          puts "Error: create address failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -63,7 +64,7 @@ class AddressesService < BaseService
       end
     rescue Exception => e
       # TODO 打印log
-      puts "Error: 删除限时抢购商品失败! Details: #{e.backtrace.inspect} #{e.message}"
+      puts "Error: 删除限时抢购商品失败! Details: #{e.message}"
 
       return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: 创建用户收货地址失败!")
     end
