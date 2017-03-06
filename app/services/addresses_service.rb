@@ -12,27 +12,68 @@ class AddressesService < BaseService
   end
 
   def create_address(address_params)
+    # address = nil
+    # customer = nil
+
     # 参数合法性检查
     if address_params.blank?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
                                            "ERROR: address_params:#{address_params.inspect} is blank!")
     end
 
-    Address.transaction do
-      customer_id = address_params.extract!("customer_id")["customer_id"]
-      if (customer = Customer.find_by(id: customer_id)).blank?
-        return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                             "ERROR: customer:#{customer.inspect} is blank!")
+    begin
+      # 查询对应的用户
+      begin
+        customer = Customer.find(address_params.extract!("customer_id")["customer_id"])
+      rescue Exception => e
+        # TODO 查询用户失败，打印对应log
+        # "Error: customer is nil! Details: #{e.backtrace.inspect} #{e.message}"
+
+        # 继续向上层抛出异常
+        raise e
       end
 
-      # 处理默认地址唯一性
-      if address_params[:is_default] == true
-        customer.addresses.collect{|address| address.update(is_default: false)}
-      end
+      PanicBuying.transaction do
+        # 处理默认地址唯一性
+        begin
+          if address_params[:is_default] == true
+            customer.addresses.collect{|address| address.update!(is_default: false)}
+          end
+        rescue Exception => e
+          # TODO 处理默认地址唯一性失败，打印对应log
+          # "Error: set address default failed! Details: #{e.backtrace.inspect} #{e.message}"
 
-      address = customer.addresses.create!(address_params)
-      CommonService.response_format(ResponseCode.COMMON.OK, address)
+          # 继续向上层抛出异常
+          raise e
+        end
+
+        # TODO 创建用户收货地址
+        address = customer.addresses.create!(address_params)
+      end
+    rescue Exception => e
+      # TODO 打印log
+      # "Error: 删除限时抢购商品失败! Details: #{e.backtrace.inspect} #{e.message}"
+
+      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: 创建用户收货地址失败!")
     end
+
+    CommonService.response_format(ResponseCode.COMMON.OK, address)
+
+    # Address.transaction do
+    #   customer_id = address_params.extract!("customer_id")["customer_id"]
+    #   if (customer = Customer.find_by(id: customer_id)).blank?
+    #     return CommonService.response_format(ResponseCode.COMMON.FAILED,
+    #                                          "ERROR: customer:#{customer.inspect} is blank!")
+    #   end
+    #
+    #   # 处理默认地址唯一性
+    #   if address_params[:is_default] == true
+    #     customer.addresses.collect{|address| address.update(is_default: false)}
+    #   end
+    #
+    #   address = customer.addresses.create!(address_params)
+    #   CommonService.response_format(ResponseCode.COMMON.OK, address)
+    # end
   end
 
   def update_address(address, address_params)
@@ -42,22 +83,61 @@ class AddressesService < BaseService
                                            "ERROR: address_params:#{address_params.inspect} is blank!")
     end
 
-    Address.transaction do
+    begin
       # 不能修改所属用户，过滤掉customer外键。
       address_params.extract!("customer_id")
 
-      # 处理默认地址唯一性
-      if address_params[:is_default] == true
-        Address.where(customer_id: address.customer_id).collect{|address| address.update(is_default: false)}
-      end
+      PanicBuying.transaction do
+        # 处理默认地址唯一性
+        begin
+          if address_params[:is_default] == true
+            Address.where(customer_id: address.customer_id).collect{|address| address.update!(is_default: false)}
+          end
+        rescue Exception => e
+          # TODO 处理默认地址唯一性失败，打印对应log
+          # "Error: set address default failed! Details: #{e.backtrace.inspect} #{e.message}"
 
-      if address.update!(address_params)
-        CommonService.response_format(ResponseCode.COMMON.OK, address)
-      else
-        ResponseCode.COMMON.FAILED['message'] = address.errors
-        CommonService.response_format(ResponseCode.COMMON.FAILED)
+          # 继续向上层抛出异常
+          raise e
+        end
+
+        # TODO 修改用户收货地址
+        begin
+          address.update!(address_params)
+        rescue Exception => e
+          # TODO 修改用户收货地址失败，打印对应log
+          # "Error: update address failed! Details: #{e.backtrace.inspect} #{e.message}"
+
+          # 继续向上层抛出异常
+          raise e
+        end
+
       end
+    rescue Exception => e
+      # TODO 打印log
+      # "Error: 修改用户收货地址失败! Details: #{e.backtrace.inspect} #{e.message}"
+
+      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: 修改用户收货地址失败!")
     end
+
+    CommonService.response_format(ResponseCode.COMMON.OK, address)
+
+    # Address.transaction do
+    #   # 不能修改所属用户，过滤掉customer外键。
+    #   address_params.extract!("customer_id")
+    #
+    #   # 处理默认地址唯一性
+    #   if address_params[:is_default] == true
+    #     Address.where(customer_id: address.customer_id).collect{|address| address.update(is_default: false)}
+    #   end
+    #
+    #   if address.update!(address_params)
+    #     CommonService.response_format(ResponseCode.COMMON.OK, address)
+    #   else
+    #     ResponseCode.COMMON.FAILED['message'] = address.errors
+    #     CommonService.response_format(ResponseCode.COMMON.FAILED)
+    #   end
+    # end
   end
 
   def destory_address(address)
