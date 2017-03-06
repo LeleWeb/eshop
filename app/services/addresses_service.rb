@@ -12,8 +12,8 @@ class AddressesService < BaseService
   end
 
   def create_address(address_params)
-    p __FILE__,__LINE__,%Q{ method: create_address
-                            params: #{address_params.inspect} }
+    p __FILE__,__LINE__,__method__,%Q{params:
+                                      address_params: #{address_params.inspect}}
     address = nil
 
     # 参数合法性检查
@@ -71,6 +71,10 @@ class AddressesService < BaseService
   end
 
   def update_address(address, address_params)
+    p __FILE__,__LINE__,__method__,%Q{params:
+                                      address: #{address},
+                                      address_params: #{address_params}}
+
     # 参数合法性检查
     if address.blank? || address_params.blank?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
