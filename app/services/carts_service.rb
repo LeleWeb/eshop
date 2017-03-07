@@ -38,9 +38,9 @@ class CartsService < BaseService
     # 参数合法性检查
     if cart_params.blank?
       # TODO 打印log
-      puts "Error: #{__FILE__} #{__LINE__} cart_params: #{cart_params} is blank!"
+      puts "Error: file: #{__FILE__} line:#{__LINE__} cart_params: #{cart_params} is blank!"
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "Error: #{__FILE__} #{__LINE__} cart_params:#{cart_params} is blank!")
+                                           "Error: file: #{__FILE__} line:#{__LINE__} cart_params:#{cart_params} is blank!")
     end
 
     # 解析购物车所属对象
@@ -48,10 +48,10 @@ class CartsService < BaseService
       owner = eval(cart_params[:owner_type]).find(cart_params[:owner_id])
     rescue Exception => e
       # TODO 解析购物车所属对象失败，打印对应log
-      puts "Error: #{__FILE__} #{__LINE__} find cart owner failed! Details: #{e.message}"
+      puts "Error: file: #{__FILE__} line:#{__LINE__} find cart owner failed! Details: #{e.message}"
 
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "Error: #{__FILE__} #{__LINE__} owner_type: #{cart_params[:owner_type]} or owner_id:#{cart_params[:owner_id]} is blank!")
+                                           "Error: file: #{__FILE__} line:#{__LINE__} owner_type: #{cart_params[:owner_type]} or owner_id:#{cart_params[:owner_id]} is blank!")
     end
 
     # 解析购物车关联商品
@@ -59,10 +59,10 @@ class CartsService < BaseService
       product = Product.find(cart_params["product_id"])
     rescue Exception => e
       # TODO 解析购物车关联商品失败，打印对应log
-      puts "Error: #{__FILE__} #{__LINE__} find cart product failed! Details: #{e.message}"
+      puts "Error: file: #{__FILE__} line:#{__LINE__} find cart product failed! Details: #{e.message}"
 
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "Error: #{__FILE__} #{__LINE__} product_id: #{cart_params["product_id"]} is blank!")
+                                           "Error: file: #{__FILE__} line:#{__LINE__} product_id: #{cart_params["product_id"]} is blank!")
     end
 
     # 解析购物车关联商品的价格
@@ -70,10 +70,10 @@ class CartsService < BaseService
       price = Price.find(cart_params["price_id"])
     rescue Exception => e
       # TODO 解析购物车关联商品的价格失败，打印对应log
-      puts "Error: #{__FILE__} #{__LINE__} find cart product price failed! Details: #{e.message}"
+      puts "Error: file: #{__FILE__} line:#{__LINE__} find cart product price failed! Details: #{e.message}"
 
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "Error: #{__FILE__} #{__LINE__} price_id: #{cart_params["price_id"]} is blank!")
+                                           "Error: file: #{__FILE__} line:#{__LINE__} price_id: #{cart_params["price_id"]} is blank!")
     end
 
     begin
@@ -92,7 +92,7 @@ class CartsService < BaseService
             cart = parent_cart
           rescue Exception => e
             # TODO 创建多商品购物车项失败，打印对应log
-            puts "Error: #{__FILE__} #{__LINE__} create multi products cart failed! Details: #{e.message}"
+            puts "Error: file: #{__FILE__} line:#{__LINE__} create multi products cart failed! Details: #{e.message}"
 
             # 继续向上层抛出异常
             raise e
@@ -112,7 +112,7 @@ class CartsService < BaseService
             end
           rescue Exception => e
             # TODO 创建单商品购物车项失败，打印对应log
-            puts "Error: #{__FILE__} #{__LINE__} create single product cart failed! Details: #{e.message}"
+            puts "Error: file: #{__FILE__} line:#{__LINE__} create single product cart failed! Details: #{e.message}"
 
             # 继续向上层抛出异常
             raise e
@@ -121,9 +121,9 @@ class CartsService < BaseService
       end
     rescue Exception => e
       # TODO 打印log
-      puts "Error: #{__FILE__} #{__LINE__} 创建购物车失败! Details: #{e.message}"
+      puts "Error: file: #{__FILE__} line:#{__LINE__} 创建购物车失败! Details: #{e.message}"
 
-      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: #{__FILE__} #{__LINE__} 创建购物车失败!")
+      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: file: #{__FILE__} line:#{__LINE__} 创建购物车失败!")
     end
     #
     # # 解析是否是多商品购物车项
@@ -162,12 +162,12 @@ class CartsService < BaseService
     # 参数合法性检查
     if cart_params.blank?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "Error: #{__FILE__} #{__LINE__} cart_params:#{cart_params} is blank!")
+                                           "Error: file: #{__FILE__} line:#{__LINE__} cart_params:#{cart_params} is blank!")
     end
 
     # if cart_params["amount"].blank? && cart_params["total_price"].blank?
     #   return CommonService.response_format(ResponseCode.COMMON.FAILED,
-    #                                        "Error: #{__FILE__} #{__LINE__} amount:#{amount} or total_price:#{total_price} is blank!")
+    #                                        "Error: file: #{__FILE__} line:#{__LINE__} amount:#{amount} or total_price:#{total_price} is blank!")
     # end
 
     # 修改购物车项数量和总金额
@@ -175,10 +175,10 @@ class CartsService < BaseService
       cart.update!(amount: cart_params["amount"], total_price: cart_params["total_price"])
     rescue Exception => e
       # TODO 修改购物车项数量和总金额失败，打印对应log
-      puts "Error: #{__FILE__} #{__LINE__} update cart amount and total_price failed! Details: #{e.message}"
+      puts "Error: file: #{__FILE__} line:#{__LINE__} update cart amount and total_price failed! Details: #{e.message}"
 
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "Error: #{__FILE__} #{__LINE__} update cart amount and total_price failed! Details: #{e.message}")
+                                           "Error: file: #{__FILE__} line:#{__LINE__} update cart amount and total_price failed! Details: #{e.message}")
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK, CartsService.get_cart(cart))
@@ -192,9 +192,9 @@ class CartsService < BaseService
       cart.update(is_deleted: true, deleted_at: Time.now)
     rescue Exception => e
       # TODO 删除购物车失败，打印对应log
-      puts "Error: #{__FILE__} #{__LINE__} destroy cart failed! Details: #{e.message}"
+      puts "Error: file: #{__FILE__} line:#{__LINE__} destroy cart failed! Details: #{e.message}"
 
-      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: #{__FILE__} #{__LINE__} destroy cart failed! Details: #{e.message}")
+      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: file: #{__FILE__} line:#{__LINE__} destroy cart failed! Details: #{e.message}")
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK)
