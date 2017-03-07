@@ -35,6 +35,8 @@ class CartsService < BaseService
     puts __FILE__,__LINE__,__method__,%Q{params:
                                          cart_params: #{cart_params.inspect} }
 
+    cart = nil
+
     # 参数合法性检查
     if cart_params.blank?
       # TODO 打印log
