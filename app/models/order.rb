@@ -20,13 +20,14 @@ class Order < ApplicationRecord
                                        Settings.ORDER.STATUS.COMPLETED,
                                        Settings.ORDER.STATUS.REFUNDING,
                                        Settings.ORDER.STATUS.REFUND] }
-  validates :total_price, :pay_price, numericality: { greater_than: 0 }
+  validates :total_price, numericality: { greater_than: 0 }
+  validates :pay_price, numericality: { greater_than: 0 }, allow_nil: true
   validates :buyer_id, numericality: { only_integer: true, greater_than: 0 }
   validates :buyer_type, inclusion: { in: ['Customer'] }
   validates :remark, :consignee_address, length: { maximum: 255 }
   validates :consignee_name, :consignee_phone, length: { maximum: 32 }
   validates :consignee_phone, format: { with: /\d{11}/, message: "手机号码格式错误" }
-  validates :is_deleted, inclusion: { in: [true, false] }
+  validates :is_deleted, inclusion: { in: [true, false] }, allow_nil: true
   validates :pay_away, inclusion: { in: [Settings.ORDER.PAY_AWAY.WXPAY.VALUE,
                                          Settings.ORDER.PAY_AWAY.COD.VALUE] }
   validates :payment_time, :delivery_time, format: { with: /\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}/, message: "时间格式错误" }
