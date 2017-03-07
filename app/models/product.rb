@@ -46,9 +46,9 @@ class Product < ApplicationRecord
                                          Settings.PRODUCT_PROPERTY.GROUP_PRODUCT,
                                          Settings.PRODUCT_PROPERTY.TIMELIMIT_PRODUCT] }
   validates :category_id, inclusion: { in: [Settings.PRODUCT_CATEGORY.SINGLE_SETMEAL,
-                                            Settings.PRODUCT_PROPERTY.PERSONAL_SETMEAL,
-                                            Settings.PRODUCT_PROPERTY.TEAM_SETMEAL,
-                                            Settings.PRODUCT_PROPERTY.ABOUT] }
+                                            Settings.PRODUCT_CATEGORY.PERSONAL_SETMEAL,
+                                            Settings.PRODUCT_CATEGORY.TEAM_SETMEAL,
+                                            Settings.PRODUCT_CATEGORY.ABOUT] }
   validates :is_deleted, inclusion: { in: [true, false] }, allow_nil: true
 
 end
