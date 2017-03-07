@@ -5,7 +5,7 @@ class AddressesService < BaseService
 
     if (customer = Customer.find_by(id: query_params["customer_id"])).blank?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "ERROR: customer:#{customer.inspect} is blank!")
+                                           "Error: file: #{__FILE__} line:#{__LINE__} customer:#{customer.inspect} is blank!")
     end
     CommonService.response_format(ResponseCode.COMMON.OK, customer.addresses)
   end
@@ -25,7 +25,7 @@ class AddressesService < BaseService
     # 参数合法性检查
     if address_params.blank?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "ERROR: address_params:#{address_params.inspect} is blank!")
+                                           "Error: file: #{__FILE__} line:#{__LINE__} address_params:#{address_params.inspect} is blank!")
     end
 
     begin
@@ -34,7 +34,7 @@ class AddressesService < BaseService
         customer = Customer.find(address_params.extract!("customer_id")["customer_id"])
       rescue Exception => e
         # TODO 查询用户失败，打印对应log
-        puts "Error: customer is nil! Details: #{e.message}"
+        puts "Error: file: #{__FILE__} line:#{__LINE__} customer is nil! Details: #{e.message}"
 
         # 继续向上层抛出异常
         raise e
@@ -48,7 +48,7 @@ class AddressesService < BaseService
           end
         rescue Exception => e
           # TODO 处理默认地址唯一性失败，打印对应log
-          puts "Error: set address default failed! Details: #{e.message}"
+          puts "Error: file: #{__FILE__} line:#{__LINE__} set address default failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -59,7 +59,7 @@ class AddressesService < BaseService
           address = customer.addresses.create!(address_params)
         rescue Exception => e
           # TODO 创建用户收货地址失败，打印对应log
-          puts "Error: create address failed! Details: #{e.message}"
+          puts "Error: file: #{__FILE__} line:#{__LINE__} create address failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -68,9 +68,9 @@ class AddressesService < BaseService
       end
     rescue Exception => e
       # TODO 打印log
-      puts "Error: 删除限时抢购商品失败! Details: #{e.message}"
+      puts "Error: file: #{__FILE__} line:#{__LINE__} 删除限时抢购商品失败! Details: #{e.message}"
 
-      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: 创建用户收货地址失败!")
+      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: file: #{__FILE__} line:#{__LINE__} 创建用户收货地址失败!")
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK, address)
@@ -84,7 +84,7 @@ class AddressesService < BaseService
     # 参数合法性检查
     if address.blank? || address_params.blank?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "ERROR: address_params:#{address_params.inspect} is blank!")
+                                           "Error: file: #{__FILE__} line:#{__LINE__} address_params:#{address_params.inspect} is blank!")
     end
 
     begin
@@ -99,7 +99,7 @@ class AddressesService < BaseService
           end
         rescue Exception => e
           # TODO 处理默认地址唯一性失败，打印对应log
-          puts "Error: set address default failed! Details: #{e.message}"
+          puts "Error: file: #{__FILE__} line:#{__LINE__} set address default failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -110,7 +110,7 @@ class AddressesService < BaseService
           address.update!(address_params)
         rescue Exception => e
           # TODO 修改用户收货地址失败，打印对应log
-          puts "Error: update address failed! Details: #{e.message}"
+          puts "Error: file: #{__FILE__} line:#{__LINE__} update address failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -118,9 +118,9 @@ class AddressesService < BaseService
       end
     rescue Exception => e
       # TODO 打印log
-      puts "Error: 修改用户收货地址失败! Details: #{e.message}"
+      puts "Error: file: #{__FILE__} line:#{__LINE__} 修改用户收货地址失败! Details: #{e.message}"
 
-      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: 修改用户收货地址失败!")
+      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: file: #{__FILE__} line:#{__LINE__} 修改用户收货地址失败!")
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK, address)

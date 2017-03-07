@@ -36,7 +36,7 @@
   def get_advert(advert)
     # 参数合法性检查
     if advert.blank?
-      return CommonService.response_format(ResponseCode.COMMON.FAILED, "ERROR: advert: #{advert} is blank!")
+      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: file: #{__FILE__} line:#{__LINE__} advert: #{advert} is blank!")
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK, AdvertsService.get_advert(advert))
@@ -51,7 +51,7 @@
     # 参数合法性检查
     if advert_params.blank?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "ERROR: advert_params:#{advert_params.inspect} is blank!")
+                                           "Error: file: #{__FILE__} line:#{__LINE__} advert_params:#{advert_params.inspect} is blank!")
     end
 
     begin
@@ -64,7 +64,7 @@
           advert = Advert.create!(advert_params)
         rescue Exception => e
           # TODO 创建广告失败，打印对应log
-          puts "Error: create advert failed! Details: #{e.message}"
+          puts "Error: file: #{__FILE__} line:#{__LINE__} create advert failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -77,7 +77,7 @@
           end
         rescue Exception => e
           # TODO 广告与商品建立关联失败，打印对应log
-          puts "Error: create advert and product relation failed! Details: #{e.message}"
+          puts "Error: file: #{__FILE__} line:#{__LINE__} create advert and product relation failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -86,9 +86,9 @@
       end
     rescue Exception => e
       # TODO 打印log
-      puts "Error: 创建广告失败! Details: #{e.message}"
+      puts "Error: file: #{__FILE__} line:#{__LINE__} 创建广告失败! Details: #{e.message}"
 
-      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: 创建广告失败!")
+      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: file: #{__FILE__} line:#{__LINE__} 创建广告失败!")
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK, AdvertsService.get_advert(advert))
@@ -102,7 +102,7 @@
     # 参数合法性检查
     if advert.blank? || advert_params.blank?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-      "ERROR: advert: #{advert} or advert_params:#{advert_params.inspect} is blank!")
+      "Error: file: #{__FILE__} line:#{__LINE__} advert: #{advert} or advert_params:#{advert_params.inspect} is blank!")
     end
 
     begin
@@ -115,7 +115,7 @@
           advert.update!(advert_params)
         rescue Exception => e
           # TODO 更新广告失败，打印对应log
-          puts "Error: update advert failed! Details: #{e.message}"
+          puts "Error: file: #{__FILE__} line:#{__LINE__} update advert failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -132,7 +132,7 @@
           end
         rescue Exception => e
           # TODO 修改用户收货地址失败，打印对应log
-          puts "Error: update advert and product relation failed! Details: #{e.message}"
+          puts "Error: file: #{__FILE__} line:#{__LINE__} update advert and product relation failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -140,9 +140,9 @@
       end
     rescue Exception => e
       # TODO 打印log
-      puts "Error: 修改广告失败! Details: #{e.message}"
+      puts "Error: file: #{__FILE__} line:#{__LINE__} 修改广告失败! Details: #{e.message}"
 
-      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: 修改广告失败!")
+      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: file: #{__FILE__} line:#{__LINE__} 修改广告失败!")
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK, AdvertsService.get_advert(advert))
@@ -160,7 +160,7 @@
           advert.update!(is_deleted: true, deleted_at: Time.now)
         rescue Exception => e
           # TODO 删除广告失败，打印对应log
-          puts "Error: destroy advert failed! Details: #{e.message}"
+          puts "Error: file: #{__FILE__} line:#{__LINE__} destroy advert failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -177,7 +177,7 @@
           end
         rescue Exception => e
           # TODO 删除广告失败，打印对应log
-          puts "Error: destroy advert failed! Details: #{e.message}"
+          puts "Error: file: #{__FILE__} line:#{__LINE__} destroy advert failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -185,9 +185,9 @@
       end
     rescue Exception => e
       # TODO 打印log
-      puts "Error: 删除广告失败! Details: #{e.message}"
+      puts "Error: file: #{__FILE__} line:#{__LINE__} 删除广告失败! Details: #{e.message}"
 
-      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: 删除广告失败!")
+      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: file: #{__FILE__} line:#{__LINE__} 删除广告失败!")
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK)

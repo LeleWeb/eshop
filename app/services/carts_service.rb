@@ -127,31 +127,6 @@ class CartsService < BaseService
 
       return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: file: #{__FILE__} line:#{__LINE__} 创建购物车失败!")
     end
-    #
-    # # 解析是否是多商品购物车项
-    # if !cart_params["subitems"].blank?
-    #   # 对于多商品购物车项，由于复杂性目前先不判断重复项，直接新建。
-    #   subitems = cart_params.extract!("subitems")["subitems"]
-    #   parent_cart = owner.shopping_carts.create(cart_params)
-    #   subitems.each do |subitem|
-    #     # 对于自关联的购物车项的非根节点记录，都不用指定owner，减少根据customer查询购物车时的冗余数据。
-    #     subitem.extract!("owner_type", "owner_id")
-    #     parent_cart.subitems.create(subitem)
-    #   end
-    #   cart = parent_cart
-    # else
-    #   # 购物车纪录建立
-    #   if cart = owner.shopping_carts.where(product_id: product.id,
-    #                                        price_id: price.id,
-    #                                        property: Settings.CART_OR_ITEM.PROPERTY.CART_ITEM,
-    #                                        is_deleted: false).first
-    #   # 如果是购物车加入同相同商品，相同价格的物品，则只修改数量。
-    #   cart.update(amount: cart.amount + cart_params["amount"].to_i,
-    #               total_price: cart.total_price + cart_params["total_price"].to_f)
-    #   else
-    #     cart = owner.shopping_carts.create(cart_params)
-    #   end
-    # end
 
     CommonService.response_format(ResponseCode.COMMON.OK, CartsService.get_cart(cart))
   end
@@ -166,11 +141,6 @@ class CartsService < BaseService
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
                                            "Error: file: #{__FILE__} line:#{__LINE__} cart_params:#{cart_params} is blank!")
     end
-
-    # if cart_params["amount"].blank? && cart_params["total_price"].blank?
-    #   return CommonService.response_format(ResponseCode.COMMON.FAILED,
-    #                                        "Error: file: #{__FILE__} line:#{__LINE__} amount:#{amount} or total_price:#{total_price} is blank!")
-    # end
 
     # 修改购物车项数量和总金额
     begin

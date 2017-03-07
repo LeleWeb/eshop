@@ -36,7 +36,7 @@
   def get_panic_buying(panic_buying)
     # 参数合法性检查
     if panic_buying.blank?
-      return CommonService.response_format(ResponseCode.COMMON.FAILED, "ERROR: panic_buying: #{panic_buying} is blank!")
+      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: file: #{__FILE__} line:#{__LINE__} panic_buying: #{panic_buying} is blank!")
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK, PanicBuyingsService.get_panic_buying(panic_buying))
@@ -55,7 +55,7 @@
           panic_buying = PanicBuying.create!(panic_buying_params)
         rescue Exception => e
           # TODO 创建限时抢购失败，打印对应log
-          # "Error: create panic_buying failed! Details: #{e.backtrace.inspect} #{e.message}"
+          # "Error: file: #{__FILE__} line:#{__LINE__} create panic_buying failed! Details: #{e.backtrace.inspect} #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -68,16 +68,16 @@
           end
         rescue Exception => e
           # TODO 创建限时抢购与商品关联关系失败，打印对应log
-          # "Error: create panic_buying products relation failed! Details: #{e.backtrace.inspect} #{e.message}"
+          # "Error: file: #{__FILE__} line:#{__LINE__} create panic_buying products relation failed! Details: #{e.backtrace.inspect} #{e.message}"
 
           raise e
         end
       end
     rescue Exception => e
       # TODO 打印log
-      # "Error: 新建限时抢购商品失败! Details: #{e.backtrace.inspect} #{e.message}"
+      # "Error: file: #{__FILE__} line:#{__LINE__} 新建限时抢购商品失败! Details: #{e.backtrace.inspect} #{e.message}"
 
-      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: 新建限时抢购商品失败!")
+      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: file: #{__FILE__} line:#{__LINE__} 新建限时抢购商品失败!")
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK, PanicBuyingsService.get_panic_buying(panic_buying))
@@ -87,7 +87,7 @@
     # 参数合法性检查
     if panic_buying.blank? || panic_buying_params.blank?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-      "ERROR: panic_buying: #{panic_buying} or panic_buying_params:#{panic_buying_params.inspect} is blank!")
+      "Error: file: #{__FILE__} line:#{__LINE__} panic_buying: #{panic_buying} or panic_buying_params:#{panic_buying_params.inspect} is blank!")
     end
 
     begin
@@ -100,7 +100,7 @@
           panic_buying.update!(panic_buying_params)
         rescue Exception => e
           # TODO 更新限时抢购失败，打印对应log
-          # "Error: update panic_buying failed! Details: #{e.backtrace.inspect} #{e.message}"
+          # "Error: file: #{__FILE__} line:#{__LINE__} update panic_buying failed! Details: #{e.backtrace.inspect} #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -118,7 +118,7 @@
           end
         rescue Exception => e
           # TODO 修改限时抢购与商品关联关系失败，打印对应log
-          # "Error: update panic_buying products relation failed! Details: #{e.backtrace.inspect} #{e.message}"
+          # "Error: file: #{__FILE__} line:#{__LINE__} update panic_buying products relation failed! Details: #{e.backtrace.inspect} #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -126,9 +126,9 @@
       end
     rescue Exception => e
       # TODO 打印log
-      # "Error: 修改限时抢购商品失败! Details: #{e.backtrace.inspect} #{e.message}"
+      # "Error: file: #{__FILE__} line:#{__LINE__} 修改限时抢购商品失败! Details: #{e.backtrace.inspect} #{e.message}"
 
-      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: 修改限时抢购商品失败!")
+      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: file: #{__FILE__} line:#{__LINE__} 修改限时抢购商品失败!")
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK, PanicBuyingsService.get_panic_buying(panic_buying))
@@ -138,7 +138,7 @@
     # 参数合法性检查
     if panic_buying.blank?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "ERROR: panic_buying: #{panic_buying} or destroy_params:#{destroy_params.inspect} is blank!")
+                                           "Error: file: #{__FILE__} line:#{__LINE__} panic_buying: #{panic_buying} or destroy_params:#{destroy_params.inspect} is blank!")
     end
 
     begin
@@ -150,7 +150,7 @@
           end
         rescue Exception => e
           # TODO 删除限时抢购失败，打印对应log
-          # "Error: destroy panic_buying failed! Details: #{e.backtrace.inspect} #{e.message}"
+          # "Error: file: #{__FILE__} line:#{__LINE__} destroy panic_buying failed! Details: #{e.backtrace.inspect} #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -161,7 +161,7 @@
           panic_buying.products.map{|x| x.update!(is_deleted: true, deleted_at: Time.now)}
         rescue Exception => e
           # TODO 删除限时抢购与商品关联关系失败，打印对应log
-          puts "Error: destroy panic_buying and product relation failed! Details: #{e.message}"
+          puts "Error: file: #{__FILE__} line:#{__LINE__} destroy panic_buying and product relation failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -169,9 +169,9 @@
       end
     rescue Exception => e
       # TODO 打印log
-      # "Error: 删除限时抢购商品失败! Details: #{e.backtrace.inspect} #{e.message}"
+      # "Error: file: #{__FILE__} line:#{__LINE__} 删除限时抢购商品失败! Details: #{e.backtrace.inspect} #{e.message}"
 
-      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: 删除限时抢购与商品关联关系!")
+      return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: file: #{__FILE__} line:#{__LINE__} 删除限时抢购与商品关联关系!")
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK)
