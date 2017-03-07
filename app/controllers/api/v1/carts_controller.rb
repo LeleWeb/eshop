@@ -8,7 +8,7 @@ class Api::V1::CartsController < Api::V1::BaseController
 
   # GET /accounts/1
   def show
-    authorize @cart
+    # authorize @cart
     render json: CartsService.new.get_cart(@cart)
   end
 
@@ -19,13 +19,13 @@ class Api::V1::CartsController < Api::V1::BaseController
 
   # PATCH/PUT /accounts/1
   def update
-    authorize @cart
+    # authorize @cart
     render json: CartsService.new.update_cart(@cart, cart_params)
   end
 
   # DELETE /accounts/1
   def destroy
-    authorize @cart
+    # authorize @cart
     render json: CartsService.new.destroy_cart(@cart)
   end
 
