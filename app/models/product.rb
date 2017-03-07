@@ -34,4 +34,21 @@ class Product < ApplicationRecord
 
   # 限时抢购
   has_and_belongs_to_many :panic_buyings
+
+  # 模型层数据验证
+  validates :name, :description, :stock, :status, :property, :category_id, presence: true, on: :create
+  validates :name, :description, :remark, length: { maximum: 255 }
+  validates :stock, numericality: { greater_than: 0 }
+  validates :status, inclusion: { in: [Settings.PRODUCT_STATUS.UNDERCARRIAGE,
+                                       Settings.PRODUCT_STATUS.GROUNDING] }
+  validates :property, inclusion: { in: [Settings.PRODUCT_PROPERTY.COMMON_PRODUCT,
+                                         Settings.PRODUCT_PROPERTY.ADVERT_PRODUCT,
+                                         Settings.PRODUCT_PROPERTY.GROUP_PRODUCT,
+                                         Settings.PRODUCT_PROPERTY.TIMELIMIT_PRODUCT] }
+  validates :category_id, inclusion: { in: [Settings.PRODUCT_CATEGORY.SINGLE_SETMEAL,
+                                            Settings.PRODUCT_PROPERTY.PERSONAL_SETMEAL,
+                                            Settings.PRODUCT_PROPERTY.TEAM_SETMEAL,
+                                            Settings.PRODUCT_PROPERTY.ABOUT] }
+  validates :is_deleted, inclusion: { in: [true, false] }, allow_nil: true
+
 end

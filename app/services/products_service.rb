@@ -1,5 +1,9 @@
 ﻿class ProductsService < BaseService
   def get_products(store, query_params)
+    puts __FILE__,__LINE__,__method__,%Q{params:
+                                         store: #{store.inspect},
+                                         query_params: #{query_params.inspect} }
+
     # 是否按照查询类型检索
     if query_params["type"] == "home"
       return ProductsService.get_home_products(store, query_params["customer"])
@@ -41,102 +45,261 @@
   end
 
   def get_product(product, query_params)
+    puts __FILE__,__LINE__,__method__,%Q{params:
+                                         product: #{product.inspect},
+                                         query_params: #{query_params.inspect} }
     CommonService.response_format(ResponseCode.COMMON.OK, ProductsService.find_product_data(product, query_params[:customer_id]))
   end
 
   def create_product(store, product_params)
-    # 参数合法性检查
-    if store.blank? || product_params.blank?
+    puts __FILE__,__LINE__,__method__,%Q{params:
+                                         store: #{store.inspect},
+                                         product_params: #{product_params.inspect} }
+
+    begin
+      # 解析参数
+      begin
+        group_buying = product_params.extract!("group_buying")["group_buying"]
+        price_params = product_params.extract!("prices")["prices"]
+        compute_strategy_params = product_params.extract!("compute_strategies")["compute_strategies"]
+      rescue Exception => e
+        # TODO 解析参数失败，打印对应log
+        puts "Error: file: #{__FILE__} line:#{__LINE__} params invalid! Details: #{e.message}"
+
+        # 继续向上层抛出异常
+        raise e
+      end
+
+      Product.transaction do
+        # 创建产品
+        begin
+          product = store.products.create!(product_params)
+          product.categories << Category.find(product_params["category_id"])
+        rescue Exception => e
+          # TODO 创建产品失败，打印对应log
+          puts "Error: file: #{__FILE__} line:#{__LINE__} create product failed! Details: #{e.message}"
+
+          # 继续向上层抛出异常
+          raise e
+        end
+
+        # 创建商品价格
+        begin
+          if !price_params.blank?
+            product.prices.create(price_params)
+          end
+        rescue Exception => e
+          # TODO 创建商品价格失败，打印对应log
+          puts "Error: file: #{__FILE__} line:#{__LINE__} create product price failed! Details: #{e.message}"
+
+          # 继续向上层抛出异常
+          raise e
+        end
+
+        # 创建商品计算策略
+        begin
+          if !compute_strategy_params.blank?
+            product.compute_strategies.create(compute_strategy_params)
+          end
+        rescue Exception => e
+          # TODO 创建商品计算策略失败，打印对应log
+          puts "Error: file: #{__FILE__} line:#{__LINE__} create product compute strategy failed! Details: #{e.message}"
+
+          # 继续向上层抛出异常
+          raise e
+        end
+
+        # 创建商品团购数据
+        begin
+          if !group_buying.blank?
+            product.create_group_buying(group_buying)
+          end
+        rescue Exception => e
+          # TODO 创建商品团购数据失败，打印对应log
+          puts "Error: file: #{__FILE__} line:#{__LINE__} create product group buying failed! Details: #{e.message}"
+
+          # 继续向上层抛出异常
+          raise e
+        end
+      end
+    rescue Exception => e
+      # TODO 打印log
+      puts "Error: file: #{__FILE__} line:#{__LINE__} 创建商品失败! Details: #{e.message}"
+
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "ERROR: store:#{store.inspect} or product_params:#{product_params.inspect} is blank!")
+                                           "Error: file: #{__FILE__} line:#{__LINE__} 创建商品失败! Details: #{e.message}")
     end
 
-    # 解析商品团购信息
-    group_buying = product_params.extract!("group_buying")["group_buying"]
-    # 解析商品价格参数, 计算策略参数.
-    price_params = product_params.extract!("prices")["prices"]
-    compute_strategy_params = product_params.extract!("compute_strategies")["compute_strategies"]
-
-    # 创建产品
-    product = store.products.create(product_params)
-    product.categories << Category.find(product_params["category_id"])
-    
-    # 创建商品价格
-    if !price_params.blank?
-      product.prices.create(price_params)
-    end
-
-    # 创建商品计算策略
-    if !compute_strategy_params.blank?
-      product.compute_strategies.create(compute_strategy_params)
-    end
-
-    # 创建商品团购数据
-    if !group_buying.blank?
-      product.create_group_buying(group_buying)
-    end
     CommonService.response_format(ResponseCode.COMMON.OK, ProductsService.product_data_format(product))
   end
 
   def update_product(product, product_params)
-    # 解析商品价格参数, 计算策略参数.
-    price_params = product_params.extract!("prices")["prices"]
-    compute_strategy_params = product_params.extract!("compute_strategies")["compute_strategies"]
-    group_buying = product_params.extract!("group_buying")["group_buying"]
+    puts __FILE__,__LINE__,__method__,%Q{params:
+                                         product: #{product.inspect},
+                                         product_params: #{product_params.inspect} }
 
-    # 更新商品信息
-    product.update(product_params)
+    begin
+      # 解析参数
+      begin
+        price_params = product_params.extract!("prices")["prices"]
+        compute_strategy_params = product_params.extract!("compute_strategies")["compute_strategies"]
+        group_buying = product_params.extract!("group_buying")["group_buying"]
+      rescue Exception => e
+        # TODO 解析参数失败，打印对应log
+        puts "Error: file: #{__FILE__} line:#{__LINE__} params invalid! Details: #{e.message}"
 
-    # 如果有价格列表，则删除原来的价格，新增参数中的价格。
-    if !price_params.blank?
-      # 先删除已有价格
-      product.prices.clear
+        # 继续向上层抛出异常
+        raise e
+      end
 
-      # 新建参数传入的价格
-      product.prices.create(price_params)
-    end
+      Product.transaction do
+        # 更新商品信息
+        begin
+          product.update!(product_params)
+        rescue Exception => e
+          # TODO 修改商品失败，打印对应log
+          puts "Error: file: #{__FILE__} line:#{__LINE__} update product failed! Details: #{e.message}"
 
-    # 如果有计算策略列表，则删除原来的计算策略，新增参数中的计算策略。
-    if !compute_strategy_params.blank?
-      # 先删除已有计算策略
-      product.compute_strategies.clear
+          # 继续向上层抛出异常
+          raise e
+        end
 
-      # 新建参数传入的计算策略
-      product.compute_strategies.create(compute_strategy_params)
-    end
+        # 如果有价格列表，则删除原来的价格，新增参数中的价格。
+        begin
+          if !price_params.blank?
+            # 先删除已有价格
+            product.prices.map{|x| x.destroy }
 
-    # 如果有团购数据，则删除原来的团购数据，新增参数中的团购数据。
-    if !group_buying.blank?
-      # 先删除已有计算策略
-      obj = product.group_buying
-      obj.destroy if !obj.blank?
+            # 新建参数传入的价格
+            product.prices.create!(price_params)
+          end
+        rescue Exception => e
+          # TODO 更新商品价格失败，打印对应log
+          puts "Error: file: #{__FILE__} line:#{__LINE__} update product price failed! Details: #{e.message}"
 
-      # 新建参数传入的计算策略
-      product.create_group_buying(group_buying)
+          # 继续向上层抛出异常
+          raise e
+        end
+
+        # 如果有计算策略列表，则删除原来的计算策略，新增参数中的计算策略。
+        begin
+          if !compute_strategy_params.blank?
+            # 先删除已有计算策略
+            product.compute_strategies.map{|x| x.destroy }
+
+            # 新建参数传入的计算策略
+            product.compute_strategies.create!(compute_strategy_params)
+          end
+        rescue Exception => e
+          # TODO 更新商品计算策略失败，打印对应log
+          puts "Error: file: #{__FILE__} line:#{__LINE__} update product compute strategy failed! Details: #{e.message}"
+
+          # 继续向上层抛出异常
+          raise e
+        end
+
+        # 如果有团购数据，则删除原来的团购数据，新增参数中的团购数据。
+        begin
+          if !group_buying.blank?
+            # 先删除已有计算策略
+            obj = product.group_buying
+            obj.destroy if !obj.nil?
+
+            # 新建参数传入的计算策略
+            product.create_group_buying(group_buying)
+          end
+        rescue Exception => e
+          # TODO 更新商品团购数据失败，打印对应log
+          puts "Error: file: #{__FILE__} line:#{__LINE__} update product group buying failed! Details: #{e.message}"
+
+          # 继续向上层抛出异常
+          raise e
+        end
+      end
+    rescue Exception => e
+      # TODO 打印log
+      puts "Error: file: #{__FILE__} line:#{__LINE__} 更新商品失败! Details: #{e.message}"
+
+      return CommonService.response_format(ResponseCode.COMMON.FAILED,
+                                           "Error: file: #{__FILE__} line:#{__LINE__} 更新商品失败! Details: #{e.message}")
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK, ProductsService.product_data_format(product))
   end
 
   def destroy_product(product, destroy_params)
-    # 单个删除
-    if !product.nil?
-      # 删除产品本身
-      product.update(is_deleted: true, deleted_at: Time.now)
-      # 删除产品价格
-      product.prices.each {|price| price.update(is_deleted: true, deleted_at: Time.now)}
-      # 删除产品计算策略
-      product.compute_strategies.each {|compute_strategy| compute_strategy.update(is_deleted: true, deleted_at: Time.now)}
-      # 删除产品团购数据
-      product.group_buying.update(is_deleted: true, deleted_at: Time.now)
-    end
+    puts __FILE__,__LINE__,__method__,%Q{params:
+                                         product: #{product.inspect},
+                                         destroy_params: #{destroy_params.inspect} }
 
-    # 批量删除
-    if !destroy_params.blank?
-      destroy_params.each do |product_id|
-        object = Product.find_by(id: product_id)
-        object.update(is_deleted: true, deleted_at: Time.now) if !object.nil?
+    begin
+      Product.transaction do
+        # 删除商品本身
+        begin
+          product.update!(is_deleted: true, deleted_at: Time.now)
+        rescue Exception => e
+          # TODO 删除商品失败，打印对应log
+          puts "Error: file: #{__FILE__} line:#{__LINE__} destroy product failed! Details: #{e.message}"
+
+          # 继续向上层抛出异常
+          raise e
+        end
+
+        # 删除产品价格
+        begin
+          product.prices.each {|price| price.update!(is_deleted: true, deleted_at: Time.now)}
+        rescue Exception => e
+          # TODO 删除产品价格失败，打印对应log
+          puts "Error: file: #{__FILE__} line:#{__LINE__} destroy product prices failed! Details: #{e.message}"
+
+          # 继续向上层抛出异常
+          raise e
+        end
+
+        # 删除产品计算策略
+        begin
+          product.compute_strategies.each {|compute_strategy| compute_strategy.update!(is_deleted: true, deleted_at: Time.now)}
+        rescue Exception => e
+          # TODO 删除产品计算策略失败，打印对应log
+          puts "Error: file: #{__FILE__} line:#{__LINE__} destroy product compute strategies failed! Details: #{e.message}"
+
+          # 继续向上层抛出异常
+          raise e
+        end
+
+        # 删除产品团购数据
+        begin
+          product.group_buying.update!(is_deleted: true, deleted_at: Time.now)
+        rescue Exception => e
+          # TODO 删除产品团购数据失败，打印对应log
+          puts "Error: file: #{__FILE__} line:#{__LINE__} destroy product group buying failed! Details: #{e.message}"
+
+          # 继续向上层抛出异常
+          raise e
+        end
+
+        # 批量删除
+        begin
+          if !destroy_params.blank?
+            destroy_params.each do |product_id|
+              Product.find(product_id).update!(is_deleted: true, deleted_at: Time.now)
+            end
+          end
+        rescue Exception => e
+          # TODO 批量删除商品失败，打印对应log
+          puts "Error: file: #{__FILE__} line:#{__LINE__} destroy mutli product failed! Details: #{e.message}"
+
+          # 继续向上层抛出异常
+          raise e
+        end
+
       end
+    rescue Exception => e
+      # TODO 打印log
+      puts "Error: file: #{__FILE__} line:#{__LINE__} 删除商品失败! Details: #{e.message}"
+
+      return CommonService.response_format(ResponseCode.COMMON.FAILED,
+                                           "Error: file: #{__FILE__} line:#{__LINE__} 删除商品失败! Details: #{e.message}")
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK)
