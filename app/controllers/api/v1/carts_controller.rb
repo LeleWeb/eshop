@@ -26,7 +26,7 @@ class Api::V1::CartsController < Api::V1::BaseController
   # DELETE /accounts/1
   def destroy
     authorize @cart
-    render json: CartsService.new.destory_cart(@cart)
+    render json: CartsService.new.destroy_cart(@cart)
   end
 
   private
