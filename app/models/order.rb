@@ -30,5 +30,7 @@ class Order < ApplicationRecord
   validates :is_deleted, inclusion: { in: [true, false] }, allow_nil: true
   validates :pay_away, inclusion: { in: [Settings.ORDER.PAY_AWAY.WXPAY.VALUE,
                                          Settings.ORDER.PAY_AWAY.COD.VALUE] }
-  validates :payment_time, :delivery_time, format: { with: /\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}/, message: "时间格式错误" }
+  validates :delivery_time, format: { with: /\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}/, message: "时间格式错误" }
+  validates :payment_time, format: { with: /\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}/, message: "时间格式错误" }, allow_nil: true
+
 end
