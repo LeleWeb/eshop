@@ -221,13 +221,40 @@ class OrdersService < BaseService
   # end
 
   def destory_order(order)
-    # 参数合法性检查
-    if order.blank?
-      return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "ERROR: order:#{order.inspect} is blank!")
-    end
+    puts __FILE__,__LINE__,__method__,%Q{params:
+                                         order: #{order.inspect} }
 
-    order.update(is_deleted: true, deleted_at: Time.now)
+    begin
+      Order.transaction do
+        # 删除订单
+        begin
+          order.update!(is_deleted: true, deleted_at: Time.now)
+        rescue Exception => e
+          # TODO 删除订单失败，打印对应log
+          puts "Error: file: #{__FILE__} line:#{__LINE__} destroy order failed! Details: #{e.message}"
+
+          # 继续向上层抛出异常
+          raise e
+        end
+
+        # TODO 删除订单与订单详情关联关系
+        begin
+          order.shopping_carts.map{|x| x.update!(is_deleted: true, deleted_at: Time.now)}
+        rescue Exception => e
+          # TODO 删除订单与订单详情关联关系失败，打印对应log
+          puts "Error: file: #{__FILE__} line:#{__LINE__} destroy order and detail relation failed! Details: #{e.message}"
+
+          # 继续向上层抛出异常
+          raise e
+        end
+      end
+    rescue Exception => e
+      # TODO 打印log
+      puts "Error: file: #{__FILE__} line:#{__LINE__} 删除订单失败! Details: #{e.message}"
+
+      return CommonService.response_format(ResponseCode.COMMON.FAILED,
+                                           "Error: file: #{__FILE__} line:#{__LINE__} 删除订单失败! Details: #{e.message}")
+    end
 
     CommonService.response_format(ResponseCode.COMMON.OK)
   end
