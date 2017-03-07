@@ -176,7 +176,7 @@ defaults: &defaults
       热销: 105
 
   # 产品分类定义
-  PRODUCT_CATEGORY: 
+  PRODUCT_CATEGORY:
     SINGLE_SETMEAL: 1 # 单品
     PERSONAL_SETMEAL: 2 # 个人套餐
     TEAM_SETMEAL: 3  # 团队套餐推荐
@@ -214,9 +214,9 @@ defaults: &defaults
   # 自动计算类别定义
   COMPUTE:
     CATEGORY:
-      SINGLE_SETMEAL: 0 # 单品
-      PERSONAL_SETMEAL: 1 # 个人套餐
-      TEAM_SETMEAL: 2  # 团队套餐推荐
+#      SINGLE_SETMEAL: 0 # 单品
+#      PERSONAL_SETMEAL: 1 # 个人套餐
+#      TEAM_SETMEAL: 2  # 团队套餐推荐
 
   # 购物车项属性常量定义
   CART_OR_ITEM:
