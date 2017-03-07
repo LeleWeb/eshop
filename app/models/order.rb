@@ -11,7 +11,7 @@ class Order < ApplicationRecord
 
   # 模型层数据验证
   validates :order_number, :total_price, :buyer_id, :buyer_type, :pay_away, :consignee_name, :consignee_phone,
-            :consignee_address, :pay_price, :payment_time, :delivery_time presence: true, on: :create
+            :consignee_address, :pay_price, :payment_time, :delivery_time, presence: true, on: :create
   validates :order_number, length: { maximum: 255 }
   validates :status, inclusion: { in: [Settings.ORDER.STATUS.CANCEL,
                                        Settings.ORDER.STATUS.PREPAY,
