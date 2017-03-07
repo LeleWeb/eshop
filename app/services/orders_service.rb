@@ -1,5 +1,8 @@
 class OrdersService < BaseService
   def get_orders(query_params)
+    puts __FILE__,__LINE__,__method__,%Q{params:
+                                         query_params: #{query_params.inspect} }
+
     # 根据参数，解析所有查询条件
     orders = []
     total_count = nil
@@ -43,14 +46,17 @@ class OrdersService < BaseService
   end
 
   def get_order(order)
+    puts __FILE__,__LINE__,__method__,%Q{params:
+                                         order: #{order.inspect} }
+
     CommonService.response_format(ResponseCode.COMMON.OK, OrdersService.get_order(order))
   end
 
   # 创建订单
   def create_order(order_params)
-    # buyer = nil
-    # address = nil
-    # shopping_carts = nil
+    puts __FILE__,__LINE__,__method__,%Q{params:
+                                         order_params: #{order_params.inspect} }
+
     order_total_price = 0.0
 
     # 参数合法性检查
@@ -60,71 +66,121 @@ class OrdersService < BaseService
     end
 
     # 解析下单用户
-    buyer_id = order_params.extract!("buyer_id")["buyer_id"]
-    if (buyer = Customer.find_by(id: buyer_id)).nil?
+    begin
+      buyer = Customer.find(order_params.extract!("buyer_id")["buyer_id"])
+    rescue Exception => e
+      # TODO 解析下单用户失败，打印对应log
+      puts "Error: file: #{__FILE__} line:#{__LINE__} find order buyer failed! Details: #{e.message}"
+
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "ERROR: buyer_id:#{buyer_id} is invalid!")
+                                           "Error: file: #{__FILE__} line:#{__LINE__} find order buyer failed! Details: #{e.message}")
     end
 
     # 解析收货地址对象
-    address_id = order_params.extract!("address_id")["address_id"]
-    if (address = Address.find_by(id: address_id)).nil?
+    begin
+      address = Address.find(order_params.extract!("address_id")["address_id"])
+    rescue Exception => e
+      # TODO 解析收货地址对象失败，打印对应log
+      puts "Error: file: #{__FILE__} line:#{__LINE__} find order address failed! Details: #{e.message}"
+
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "ERROR: address_id:#{address_id} is invalid!")
+                                           "Error: file: #{__FILE__} line:#{__LINE__} find order address failed! Details: #{e.message}")
     end
 
     # 解析订单详情项(此处为了复用，实际为购物车项)
     begin
-      shopping_cart_ids = order_params.extract!("shopping_cart_ids")["shopping_cart_ids"]
-      if shopping_cart_ids.blank? || (shopping_carts = ShoppingCart.find(shopping_cart_ids)).blank?
-        return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                             "ERROR: shopping_cart_ids:#{shopping_cart_ids} is invalid!")
-      end
-    rescue => e
-      return CommonService.response_format(ResponseCode.COMMON.FAILED, "ERROR: #{e}")
+      shopping_carts = ShoppingCart.find(order_params.extract!("shopping_cart_ids")["shopping_cart_ids"])
+    rescue Exception => e
+      # TODO 解析订单详情项失败，打印对应log
+      puts "Error: file: #{__FILE__} line:#{__LINE__} find shopping_carts failed! Details: #{e.message}"
+
+      return CommonService.response_format(ResponseCode.COMMON.FAILED,
+                                           "Error: file: #{__FILE__} line:#{__LINE__} find shopping_carts failed! Details: #{e.message}")
     end
 
-    # 生成本系统订单
-    order_params["order_number"] = OrdersService.generate_order_number(buyer.id)
-    order_params["status"] = Settings.ORDER.STATUS.PREPAY
-    # order_params["pay_away"] = 1 # 改为由前端参数传入，用来支持货到付款方式。
-    order_params["time_start"] = Time.now.strftime("%Y%m%d%H%M%S")
-    order_params["time_expire"] = (Time.now + Settings.ORDER.EXPIRE_TIME.to_i).strftime("%Y%m%d%H%M%S")
-    order = buyer.orders.create(order_params.merge("consignee_address" => address.address,
-                                                   "consignee_name" => address.name,
-                                                   "consignee_phone" => address.phone))
+    begin
+      Order.transaction do
+        # 生成本系统订单
+        begin
+          order_params["order_number"] = OrdersService.generate_order_number(buyer.id)
+          order_params["status"] = Settings.ORDER.STATUS.PREPAY
+          # order_params["pay_away"] = 1 # 改为由前端参数传入，用来支持货到付款方式。
+          order_params["time_start"] = Time.now.strftime("%Y%m%d%H%M%S")
+          order_params["time_expire"] = (Time.now + Settings.ORDER.EXPIRE_TIME.to_i).strftime("%Y%m%d%H%M%S")
+          order = buyer.orders.create!(order_params.merge("consignee_address" => address.address,
+                                                          "consignee_name" => address.name,
+                                                          "consignee_phone" => address.phone))
+        rescue Exception => e
+          # TODO 生成本系统订单失败，打印对应log
+          puts "Error: file: #{__FILE__} line:#{__LINE__} create system order failed! Details: #{e.message}"
 
-    # 生成对应的订单详情项
-    shopping_carts.each do |shopping_cart|
-      # 先设置购物车项的property属性为：1-订单详情项
-      shopping_cart.update(property: Settings.CART_OR_ITEM.PROPERTY.ORDER_DETAILS_ITEM)
-      # 累加订单总金额
-      order_total_price += shopping_cart.total_price
-      # 与订单建立关联
-      order.shopping_carts << shopping_cart
+          # 继续向上层抛出异常
+          raise e
+        end
 
-      # 如果是多商品购物车，则需要将该节点下的子项设置由购物车项为订单项。
-      if !shopping_cart.subitems.blank?
-        shopping_cart.subitems.each do |subitem|
-          subitem.update(property: Settings.CART_OR_ITEM.PROPERTY.ORDER_DETAILS_ITEM)
-          # 累加订单总金额
-          order_total_price += subitem.total_price
+        # 生成对应的订单详情项
+        begin
+          shopping_carts.each do |shopping_cart|
+            # 先设置购物车项的property属性为：1-订单详情项
+            shopping_cart.update!(property: Settings.CART_OR_ITEM.PROPERTY.ORDER_DETAILS_ITEM)
+            # 累加订单总金额
+            order_total_price += shopping_cart.total_price
+            # 与订单建立关联
+            order.shopping_carts << shopping_cart
+
+            # 如果是多商品购物车，则需要将该节点下的子项设置由购物车项为订单项。
+            if !shopping_cart.subitems.blank?
+              shopping_cart.subitems.each do |subitem|
+                subitem.update!(property: Settings.CART_OR_ITEM.PROPERTY.ORDER_DETAILS_ITEM)
+                # 累加订单总金额
+                order_total_price += subitem.total_price
+              end
+            end
+          end
+        rescue Exception => e
+          # TODO 生成对应的订单详情项失败，打印对应log
+          puts "Error: file: #{__FILE__} line:#{__LINE__} create order detail failed! Details: #{e.message}"
+
+          # 继续向上层抛出异常
+          raise e
+        end
+
+        # 设置实际支付订单为订单总额
+        begin
+          order.update(pay_price: order_total_price, total_price: order_total_price)
+        rescue Exception => e
+          # TODO 设置实际支付订单为订单总额失败，打印对应log
+          puts "Error: file: #{__FILE__} line:#{__LINE__} set order total_price failed! Details: #{e.message}"
+
+          # 继续向上层抛出异常
+          raise e
+        end
+
+        # 此处根据支付方式不同做相应处理
+        begin
+          if order.pay_away == Settings.ORDER.PAY_AWAY.WXPAY.VALUE
+            # 调用微信统一接口,生成预付订单.
+            res = WechatService.create_unifiedorder(order)
+            CommonService.response_format(ResponseCode.COMMON.OK, {"order" => self.get_order(order), "prepay_data" => res})
+          elsif order.pay_away == Settings.ORDER.PAY_AWAY.COD.VALUE
+            # 货到付款
+            order.update!(status: Settings.ORDER.STATUS.PREPAY)
+            CommonService.response_format(ResponseCode.COMMON.OK, {"order" => self.get_order(order)})
+          end
+        rescue Exception => e
+          # TODO 设置实际支付订单为订单总额失败，打印对应log
+          puts "Error: file: #{__FILE__} line:#{__LINE__} set order total_price failed! Details: #{e.message}"
+
+          # 继续向上层抛出异常
+          raise e
         end
       end
-    end
+    rescue Exception => e
+      # TODO 打印log
+      puts "Error: file: #{__FILE__} line:#{__LINE__} 创建订单失败! Details: #{e.message}"
 
-    # 暂时设置实际支付订单为订单总额
-    order.update(pay_price: order_total_price, total_price: order_total_price)
-
-    # 此处根据支付方式不同做相应处理
-    if order.pay_away == Settings.ORDER.PAY_AWAY.WXPAY.VALUE
-      # 调用微信统一接口,生成预付订单.
-      res = WechatService.create_unifiedorder(order)
-      CommonService.response_format(ResponseCode.COMMON.OK, {"order" => self.get_order(order), "prepay_data" => res})
-    elsif order.pay_away == Settings.ORDER.PAY_AWAY.COD.VALUE
-      # 货到付款
-      order.update(status: Settings.ORDER.STATUS.PREPAY)
-      CommonService.response_format(ResponseCode.COMMON.OK, {"order" => self.get_order(order)})
+      return CommonService.response_format(ResponseCode.COMMON.FAILED,
+                                           "Error: file: #{__FILE__} line:#{__LINE__} 创建订单失败! Details: #{e.message}")
     end
   end
 
