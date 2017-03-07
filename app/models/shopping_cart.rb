@@ -10,12 +10,13 @@ class ShoppingCart < ApplicationRecord
 
   # 模型层数据验证
   validates :product_id, :amount, :price_id, :total_price, :property, presence: true, on: :create
-  validates :product_id, :price_id, :amount, :owner_id, :order_id, numericality: { only_integer: true, greater_than: 0 }
+  validates :product_id, :price_id, :amount, :owner_id, numericality: { only_integer: true, greater_than: 0 }
+  validates :order_id, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
   validates :total_price, numericality: { greater_than: 0 }
   validates :property, inclusion: { in: [Settings.CART_OR_ITEM.PROPERTY.CART_ITEM, Settings.CART_OR_ITEM.PROPERTY.ORDER_DETAILS_ITEM] }
   validates :is_deleted, inclusion: { in: [true, false] }
   validates :owner_type, inclusion: { in: ['Customer'] }
-  validates :remark, length: { maximum: 256 }
+  validates :remark, length: { maximum: 255 }
   # 购物车的修改只支持修改: amount, total_price.
   validates :amount, :total_price, presence: true, on: :update
 end
