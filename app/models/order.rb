@@ -24,7 +24,7 @@ class Order < ApplicationRecord
   validates :buyer_id, numericality: { only_integer: true, greater_than: 0 }
   validates :buyer_type, inclusion: { in: ['Customer'] }
   validates :remark, :consignee_address, length: { maximum: 255 }
-  validates :consignee_name, :consignee_phone length: { maximum: 32 }
+  validates :consignee_name, :consignee_phone, length: { maximum: 32 }
   validates :consignee_phone, format: { with: /\d{11}/, message: "手机号码格式错误" }
   validates :is_deleted, inclusion: { in: [true, false] }
   validates :pay_away, inclusion: { in: [Settings.ORDER.PAY_AWAY.WXPAY.VALUE,
