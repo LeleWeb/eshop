@@ -56,6 +56,8 @@
                                          store: #{store.inspect},
                                          product_params: #{product_params.inspect} }
 
+    product = nil
+    
     begin
       # 解析参数
       begin
