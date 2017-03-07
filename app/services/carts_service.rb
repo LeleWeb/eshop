@@ -172,17 +172,6 @@ class CartsService < BaseService
           return CommonService.response_format(ResponseCode.COMMON.FAILED,
                                                "Error: file: #{__FILE__} line:#{__LINE__} destroy cart failed! Details: #{e.message}")
         end
-
-        # # TODO 删除购物车与购物车项关联关系
-        # begin
-        #   cart.shopping_carts.map{|x| x.update!(is_deleted: true, deleted_at: Time.now)}
-        # rescue Exception => e
-        #   # TODO 删除购物车与购物车项关联关系失败，打印对应log
-        #   puts "Error: file: #{__FILE__} line:#{__LINE__} destroy cart and detail relation failed! Details: #{e.message}"
-        #
-        #   # 继续向上层抛出异常
-        #   raise e
-        # end
       end
     rescue Exception => e
       # TODO 打印log

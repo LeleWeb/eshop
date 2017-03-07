@@ -136,6 +136,7 @@
   end
 
   def update_product(product, product_params)
+    Rails.logger.info "1"*10
     puts __FILE__,__LINE__,__method__,%Q{params:
                                          product: #{product.inspect},
                                          product_params: #{product_params.inspect} }
