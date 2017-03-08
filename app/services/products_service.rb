@@ -113,8 +113,10 @@
 
         # 创建商品团购数据
         begin
+          p '1'*10,group_buying,product
           if !group_buying.blank?
-            product.create_group_buying(group_buying)
+            product.create_group_buying!(group_buying)
+            p '2'*10, product.group_buying
           end
         rescue Exception => e
           # TODO 创建商品团购数据失败，打印对应log
