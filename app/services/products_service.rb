@@ -52,6 +52,7 @@
   end
 
   def create_product(store, product_params)
+    logger.info("B"*10)
     puts __FILE__,__LINE__,__method__,%Q{params:
                                          store: #{store.inspect},
                                          product_params: #{product_params.inspect} }
