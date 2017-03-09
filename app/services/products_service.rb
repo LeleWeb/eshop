@@ -52,10 +52,9 @@
   end
 
   def create_product(store, product_params)
-    logger.info("B"*10)
-    puts __FILE__,__LINE__,__method__,%Q{params:
-                                         store: #{store.inspect},
-                                         product_params: #{product_params.inspect} }
+    logger.info %Q{__FILE__,__LINE__,__method__,params:
+                                                        store: #{store.inspect},
+                                                        product_params: #{product_params.inspect} }
 
     product = nil
 
@@ -67,7 +66,7 @@
         compute_strategy_params = product_params.extract!("compute_strategies")["compute_strategies"]
       rescue Exception => e
         # TODO 解析参数失败，打印对应log
-        puts "Error: file: #{__FILE__} line:#{__LINE__} params invalid! Details: #{e.message}"
+        logger.error "Error: file: #{__FILE__} line:#{__LINE__} params invalid! Details: #{e.message}"
 
         # 继续向上层抛出异常
         raise e
@@ -80,7 +79,7 @@
           product.categories << Category.find(product_params["category_id"])
         rescue Exception => e
           # TODO 创建产品失败，打印对应log
-          puts "Error: file: #{__FILE__} line:#{__LINE__} create product failed! Details: #{e.message}"
+          logger.error "Error: file: #{__FILE__} line:#{__LINE__} create product failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -93,7 +92,7 @@
           end
         rescue Exception => e
           # TODO 创建商品价格失败，打印对应log
-          puts "Error: file: #{__FILE__} line:#{__LINE__} create product price failed! Details: #{e.message}"
+          logger.error "Error: file: #{__FILE__} line:#{__LINE__} create product price failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -106,7 +105,7 @@
           end
         rescue Exception => e
           # TODO 创建商品计算策略失败，打印对应log
-          puts "Error: file: #{__FILE__} line:#{__LINE__} create product compute strategy failed! Details: #{e.message}"
+          logger.error "Error: file: #{__FILE__} line:#{__LINE__} create product compute strategy failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -114,14 +113,12 @@
 
         # 创建商品团购数据
         begin
-          p '1'*10,group_buying,product
           if !group_buying.blank?
             product.create_group_buying!(group_buying)
-            p '2'*10, product.group_buying
           end
         rescue Exception => e
           # TODO 创建商品团购数据失败，打印对应log
-          puts "Error: file: #{__FILE__} line:#{__LINE__} create product group buying failed! Details: #{e.message}"
+          logger.error "Error: file: #{__FILE__} line:#{__LINE__} create product group buying failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -129,7 +126,7 @@
       end
     rescue Exception => e
       # TODO 打印log
-      puts "Error: file: #{__FILE__} line:#{__LINE__} 创建商品失败! Details: #{e.message}"
+      logger.error "Error: file: #{__FILE__} line:#{__LINE__} 创建商品失败! Details: #{e.message}"
 
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
                                            "Error: file: #{__FILE__} line:#{__LINE__} 创建商品失败! Details: #{e.message}")
