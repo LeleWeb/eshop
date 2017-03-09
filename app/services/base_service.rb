@@ -2,7 +2,7 @@ class BaseService < Logger
   def initializer
     logger = File.open("#{Rails.root}/log/eshop.log", 'a')
     logger.sync = true
-    Logger = BaseService.new(logger)
+    LOG = BaseService.new(logger)
   end
 
   def format_message(severity, timestamp, progname, msg)

@@ -1,6 +1,6 @@
 ﻿class ProductsService < BaseService
   def get_products(store, query_params)
-    Logger.info %Q{__FILE__,__LINE__,__method__,params:
+    LOG.info %Q{__FILE__,__LINE__,__method__,params:
                                                         store: #{store.inspect},
                                                         query_params: #{query_params.inspect} }
 
@@ -45,14 +45,14 @@
   end
 
   def get_product(product, query_params)
-    Logger.info %Q{__FILE__,__LINE__,__method__,params:
+    LOG.info %Q{__FILE__,__LINE__,__method__,params:
                                                         product: #{product.inspect},
                                                         query_params: #{query_params.inspect} }
     CommonService.response_format(ResponseCode.COMMON.OK, ProductsService.find_product_data(product, query_params[:customer_id]))
   end
 
   def create_product(store, product_params)
-    Logger.info %Q{__FILE__,__LINE__,__method__,params:
+    LOG.info %Q{__FILE__,__LINE__,__method__,params:
                                                         store: #{store.inspect},
                                                         product_params: #{product_params.inspect} }
 
@@ -66,7 +66,7 @@
         compute_strategy_params = product_params.extract!("compute_strategies")["compute_strategies"]
       rescue Exception => e
         # TODO 解析参数失败，打印对应log
-        Logger.error "Error: file: #{__FILE__} line:#{__LINE__} params invalid! Details: #{e.message}"
+        LOG.error "Error: file: #{__FILE__} line:#{__LINE__} params invalid! Details: #{e.message}"
 
         # 继续向上层抛出异常
         raise e
@@ -79,7 +79,7 @@
           product.categories << Category.find(product_params["category_id"])
         rescue Exception => e
           # TODO 创建产品失败，打印对应log
-          Logger.error "Error: file: #{__FILE__} line:#{__LINE__} create product failed! Details: #{e.message}"
+          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} create product failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -92,7 +92,7 @@
           end
         rescue Exception => e
           # TODO 创建商品价格失败，打印对应log
-          Logger.error "Error: file: #{__FILE__} line:#{__LINE__} create product price failed! Details: #{e.message}"
+          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} create product price failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -105,7 +105,7 @@
           end
         rescue Exception => e
           # TODO 创建商品计算策略失败，打印对应log
-          Logger.error "Error: file: #{__FILE__} line:#{__LINE__} create product compute strategy failed! Details: #{e.message}"
+          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} create product compute strategy failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -118,7 +118,7 @@
           end
         rescue Exception => e
           # TODO 创建商品团购数据失败，打印对应log
-          Logger.error "Error: file: #{__FILE__} line:#{__LINE__} create product group buying failed! Details: #{e.message}"
+          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} create product group buying failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -126,7 +126,7 @@
       end
     rescue Exception => e
       # TODO 打印log
-      Logger.error "Error: file: #{__FILE__} line:#{__LINE__} 创建商品失败! Details: #{e.message}"
+      LOG.error "Error: file: #{__FILE__} line:#{__LINE__} 创建商品失败! Details: #{e.message}"
 
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
                                            "Error: file: #{__FILE__} line:#{__LINE__} 创建商品失败! Details: #{e.message}")
@@ -136,7 +136,7 @@
   end
 
   def update_product(product, product_params)
-    Logger.info %Q{__FILE__,__LINE__,__method__,params:
+    LOG.info %Q{__FILE__,__LINE__,__method__,params:
                                                         product: #{product.inspect},
                                                         product_params: #{product_params.inspect} }
 
@@ -148,7 +148,7 @@
         group_buying = product_params.extract!("group_buying")["group_buying"]
       rescue Exception => e
         # TODO 解析参数失败，打印对应log
-        Logger.error "Error: file: #{__FILE__} line:#{__LINE__} params invalid! Details: #{e.message}"
+        LOG.error "Error: file: #{__FILE__} line:#{__LINE__} params invalid! Details: #{e.message}"
 
         # 继续向上层抛出异常
         raise e
@@ -160,7 +160,7 @@
           product.update!(product_params)
         rescue Exception => e
           # TODO 修改商品失败，打印对应log
-          Logger.error "Error: file: #{__FILE__} line:#{__LINE__} update product failed! Details: #{e.message}"
+          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} update product failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -177,7 +177,7 @@
           end
         rescue Exception => e
           # TODO 更新商品价格失败，打印对应log
-          Logger.error "Error: file: #{__FILE__} line:#{__LINE__} update product price failed! Details: #{e.message}"
+          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} update product price failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -194,7 +194,7 @@
           end
         rescue Exception => e
           # TODO 更新商品计算策略失败，打印对应log
-          Logger.error "Error: file: #{__FILE__} line:#{__LINE__} update product compute strategy failed! Details: #{e.message}"
+          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} update product compute strategy failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -212,7 +212,7 @@
           end
         rescue Exception => e
           # TODO 更新商品团购数据失败，打印对应log
-          Logger.error "Error: file: #{__FILE__} line:#{__LINE__} update product group buying failed! Details: #{e.message}"
+          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} update product group buying failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -220,7 +220,7 @@
       end
     rescue Exception => e
       # TODO 打印log
-      Logger.error "Error: file: #{__FILE__} line:#{__LINE__} 更新商品失败! Details: #{e.message}"
+      LOG.error "Error: file: #{__FILE__} line:#{__LINE__} 更新商品失败! Details: #{e.message}"
 
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
                                            "Error: file: #{__FILE__} line:#{__LINE__} 更新商品失败! Details: #{e.message}")
@@ -230,7 +230,7 @@
   end
 
   def destroy_product(product, destroy_params)
-    Logger.info %Q{__FILE__,__LINE__,__method__,params:
+    LOG.info %Q{__FILE__,__LINE__,__method__,params:
                                                         product: #{product.inspect},
                                                         destroy_params: #{destroy_params.inspect} }
 
@@ -241,7 +241,7 @@
           product.update!(is_deleted: true, deleted_at: Time.now)
         rescue Exception => e
           # TODO 删除商品失败，打印对应log
-          Logger.error "Error: file: #{__FILE__} line:#{__LINE__} destroy product failed! Details: #{e.message}"
+          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} destroy product failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -252,7 +252,7 @@
           product.prices.each {|price| price.update!(is_deleted: true, deleted_at: Time.now)}
         rescue Exception => e
           # TODO 删除产品价格失败，打印对应log
-          Logger.error "Error: file: #{__FILE__} line:#{__LINE__} destroy product prices failed! Details: #{e.message}"
+          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} destroy product prices failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -263,7 +263,7 @@
           product.compute_strategies.each {|compute_strategy| compute_strategy.update!(is_deleted: true, deleted_at: Time.now)}
         rescue Exception => e
           # TODO 删除产品计算策略失败，打印对应log
-          Logger.error "Error: file: #{__FILE__} line:#{__LINE__} destroy product compute strategies failed! Details: #{e.message}"
+          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} destroy product compute strategies failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -274,7 +274,7 @@
           product.group_buying.update!(is_deleted: true, deleted_at: Time.now)
         rescue Exception => e
           # TODO 删除产品团购数据失败，打印对应log
-          Logger.error "Error: file: #{__FILE__} line:#{__LINE__} destroy product group buying failed! Details: #{e.message}"
+          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} destroy product group buying failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -289,7 +289,7 @@
           end
         rescue Exception => e
           # TODO 批量删除商品失败，打印对应log
-          Logger.error "Error: file: #{__FILE__} line:#{__LINE__} destroy mutli product failed! Details: #{e.message}"
+          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} destroy mutli product failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -298,7 +298,7 @@
       end
     rescue Exception => e
       # TODO 打印log
-      Logger.error "Error: file: #{__FILE__} line:#{__LINE__} 删除商品失败! Details: #{e.message}"
+      LOG.error "Error: file: #{__FILE__} line:#{__LINE__} 删除商品失败! Details: #{e.message}"
 
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
                                            "Error: file: #{__FILE__} line:#{__LINE__} 删除商品失败! Details: #{e.message}")
