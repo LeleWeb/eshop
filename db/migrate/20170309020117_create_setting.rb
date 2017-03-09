@@ -3,6 +3,7 @@ class CreateSetting < ActiveRecord::Migration[5.0]
     create_table :settings do |t|
       t.integer :setting_type, default: 0
       t.integer :position, default: 0
+      t.integer :sort, default: 0
       t.boolean :is_deleted, default: false
       t.datetime :deleted_at
     end

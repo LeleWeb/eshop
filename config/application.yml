@@ -233,6 +233,10 @@ defaults: &defaults
         CHINESE: 16  # 打印机一行最多显示的汉字数量为16个
         ENGLISH: 32  # 打印机一行最多显示的英文数量为32个
 
+  # 设置类别常量定义
+  SETTING:
+    HOME_PRODUCT: 1  # 首页商品显示设置
+
 development:
   <<: *defaults
   neat_setting: 800

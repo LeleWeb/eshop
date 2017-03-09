@@ -35,6 +35,9 @@ class Product < ApplicationRecord
   # 限时抢购
   has_and_belongs_to_many :panic_buyings
 
+  # 设置
+  has_and_belongs_to_many :settings
+
   # 模型层数据验证
   validates :name, :description, :stock, :status, :property, :category_id, presence: true, on: :create
   validates :name, :description, :remark, length: { maximum: 255 }
