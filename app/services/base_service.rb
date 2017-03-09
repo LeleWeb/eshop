@@ -5,8 +5,8 @@ class BaseService < Logger
   #   log = BaseService.new(logger)
   # end
 
-  def format_message(severity, timestamp, progname, msg)
-    "#{timestamp.to_formatted_s(:db)} #{severity} #{msg}\n"
-  end
+  # def format_message(severity, timestamp, progname, msg)
+  #   "#{timestamp.to_formatted_s(:db)} #{severity} #{msg}\n"
+  # end
   
 end
