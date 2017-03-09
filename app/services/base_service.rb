@@ -1,5 +1,12 @@
-# require "#{Rails.root}/app/controllers/api/v1/base_controller"
+class BaseService < Logger
+  def initializer
+    logger = File.open("#{Rails.root}/log/eshop.log", 'a')
+    logger.sync = true
+    Logger = BaseService.new(logger)
+  end
 
-class BaseService < ApplicationController
-
+  def format_message(severity, timestamp, progname, msg)
+    "#{timestamp.to_formatted_s(:db)} #{severity} #{msg}\n"
+  end
+  
 end
