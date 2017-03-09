@@ -178,7 +178,7 @@ defaults: &defaults
   # 产品分类定义
   PRODUCT_CATEGORY:
     SINGLE_SETMEAL: 1 # 单品
-    PERSONAL_SETMEAL: 2 # 个人套餐
+    PERSONAL_SETMEAL: 2 # 果切
     TEAM_SETMEAL: 3  # 团队套餐推荐
     ABOUT: 4
 
