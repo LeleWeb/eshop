@@ -292,7 +292,7 @@
   end
 
   def self.get_setting(setting)
-    setting.as_json.merge("products" => setting.products)
+    setting.as_json.merge("products" => ProductsService.get_products_no_count(setting.products))
   end
 
 end
