@@ -288,7 +288,7 @@
   end
 
   def self.get_settings(settings)
-    settings.map{|setting| self.get_setting(settings)}
+    settings.map{|setting| self.get_setting(setting)}
   end
 
   def self.get_setting(setting)
