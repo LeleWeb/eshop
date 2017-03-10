@@ -3,14 +3,7 @@
     LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
                                                         query_params: #{query_params.inspect} }
 
-    CommonService.response_format(ResponseCode.COMMON.OK,
-                                  SettingsService.get_settings(Setting.where(setting_type: query_params["setting_type"])))
-  end
-
-  def self.get_setting(setting)
-    LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
-                                                        setting: #{setting.inspect}  }
-    setting.as_json.merge("products" => setting.products)
+    CommonService.response_format(ResponseCode.COMMON.OK, self.get_home_product)
   end
 
   def create_setting(setting_params)
@@ -60,8 +53,7 @@
 
       end
 
-      CommonService.response_format(ResponseCode.COMMON.OK,
-                                    SettingsService.get_settings(Setting.where(setting_type: Settings.SETTING.HOME_PRODUCT)))
+      CommonService.response_format(ResponseCode.COMMON.OK, self.get_home_product)
     rescue Exception => e
       # TODO 打印LOG
       LOG.error "Error: file: #{__FILE__} line:#{__LINE__} 创建设置失败! Details: #{e.message}"
@@ -116,8 +108,7 @@
         end
       end
 
-      CommonService.response_format(ResponseCode.COMMON.OK,
-                                    SettingsService.get_settings(Setting.where(setting_type: Settings.SETTING.HOME_PRODUCT)))
+      CommonService.response_format(ResponseCode.COMMON.OK, self.get_home_product)
     rescue Exception => e
       # TODO 打印LOG
       LOG.error "Error: file: #{__FILE__} line:#{__LINE__} 更新设置失败! Details: #{e.message}"
@@ -162,6 +153,11 @@
 
   def self.get_setting(setting)
     setting.as_json.merge("products" => ProductsService.get_products_no_count(setting.products))
+  end
+
+  # 获取首页商品设置
+  def self.get_home_product
+    SettingsService.get_settings(Setting.where(setting_type: Settings.SETTING.HOME_PRODUCT, is_deleted: false))
   end
 
 end
