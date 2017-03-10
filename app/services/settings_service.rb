@@ -96,6 +96,9 @@
         end
 
       end
+
+      CommonService.response_format(ResponseCode.COMMON.OK,
+                                    SettingsService.get_settings(Setting.where(setting_type: Settings.SETTING.HOME_PRODUCT)))
     rescue Exception => e
       # TODO 打印LOG
       LOG.error "Error: file: #{__FILE__} line:#{__LINE__} 创建设置失败! Details: #{e.message}"
@@ -103,9 +106,6 @@
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
                                            "Error: file: #{__FILE__} line:#{__LINE__} 创建设置失败! Details: #{e.message}")
     end
-
-    CommonService.response_format(ResponseCode.COMMON.OK,
-                                  SettingsService.get_settings(Setting.where(setting_type: Settings.SETTING.HOME_PRODUCT)))
   end
 
   def update_setting(product, setting_params)
@@ -292,7 +292,7 @@
   end
 
   def self.get_setting(setting)
-    setting.merge("products" => setting.products)
+    setting.as_json.merge("products" => setting.products)
   end
 
 end
