@@ -69,23 +69,22 @@
       end
 
       Product.transaction do
-        # 创建设置
-        begin
-          setting = Setting.create!(setting_params)
-        rescue Exception => e
-          # TODO 创建设置失败，打印对应LOG
-          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} create setting failed! Details: #{e.message}"
-
-          # 继续向上层抛出异常
-          raise e
-        end
-
         # 设置与商品建立关联
         begin
           if !data.blank?
             data.each do |item|
+              # 创建设置
+              begin
+                setting = Setting.create!(setting_params.merge(position: item["category"]))
+              rescue Exception => e
+                # TODO 创建设置失败，打印对应LOG
+                LOG.error "Error: file: #{__FILE__} line:#{__LINE__} create setting failed! Details: #{e.message}"
+
+                # 继续向上层抛出异常
+                raise e
+              end
+
               setting.products << Product.find(item["products"])
-              setting.update!(position: item["category"])
             end
           end
         rescue Exception => e
@@ -105,7 +104,8 @@
                                            "Error: file: #{__FILE__} line:#{__LINE__} 创建设置失败! Details: #{e.message}")
     end
 
-    CommonService.response_format(ResponseCode.COMMON.OK, SettingsService.get_setting(setting))
+    CommonService.response_format(ResponseCode.COMMON.OK,
+                                  SettingsService.get_settings(Setting.where(setting_type: Settings.SETTING.HOME_PRODUCT)))
   end
 
   def update_setting(product, setting_params)
@@ -280,124 +280,6 @@
     CommonService.response_format(ResponseCode.COMMON.OK)
   end
 
-  # private
-
-    def find_by_category(store, query_params)
-      if query_params[:category] == 'all'
-        data = []
-        # 查询商家所有分类
-        setting_ids = store.products.collect{|product| product.id}.uniq
-        category_ids = CategoriesProduct.where("setting_id in (?)", setting_ids).group("category_id").collect{|x| x.category_id}
-        Category.find(category_ids).each do |category|
-          products = []
-          category.products.each do |product|
-            products << SettingsService.find_setting_data(product) if !product.nil?
-          end
-          data << {:category => category.as_json.merge(:picture => category.pictures[0]),
-                   :products => products}
-        end
-        data
-      elsif query_params[:category].to_i == Settings.setting_CATEGORY.HOME
-        # # 返回30个商品
-        # data = []
-        # apples = Product.where("name = ? or name = ?", "阿克苏苹果", "夏威夷果").limit(6)
-        # jianguo = Product.where(name: "巴旦木").limit(6)
-        # hongzao = Product.where(name: "红枣").limit(6)
-        # heijialun = Product.where(name: "黑加仑葡萄干").limit(6)
-        # hetao = Product.where(name: "美国核桃").limit(6)
-        #
-        # for i in 0..5
-        #   data << SettingsService.find_setting_data(apples[i])
-        #   data << SettingsService.find_setting_data(jianguo[i])
-        #   data << SettingsService.find_setting_data(hongzao[i])
-        #   data << SettingsService.find_setting_data(heijialun[i])
-        #   data << SettingsService.find_setting_data(hetao[i])
-        # end
-
-        data = []
-        category = Category.find_by(id: Settings.setting_CATEGORY.HOME)
-        products = category.products
-        temp = products[1,products.length]
-        temp << products[0]
-        temp.each do |product|
-          data << SettingsService.find_setting_data(product)
-        end
-        data
-      else
-        # 按照分类查询产品
-        data = []
-        category = Category.find_by(id: query_params[:category].to_i)
-        if !category.nil?
-          category.products.each do |product|
-            data << SettingsService.find_setting_data(product)
-          end
-        end
-        data
-      end
-    end
-
-    def find_by_search(store, query_params)
-      data = []
-      store.products.where("name like ?", "%#{query_params[:search]}%").each do |product|
-        data << SettingsService.find_setting_data(product)
-      end
-      data
-    end
-
-  def self.find_setting_datas(store)
-    data = []
-    store.products.where(is_deleted: false).each do |product|
-      data << SettingsService.find_setting_data(product)
-    end
-    data
-  end
-  
-  # 根据product id查询商品信息
-  def self.find_by_id(setting_id)
-    product = Product.find_by(id: setting_id)
-
-    if !product.nil?
-      product = self.find_setting_data(product)
-    end
-
-    product
-  end
-
-  def self.find_setting_data(product, customer_id=nil)
-    data = nil
-
-    if product.nil?
-      return nil
-    end
-
-    # 获取商品分类
-    categories = product.categories
-
-    # 获取商品所有图片,并按照产品图片分类展示.
-    picture_data = {}
-    pictures = product.images
-    Settings.PICTURES_CATEGORY.PRODUCT.each do |key, value|
-      documents = []
-      pictures.where(category: value).each do |image|
-        documents += image.documents
-      end
-      picture_data[value] = documents #pictures.where(category: value).collect{|image| image.as_json.merge(:pictures => image.documents)}
-    end
-
-    # 如果存在指定的用户,则判断用户是否收藏了该商品.
-    is_collected = false
-    customer = nil
-    if !customer_id.blank? && !(customer = Customer.find_by(id: customer_id)).nil?
-      collection = customer.collections.where(object_type: 'Product', object_id: product.id)
-      is_collected = true if !collection.nil?
-    end
-
-    # 添加价格属性
-    setting_data = SettingsService.setting_data_format(product)
-
-    setting_data.merge(:categories => categories, :pictures => picture_data, :is_collected => is_collected)
-  end
-
   # 格式化产品返回数据为指定格式
   def self.setting_data_format(product)
     product.as_json.merge("prices" => product.prices,
@@ -405,55 +287,12 @@
                           "group_buying" => product.group_buying)
   end
 
-  def self.get_settings(products, total_count)
-    # products.collect{|product| self.find_setting_data(product)}
-
-    data = products.collect{|product| self.find_setting_data(product)}
-    {"total_count" => total_count.nil? ? products.length : total_count, "products" => data}
+  def self.get_settings(settings)
+    settings.map{|setting| self.get_setting(settings)}
   end
 
-  def self.get_settings_no_count(products)
-    products.collect{|product| self.find_setting_data(product)}
-  end
-
-  def self.get_home_settings(store, customer_id)
-    home_adverts = []
-
-    # 首页广告及其关联的商品数据
-    adverts = Advert.where(category: Settings.ADVERT.CATEGORY.HOME_TOP,
-                           status: Settings.ADVERT.STATUS.PUTTING,
-                           is_deleted: false)
-    adverts.each do |advert|
-      home_adverts << {"advert" => AdvertsService.get_advert(advert),
-                       "products" => self.get_settings_no_count(advert.products)}
-    end
-
-    # 首页商品列表数据
-    home_settings = self.get_settings_no_count(store.products.where(property: Settings.setting_PROPERTY.COMMON_setting, is_deleted: false))
-
-    # 购物车项
-    carts = CartsService.get_customer_carts(customer_id)
-
-    # 组织输出首页数据
-    {"adverts" => home_adverts, "products"=> home_settings, "customer_carts"=> carts}
-  end
-
-  # 用户购买团购商品后，自动更新团购商品的数据接口。
-  def self.update_setting_data(order)
-    group_buying_settings = order.products.where(property: Settings.setting_PROPERTY.GROUP_setting)
-    group_buying_settings.each do |product|
-      # 获取该商品对应的订单详情项
-      order_detail = order.shopping_carts.where(setting_id: product.id).first
-
-      # 团购
-      group_buying = product.group_buying
-      if !group_buying.blank?
-        current_amount = group_buying.current_amount + order_detail.amount
-        product.group_buying.update(current_number: group_buying.current_number+1,
-                                    completion_rate: current_amount/group_buying.target_amount,
-                                    current_amount: current_amount)
-      end
-    end
+  def self.get_setting(setting)
+    setting.merge("products" => setting.products)
   end
 
 end

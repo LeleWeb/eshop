@@ -2,7 +2,7 @@ class Setting < ApplicationRecord
   has_and_belongs_to_many :products
 
   # 模型层数据验证
-  validates :setting_type, presence: true, on: :create
+  validates :setting_type, :position, presence: true, on: :create
   validates :sort, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
   validates :setting_type, inclusion: { in: [Settings.SETTING.HOME_PRODUCT] }
   validates :position, inclusion: { in: [0,
