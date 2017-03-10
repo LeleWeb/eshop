@@ -1,47 +1,10 @@
 ﻿class SettingsService < BaseService
   def get_settings(query_params)
     LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
-                                                        store: #{store.inspect},
                                                         query_params: #{query_params.inspect} }
 
-    # 是否按照查询类型检索
-    if query_params["type"] == "home"
-      return SettingsService.get_home_settings(store, query_params["customer"])
-    end
-
-    products = store.products.where(is_deleted: false)
-    total_count = nil
-
-    # 按照产品分类检索
-    if !query_params[:category].blank?
-      products = eval(products.blank? ? "Product" : "products").where(category_id: query_params[:category])
-    end
-
-    # 按照产品属性检索
-    if !query_params[:property].blank?
-      products = eval(products.blank? ? "Product" : "products").where(property: query_params[:property])
-    end
-
-    # 如果存在分页参数,按照分页返回结果.
-    if !query_params[:page].blank? && !query_params[:per_page].blank?
-      products = eval(products.blank? ? "Product" : "products").
-                      page(query_params[:page]).
-                      per(query_params[:per_page])
-      total_count = products.total_count
-    else
-      total_count = products.size
-    end
-
-    CommonService.response_format(ResponseCode.COMMON.OK, SettingsService.get_settings(products, total_count))
-    # if !query_params[:category].blank? && !query_params[:limit].blank?
-    #   CommonService.response_format(ResponseCode.COMMON.OK,
-    #                                 self.find_by_category(store, query_params))
-    # elsif !query_params[:search].blank?
-    #   CommonService.response_format(ResponseCode.COMMON.OK,
-    #                                 self.find_by_search(store, query_params))
-    # else
-    #   CommonService.response_format(ResponseCode.COMMON.OK, SettingsService.find_setting_datas(store))
-    # end
+    CommonService.response_format(ResponseCode.COMMON.OK,
+                                  SettingsService.get_settings(Setting.where(setting_type: query_params["setting_type"])))
   end
 
   def self.get_setting(setting)
@@ -164,82 +127,33 @@
     end
   end
 
-  def destroy_setting(product, destroy_params)
+  def destroy_setting(setting, destroy_params)
     LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
-                                                        product: #{product.inspect},
+                                                        setting: #{setting.inspect},
                                                         destroy_params: #{destroy_params.inspect} }
 
     begin
       Product.transaction do
-        # 删除商品本身
+        # 删除设置本身
         begin
-          product.update!(is_deleted: true, deleted_at: Time.now)
+          Setting.where(setting_type: Settings.SETTING.HOME_PRODUCT).map{|x| x.update!(is_deleted: true, deleted_at: Time.now) }
         rescue Exception => e
           # TODO 删除商品失败，打印对应LOG
-          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} destroy product failed! Details: #{e.message}"
+          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} destroy settings failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
         end
-
-        # 删除产品价格
-        begin
-          product.prices.each {|price| price.update!(is_deleted: true, deleted_at: Time.now)}
-        rescue Exception => e
-          # TODO 删除产品价格失败，打印对应LOG
-          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} destroy product prices failed! Details: #{e.message}"
-
-          # 继续向上层抛出异常
-          raise e
-        end
-
-        # 删除产品计算策略
-        begin
-          product.compute_strategies.each {|compute_strategy| compute_strategy.update!(is_deleted: true, deleted_at: Time.now)}
-        rescue Exception => e
-          # TODO 删除产品计算策略失败，打印对应LOG
-          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} destroy product compute strategies failed! Details: #{e.message}"
-
-          # 继续向上层抛出异常
-          raise e
-        end
-
-        # 删除产品团购数据
-        begin
-          product.group_buying.update!(is_deleted: true, deleted_at: Time.now)
-        rescue Exception => e
-          # TODO 删除产品团购数据失败，打印对应LOG
-          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} destroy product group buying failed! Details: #{e.message}"
-
-          # 继续向上层抛出异常
-          raise e
-        end
-
-        # 批量删除
-        begin
-          if !destroy_params.blank?
-            destroy_params.each do |setting_id|
-              Product.find(setting_id).update!(is_deleted: true, deleted_at: Time.now)
-            end
-          end
-        rescue Exception => e
-          # TODO 批量删除商品失败，打印对应LOG
-          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} destroy mutli product failed! Details: #{e.message}"
-
-          # 继续向上层抛出异常
-          raise e
-        end
-
       end
+
+      CommonService.response_format(ResponseCode.COMMON.OK)
     rescue Exception => e
       # TODO 打印LOG
-      LOG.error "Error: file: #{__FILE__} line:#{__LINE__} 删除商品失败! Details: #{e.message}"
+      LOG.error "Error: file: #{__FILE__} line:#{__LINE__} 删除首页商品设置失败! Details: #{e.message}"
 
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "Error: file: #{__FILE__} line:#{__LINE__} 删除商品失败! Details: #{e.message}")
+                                           "Error: file: #{__FILE__} line:#{__LINE__} 删除首页商品设置失败! Details: #{e.message}")
     end
-
-    CommonService.response_format(ResponseCode.COMMON.OK)
   end
 
   def self.get_settings(settings)

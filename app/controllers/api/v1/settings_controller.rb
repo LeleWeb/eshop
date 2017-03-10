@@ -6,11 +6,6 @@ class Api::V1::SettingsController < Api::V1::BaseController
     render json: SettingsService.new.get_settings(query_params)
   end
 
-  # GET /settings/1
-  def show
-    render json: SettingsService.new.get_setting(@setting)
-  end
-
   # POST /api/v1/settings
   def create
     render json: SettingsService.new.create_setting(setting_params)
@@ -39,8 +34,11 @@ class Api::V1::SettingsController < Api::V1::BaseController
   end
 
   def query_params
-    params.permit(:page,
-                  :per_page)
+    params.permit(:setting_type)
+  end
+
+  def destroy_params
+    params.permit(:setting_type)
   end
 
 end
