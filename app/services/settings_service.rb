@@ -132,7 +132,7 @@
             data.each do |item|
               if !item["products"].empty?
                 begin
-                  setting.products.where(position: item["category"]).clear
+                  setting.products.where(position: item["category"]).map{|x| x.delete}
                 rescue Exception => e
                   # TODO 删除已设置的首页分类商品失败，打印对应LOG
                   LOG.error "Error: file: #{__FILE__} line:#{__LINE__} destroy setting products failed! Details: #{e.message}"
