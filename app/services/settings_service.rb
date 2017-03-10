@@ -108,9 +108,8 @@
     end
   end
 
-  def update_setting(setting, setting_params)
+  def update_setting(setting_params)
     LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
-                                                        setting: #{setting.inspect},
                                                         setting_params: #{setting_params.inspect} }
 
     begin
@@ -132,7 +131,9 @@
             data.each do |item|
               if !item["products"].empty?
                 begin
-                  setting.products.where(position: item["category"]).map{|x| x.delete}
+                  setting = Setting.find_by(setting_type: Settings.SETTING.HOME_PRODUCT, position: item["category"])
+                  setting.products.clear
+                  setting.products << Product.find(item["products"])
                 rescue Exception => e
                   # TODO 删除已设置的首页分类商品失败，打印对应LOG
                   LOG.error "Error: file: #{__FILE__} line:#{__LINE__} destroy setting products failed! Details: #{e.message}"
@@ -140,8 +141,6 @@
                   # 继续向上层抛出异常
                   raise e
                 end
-
-                setting.products << Product.find(item["products"])
               end
             end
           end

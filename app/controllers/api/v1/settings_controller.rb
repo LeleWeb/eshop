@@ -18,7 +18,7 @@ class Api::V1::SettingsController < Api::V1::BaseController
 
   # PATCH/PUT /settings/1
   def update
-    render json: SettingsService.new.update_setting(@setting, setting_params)
+    render json: SettingsService.new.update_setting(setting_params)
   end
 
   # DELETE /settings /1
