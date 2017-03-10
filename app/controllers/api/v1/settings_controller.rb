@@ -33,9 +33,7 @@ class Api::V1::SettingsController < Api::V1::BaseController
 
   # Only allow a trusted parameter "white list" through.
   def setting_params
-    params.require(:setting).permit( :setting_type,
-                                     :position,
-                                     :product_ids => [])
+    params.require(:setting).permit( :setting_type, :data => [:category, :products])
   end
 
   def query_params
