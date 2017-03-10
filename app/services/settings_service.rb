@@ -44,7 +44,7 @@
     # end
   end
 
-  def get_setting(setting)
+  def self.get_setting(setting)
     LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
                                                         setting: #{setting.inspect}  }
     setting.as_json.merge("products" => setting.products)
