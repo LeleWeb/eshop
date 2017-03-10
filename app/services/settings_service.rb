@@ -108,17 +108,15 @@
     end
   end
 
-  def update_setting(product, setting_params)
+  def update_setting(setting, setting_params)
     LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
-                                                        product: #{product.inspect},
+                                                        setting: #{setting.inspect},
                                                         setting_params: #{setting_params.inspect} }
 
     begin
       # 解析参数
       begin
-        price_params = setting_params.extract!("prices")["prices"]
-        compute_strategy_params = setting_params.extract!("compute_strategies")["compute_strategies"]
-        group_buying = setting_params.extract!("group_buying")["group_buying"]
+        data = setting_params.extract!("data")["data"]
       rescue Exception => e
         # TODO 解析参数失败，打印对应LOG
         LOG.error "Error: file: #{__FILE__} line:#{__LINE__} params invalid! Details: #{e.message}"
@@ -128,78 +126,43 @@
       end
 
       Product.transaction do
-        # 更新商品信息
+        # 设置与商品建立关联
         begin
-          product.update!(setting_params)
-        rescue Exception => e
-          # TODO 修改商品失败，打印对应LOG
-          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} update product failed! Details: #{e.message}"
+          if !data.blank?
+            data.each do |item|
+              if !item["products"].empty?
+                begin
+                  setting.products.where(position: item["category"]).clear
+                rescue Exception => e
+                  # TODO 删除已设置的首页分类商品失败，打印对应LOG
+                  LOG.error "Error: file: #{__FILE__} line:#{__LINE__} destroy setting products failed! Details: #{e.message}"
 
-          # 继续向上层抛出异常
-          raise e
-        end
+                  # 继续向上层抛出异常
+                  raise e
+                end
 
-        # 如果有价格列表，则删除原来的价格，新增参数中的价格。
-        begin
-          if !price_params.blank?
-            # 先删除已有价格
-            product.prices.map{|x| x.destroy }
-
-            # 新建参数传入的价格
-            product.prices.create!(price_params)
+                setting.products << Product.find(item["products"])
+              end
+            end
           end
         rescue Exception => e
-          # TODO 更新商品价格失败，打印对应LOG
-          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} update product price failed! Details: #{e.message}"
-
-          # 继续向上层抛出异常
-          raise e
-        end
-
-        # 如果有计算策略列表，则删除原来的计算策略，新增参数中的计算策略。
-        begin
-          if !compute_strategy_params.blank?
-            # 先删除已有计算策略
-            product.compute_strategies.map{|x| x.destroy }
-
-            # 新建参数传入的计算策略
-            product.compute_strategies.create!(compute_strategy_params)
-          end
-        rescue Exception => e
-          # TODO 更新商品计算策略失败，打印对应LOG
-          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} update product compute strategy failed! Details: #{e.message}"
-
-          # 继续向上层抛出异常
-          raise e
-        end
-
-        # 如果有团购数据，则删除原来的团购数据，新增参数中的团购数据。
-        begin
-          if !group_buying.blank?
-            # 先删除已有计算策略
-            obj = product.group_buying
-            obj.destroy if !obj.nil?
-
-            # 新建参数传入的计算策略
-            product.create_group_buying(group_buying)
-          end
-        rescue Exception => e
-          # TODO 更新商品团购数据失败，打印对应LOG
-          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} update product group buying failed! Details: #{e.message}"
+          # TODO 设置与商品建立关联失败，打印对应log
+          puts "Error: file: #{__FILE__} line:#{__LINE__} update setting and product relation failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
         end
       end
+
+      CommonService.response_format(ResponseCode.COMMON.OK,
+                                    SettingsService.get_settings(Setting.where(setting_type: Settings.SETTING.HOME_PRODUCT)))
     rescue Exception => e
       # TODO 打印LOG
-      LOG.error "Error: file: #{__FILE__} line:#{__LINE__} 更新商品失败! Details: #{e.message}"
+      LOG.error "Error: file: #{__FILE__} line:#{__LINE__} 更新设置失败! Details: #{e.message}"
 
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "Error: file: #{__FILE__} line:#{__LINE__} 更新商品失败! Details: #{e.message}")
+                                           "Error: file: #{__FILE__} line:#{__LINE__} 更新设置失败! Details: #{e.message}")
     end
-
-    CommonService.response_format(ResponseCode.COMMON.OK, SettingsService.setting_data_format(product))
   end
 
   def destroy_setting(product, destroy_params)
@@ -278,13 +241,6 @@
     end
 
     CommonService.response_format(ResponseCode.COMMON.OK)
-  end
-
-  # 格式化产品返回数据为指定格式
-  def self.setting_data_format(product)
-    product.as_json.merge("prices" => product.prices,
-                          "compute_strategies" => product.compute_strategies,
-                          "group_buying" => product.group_buying)
   end
 
   def self.get_settings(settings)
