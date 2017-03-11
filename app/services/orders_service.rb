@@ -324,6 +324,9 @@ class OrdersService < BaseService
   end
 
   def self.print_order(order)
+    LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
+                                                        order: #{order.inspect} }
+
     # 收集订单相关数据
     order_info = self.get_order(order)
     # 格式化为打印机可以接受的数据格式
@@ -333,6 +336,9 @@ class OrdersService < BaseService
   end
 
   def self.format_print_data(order)
+    LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
+                                                        order: #{order.inspect} }
+
     content =  ""
     # 头部信息
     content += "<CB>舌尖生鲜</CB>"
@@ -411,6 +417,8 @@ class OrdersService < BaseService
   end
 
   def self.get_single_content(order_detail)
+    LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
+                                                        order_detail: #{order_detail.inspect} }
     self.format_content(order_detail["product"]["name"]) +
         self.format_value(order_detail["price"]["real_price"]) +
         self.format_value(order_detail["amount"]) +
