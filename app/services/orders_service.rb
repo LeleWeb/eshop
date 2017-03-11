@@ -22,6 +22,12 @@ class OrdersService < BaseService
       query_condition << query_params[:status]
     end
 
+    # 查询指定支付方式的所有订单
+    if !query_params[:pay_away].blank?
+      query_condition[0] += " AND pay_away = ? "
+      query_condition << query_params[:pay_away]
+    end
+
     # 查询指定时间区间的订单
     if !query_params[:begin_time].blank? && !query_params[:end_time].blank?
       query_condition[0] += " AND created_at >= ? AND created_at <= ? "
