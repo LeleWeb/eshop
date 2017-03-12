@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170304133410) do
+ActiveRecord::Schema.define(version: 20170309024255) do
 
   create_table "accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "uuid"
@@ -404,7 +404,7 @@ ActiveRecord::Schema.define(version: 20170304133410) do
     t.string   "name"
     t.string   "description"
     t.string   "detail"
-    t.integer  "stock"
+    t.float    "stock",       limit: 24
     t.float    "price",       limit: 24
     t.float    "real_price",  limit: 24
     t.integer  "status"
@@ -418,6 +418,13 @@ ActiveRecord::Schema.define(version: 20170304133410) do
     t.integer  "group_id"
     t.string   "unit"
     t.integer  "amount"
+  end
+
+  create_table "products_settings", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "product_id"
+    t.integer "setting_id"
+    t.index ["product_id"], name: "index_products_settings_on_product_id", using: :btree
+    t.index ["setting_id"], name: "index_products_settings_on_setting_id", using: :btree
   end
 
   create_table "products_stores", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -434,6 +441,14 @@ ActiveRecord::Schema.define(version: 20170304133410) do
     t.string   "remark"
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
+  end
+
+  create_table "settings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "setting_type", default: 0
+    t.integer  "position",     default: 0
+    t.integer  "sort",         default: 0
+    t.boolean  "is_deleted",   default: false
+    t.datetime "deleted_at"
   end
 
   create_table "shopping_carts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
