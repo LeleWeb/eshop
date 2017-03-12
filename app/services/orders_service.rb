@@ -468,7 +468,7 @@ class OrdersService < BaseService
       product = Product.find(shopping_cart.product_id)
       image = product.images.where(category: Settings.PICTURES_CATEGORY.PRODUCT.MAIN).first
       price = Price.find(shopping_cart.price_id)
-      shopping_cart.update!(product_img: image.documents.first,
+      shopping_cart.update!(product_img: image.documents.first.document,
                             product_name: product.name,
                             product_desc: product.description,
                             product_price: price.real_price,
