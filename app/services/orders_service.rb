@@ -1,7 +1,7 @@
 class OrdersService < BaseService
   def get_orders(query_params)
-    puts __FILE__,__LINE__,__method__,%Q{params:
-                                         query_params: #{query_params.inspect} }
+    LOG.info __FILE__,__LINE__,__method__,%Q{params:
+                                             query_params: #{query_params.inspect} }
 
     # 根据参数，解析所有查询条件
     orders = []
@@ -52,7 +52,7 @@ class OrdersService < BaseService
   end
 
   def get_order(order)
-    puts __FILE__,__LINE__,__method__,%Q{params:
+    LOG.info __FILE__,__LINE__,__method__,%Q{params:
                                          order: #{order.inspect} }
 
     CommonService.response_format(ResponseCode.COMMON.OK, OrdersService.get_order(order))
@@ -60,7 +60,7 @@ class OrdersService < BaseService
 
   # 创建订单
   def create_order(order_params)
-    puts __FILE__,__LINE__,__method__,%Q{params:
+    LOG.info __FILE__,__LINE__,__method__,%Q{params:
                                          order_params: #{order_params.inspect} }
 
     order_total_price = 0.0
@@ -76,7 +76,7 @@ class OrdersService < BaseService
       buyer = Customer.find(order_params.extract!("buyer_id")["buyer_id"])
     rescue Exception => e
       # TODO 解析下单用户失败，打印对应log
-      puts "Error: file: #{__FILE__} line:#{__LINE__} find order buyer failed! Details: #{e.message}"
+      LOG.error "Error: file: #{__FILE__} line:#{__LINE__} find order buyer failed! Details: #{e.message}"
 
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
                                            "Error: file: #{__FILE__} line:#{__LINE__} find order buyer failed! Details: #{e.message}")
@@ -87,7 +87,7 @@ class OrdersService < BaseService
       address = Address.find(order_params.extract!("address_id")["address_id"])
     rescue Exception => e
       # TODO 解析收货地址对象失败，打印对应log
-      puts "Error: file: #{__FILE__} line:#{__LINE__} find order address failed! Details: #{e.message}"
+      LOG.error "Error: file: #{__FILE__} line:#{__LINE__} find order address failed! Details: #{e.message}"
 
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
                                            "Error: file: #{__FILE__} line:#{__LINE__} find order address failed! Details: #{e.message}")
@@ -98,7 +98,7 @@ class OrdersService < BaseService
       shopping_carts = ShoppingCart.find(order_params.extract!("shopping_cart_ids")["shopping_cart_ids"])
     rescue Exception => e
       # TODO 解析订单详情项失败，打印对应log
-      puts "Error: file: #{__FILE__} line:#{__LINE__} find shopping_carts failed! Details: #{e.message}"
+      LOG.error "Error: file: #{__FILE__} line:#{__LINE__} find shopping_carts failed! Details: #{e.message}"
 
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
                                            "Error: file: #{__FILE__} line:#{__LINE__} find shopping_carts failed! Details: #{e.message}")
@@ -118,7 +118,7 @@ class OrdersService < BaseService
                                                           "consignee_phone" => address.phone))
         rescue Exception => e
           # TODO 生成本系统订单失败，打印对应log
-          puts "Error: file: #{__FILE__} line:#{__LINE__} create system order failed! Details: #{e.message}"
+          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} create system order failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -133,6 +133,8 @@ class OrdersService < BaseService
             order_total_price += shopping_cart.total_price
             # 与订单建立关联
             order.shopping_carts << shopping_cart
+            # 此处将订单关联资源的必要信息都拷贝到订单详情项的对应字段中
+            OrdersService.update_shopping_cart_product_info(shopping_cart)
 
             # 如果是多商品购物车，则需要将该节点下的子项设置由购物车项为订单项。
             if !shopping_cart.subitems.blank?
@@ -145,7 +147,7 @@ class OrdersService < BaseService
           end
         rescue Exception => e
           # TODO 生成对应的订单详情项失败，打印对应log
-          puts "Error: file: #{__FILE__} line:#{__LINE__} create order detail failed! Details: #{e.message}"
+          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} create order detail failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -156,7 +158,7 @@ class OrdersService < BaseService
           order.update(pay_price: order_total_price, total_price: order_total_price)
         rescue Exception => e
           # TODO 设置实际支付订单为订单总额失败，打印对应log
-          puts "Error: file: #{__FILE__} line:#{__LINE__} set order total_price failed! Details: #{e.message}"
+          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} set order total_price failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -175,7 +177,7 @@ class OrdersService < BaseService
           end
         rescue Exception => e
           # TODO 设置实际支付订单为订单总额失败，打印对应log
-          puts "Error: file: #{__FILE__} line:#{__LINE__} set order total_price failed! Details: #{e.message}"
+          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} set order total_price failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -183,7 +185,7 @@ class OrdersService < BaseService
       end
     rescue Exception => e
       # TODO 打印log
-      puts "Error: file: #{__FILE__} line:#{__LINE__} 创建订单失败! Details: #{e.message}"
+      LOG.error "Error: file: #{__FILE__} line:#{__LINE__} 创建订单失败! Details: #{e.message}"
 
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
                                            "Error: file: #{__FILE__} line:#{__LINE__} 创建订单失败! Details: #{e.message}")
@@ -227,7 +229,7 @@ class OrdersService < BaseService
   # end
 
   def destory_order(order)
-    puts __FILE__,__LINE__,__method__,%Q{params:
+    LOG.info __FILE__,__LINE__,__method__,%Q{params:
                                          order: #{order.inspect} }
 
     begin
@@ -237,7 +239,7 @@ class OrdersService < BaseService
           order.update!(is_deleted: true, deleted_at: Time.now)
         rescue Exception => e
           # TODO 删除订单失败，打印对应log
-          puts "Error: file: #{__FILE__} line:#{__LINE__} destroy order failed! Details: #{e.message}"
+          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} destroy order failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -248,7 +250,7 @@ class OrdersService < BaseService
           order.shopping_carts.map{|x| x.update!(is_deleted: true, deleted_at: Time.now)}
         rescue Exception => e
           # TODO 删除订单与订单详情关联关系失败，打印对应log
-          puts "Error: file: #{__FILE__} line:#{__LINE__} destroy order and detail relation failed! Details: #{e.message}"
+          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} destroy order and detail relation failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -256,7 +258,7 @@ class OrdersService < BaseService
       end
     rescue Exception => e
       # TODO 打印log
-      puts "Error: file: #{__FILE__} line:#{__LINE__} 删除订单失败! Details: #{e.message}"
+      LOG.error "Error: file: #{__FILE__} line:#{__LINE__} 删除订单失败! Details: #{e.message}"
 
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
                                            "Error: file: #{__FILE__} line:#{__LINE__} 删除订单失败! Details: #{e.message}")
@@ -450,6 +452,26 @@ class OrdersService < BaseService
   def self.wxpay_notify_callback(order)
     # 团购商品支付成功后的数据更新
     ProductsService.update_product_data(order)
+  end
+
+  # 订单项关联的商品和价格需要从关联的对象拷贝必要字段到商品详情项记录的对应字段
+  def self.update_shopping_cart_product_info(shopping_cart)
+    begin
+      product = Product.find(shopping_cart.product_id)
+      picture = product.pictures.where(category: Settings.PICTURES_CATEGORY.PRODUCT.MAIN).first
+      price = Price.find(shopping_cart.price_id)
+      shopping_cart.update!(product_img: picture.documents.first,
+                            product_name: product.name,
+                            product_desc: product.description,
+                            product_price: price.real_price,
+                            product_unit: price.unit)
+    rescue Exception => e
+      # TODO 订单项关联的商品和价格需要从关联的对象拷贝必要字段到商品详情项记录的对应字段失败，打印对应log
+      LOG.error "Error: file: #{__FILE__} line:#{__LINE__} update_shopping_cart_product_info failed! Details: #{e.message}"
+
+      # 继续向上层抛出异常
+      raise e
+    end
   end
 
 end
