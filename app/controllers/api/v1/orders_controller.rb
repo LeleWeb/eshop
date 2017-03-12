@@ -43,7 +43,8 @@ class Api::V1::OrdersController < Api::V1::BaseController
                   :end_time,
                   :page,
                   :per_page,
-                  :pay_away)
+                  :pay_away,
+                  :type)
   end
 
   # Use callbacks to share common setup or constraints between actions.
