@@ -1,7 +1,7 @@
 class OrdersService < BaseService
   def get_orders(query_params)
-    LOG.info __FILE__,__LINE__,__method__,%Q{params:
-                                             query_params: #{query_params.inspect} }
+    LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
+                                                        query_params: #{query_params.inspect} }
 
     # 根据参数，解析所有查询条件
     orders = []
@@ -52,16 +52,16 @@ class OrdersService < BaseService
   end
 
   def get_order(order)
-    LOG.info __FILE__,__LINE__,__method__,%Q{params:
-                                         order: #{order.inspect} }
+    LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
+                                                        order: #{order.inspect} }
 
     CommonService.response_format(ResponseCode.COMMON.OK, OrdersService.get_order(order))
   end
 
   # 创建订单
   def create_order(order_params)
-    LOG.info __FILE__,__LINE__,__method__,%Q{params:
-                                         order_params: #{order_params.inspect} }
+    LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
+                                                        order_params: #{order_params.inspect} }
 
     order_total_price = 0.0
 
@@ -229,8 +229,8 @@ class OrdersService < BaseService
   # end
 
   def destory_order(order)
-    LOG.info __FILE__,__LINE__,__method__,%Q{params:
-                                         order: #{order.inspect} }
+    LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
+                                                        order: #{order.inspect} }
 
     begin
       Order.transaction do
@@ -268,6 +268,9 @@ class OrdersService < BaseService
   end
 
   def print_order(order)
+    LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
+                                                        order: #{order.inspect} }
+
     # 参数合法性检查
     if order.blank?
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
@@ -295,6 +298,8 @@ class OrdersService < BaseService
 
   # 定时刷新订单状态，已发货的订单，超过七天后自动设置为已完成方法。
   def self.update_order_status
+    LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__} }
+
     # 查找所有状态为已发货的订单
     orders = Order.where(status: Settings.ORDER.STATUS.DELIVERED)
 
@@ -456,6 +461,9 @@ class OrdersService < BaseService
 
   # 订单项关联的商品和价格需要从关联的对象拷贝必要字段到商品详情项记录的对应字段
   def self.update_shopping_cart_product_info(shopping_cart)
+    LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
+                                                        shopping_cart: #{shopping_cart.inspect} }
+
     begin
       product = Product.find(shopping_cart.product_id)
       picture = product.pictures.where(category: Settings.PICTURES_CATEGORY.PRODUCT.MAIN).first
