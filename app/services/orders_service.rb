@@ -38,7 +38,7 @@ class OrdersService < BaseService
     # 查询未处理的订单(包括：在线已支付订单和货到付款的未完成订单)
     if query_params[:type] == 'untreated'
       # 查询在线支付的已付款订单和货到付款的未支付订单
-      query_condition[0] += " AND status = ? AND pay_away = ? OR AND status = ? AND pay_away = ? "
+      query_condition[0] += " AND status = ? AND pay_away = ? OR status = ? AND pay_away = ? "
       query_condition << Settings.ORDER.STATUS.PAID
       query_condition << Settings.ORDER.PAY_AWAY.WXPAY.VALUE
       query_condition << Settings.ORDER.STATUS.PREPAY
