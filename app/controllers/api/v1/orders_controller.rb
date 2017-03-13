@@ -64,6 +64,7 @@ class Api::V1::OrdersController < Api::V1::BaseController
                                   :address_id,
                                   :pay_away,
                                   :delivery_time,
+                                  :status,
                                   :shopping_cart_ids => [])
   end
 end
