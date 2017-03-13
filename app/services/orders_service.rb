@@ -229,14 +229,33 @@ class OrdersService < BaseService
   #   CommonService.response_format(ResponseCode.COMMON.OK, {"order" => order, "prepay_data" => res})
   # end
 
-  # def update_order(order, order_params)
-  #   if order.update(order_params)
-  #     CommonService.response_format(ResponseCode.COMMON.OK, order)
-  #   else
-  #     ResponseCode.COMMON.FAILED['message'] = order.errors
-  #     CommonService.response_format(ResponseCode.COMMON.FAILED)
-  #   end
-  # end
+  def update_order(order, order_params)
+    LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
+                                                      order: #{order.inspect}
+                                                      order_params: #{order_params.inspect} }
+
+    # 订单只能通过cms修改状态
+    if !order_params["status"].blank?
+      # TODO 订单状态参数无效，打印对应log
+      LOG.error "Error: file: #{__FILE__} line:#{__LINE__} invalid order status params! Details: #{e.message}"
+
+      return CommonService.response_format(ResponseCode.COMMON.FAILED,
+                                           "Error: file: #{__FILE__} line:#{__LINE__} invalid order status params!")
+    end
+
+    begin
+      order.update!(status: order_params["status"])
+
+      CommonService.response_format(ResponseCode.COMMON.OK, OrdersService.get_order(order))
+    rescue Exception => e
+      # TODO 修改订单状态失败，打印log
+      LOG.error "Error: file: #{__FILE__} line:#{__LINE__} update order status failed! Details: #{e.message}"
+
+      return CommonService.response_format(ResponseCode.COMMON.FAILED,
+                                           "Error: file: #{__FILE__} line:#{__LINE__} 修改订单状态失败! Details: #{e.message}")
+    end
+
+  end
 
   def destory_order(order)
     LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:

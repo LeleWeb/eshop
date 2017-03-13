@@ -18,11 +18,11 @@ class Api::V1::OrdersController < Api::V1::BaseController
     render json: OrdersService.new.create_order(order_params)
   end
 
-  # # PATCH/PUT /accounts/1
-  # def update
-  #   authorize @order
-  #   render json: OrdersService.new.update_order(@order, order_params)
-  # end
+  # PATCH/PUT /accounts/1
+  def update
+    # authorize @order
+    render json: OrdersService.new.update_order(@order, order_params)
+  end
 
   # DELETE /accounts/1
   def destroy
