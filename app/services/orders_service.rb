@@ -235,9 +235,9 @@ class OrdersService < BaseService
                                                       order_params: #{order_params.inspect} }
 
     # 订单只能通过cms修改状态
-    if !order_params["status"].blank?
+    if order_params["status"].blank?
       # TODO 订单状态参数无效，打印对应log
-      LOG.error "Error: file: #{__FILE__} line:#{__LINE__} invalid order status params! Details: #{e.message}"
+      LOG.error "Error: file: #{__FILE__} line:#{__LINE__} invalid order status params!"
 
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
                                            "Error: file: #{__FILE__} line:#{__LINE__} invalid order status params!")
