@@ -455,14 +455,28 @@
                        "products" => self.get_products_no_count(advert.products)}
     end
 
-    # 首页商品列表数据
+    # 限时抢购商品(根据限时抢购是否处于有效状态返回当前的限时抢购商品列表)
+    now = Time.now
+    panic_buying = PanicBuying.where("is_deleted = ? AND begin_time <= ? AND end_time >= ? ", false, now, now).first
+    panic_buying_products = self.get_products_no_count(panic_buying.products)
+
+    # 团购商品
+    now = Time.now
+    group_buyings = GroupBuying.where("is_deleted = ? AND begin_time <= ? AND end_time >= ? ", false, now, now)
+    group_buyings.map!{|group_buying| group_buying.as_json.merge("product" => self.find_product_data(group_buying.product))}
+
+    # 首页商品列表数据(按照以下分类组织：单品，果切，团队)
     home_products = self.get_products_no_count(store.products.where(property: Settings.PRODUCT_PROPERTY.COMMON_PRODUCT, is_deleted: false))
 
     # 购物车项
     carts = CartsService.get_customer_carts(customer_id)
 
     # 组织输出首页数据
-    {"adverts" => home_adverts, "products"=> home_products, "customer_carts"=> carts}
+    {"adverts" => home_adverts,
+     "panic_buying" => panic_buying.as_json.merge("products" => panic_buying_products),
+     "group_buyings" => group_buyings,
+     "products"=> home_products,
+     "customer_carts"=> carts}
   end
 
   # 用户购买团购商品后，自动更新团购商品的数据接口。
