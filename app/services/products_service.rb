@@ -467,8 +467,7 @@
                       false,
                       now,
                       now).each do |group_buying|
-        group_buyings << group_buying.as_json.merge("product" => self.find_product_data(group_buying.product))
-      end
+      group_buyings << group_buying.as_json.merge("product" => self.find_product_data(group_buying.product))
     end
 
     # 首页商品列表数据(按照以下分类组织：单品，果切，团队)
