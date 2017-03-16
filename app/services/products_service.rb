@@ -457,8 +457,9 @@
 
     # 限时抢购商品(根据限时抢购是否处于有效状态返回当前的限时抢购商品列表)
     now = Time.now
+    panic_buying_products = []
     panic_buying = PanicBuying.where("is_deleted = ? AND begin_time <= ? AND end_time >= ? ", false, now, now).first
-    panic_buying_products = self.get_products_no_count(panic_buying.products)
+    panic_buying_products = self.get_products_no_count(panic_buying.products) if !panic_buying.nil?
 
     # 团购商品
     now = Time.now
