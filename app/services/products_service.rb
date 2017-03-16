@@ -479,7 +479,7 @@
 
     # 组织输出首页数据
     {"adverts" => home_adverts,
-     "panic_buying" => panic_buying.as_json.merge("products" => panic_buying_products),
+     "panic_buying" => !panic_buying.nil? ? panic_buying.as_json.merge("products" => panic_buying_products) : nil,
      "group_buyings" => group_buyings,
      "products"=> home_products,
      "customer_carts"=> carts}
