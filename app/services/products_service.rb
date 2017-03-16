@@ -462,8 +462,14 @@
 
     # 团购商品
     now = Time.now
-    group_buyings = GroupBuying.where("is_deleted = ? AND begin_time <= ? AND end_time >= ? ", false, now, now)
-    group_buyings.map!{|group_buying| group_buying.as_json.merge("product" => self.find_product_data(group_buying.product))}
+    group_buyings = []
+    GroupBuying.where("is_deleted = ? AND begin_time <= ? AND end_time >= ? ",
+                      false,
+                      now,
+                      now).each do |group_buying|
+        group_buyings << group_buying.as_json.merge("product" => self.find_product_data(group_buying.product))
+      end
+    end
 
     # 首页商品列表数据(按照以下分类组织：单品，果切，团队)
     home_products = self.get_products_no_count(store.products.where(property: Settings.PRODUCT_PROPERTY.COMMON_PRODUCT, is_deleted: false))
