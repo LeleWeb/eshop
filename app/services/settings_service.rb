@@ -127,7 +127,7 @@
       Product.transaction do
         # 删除设置本身
         begin
-          Setting.where(setting_type: Settings.SETTING.HOME_PRODUCT).map{|x| x.update!(is_deleted: true, deleted_at: Time.now) }
+          Setting.where(setting_type: Settings.SETTING.HOME_PRODUCT.VALUE).map{|x| x.update!(is_deleted: true, deleted_at: Time.now) }
         rescue Exception => e
           # TODO 删除商品失败，打印对应LOG
           LOG.error "Error: file: #{__FILE__} line:#{__LINE__} destroy settings failed! Details: #{e.message}"
@@ -157,7 +157,7 @@
 
   # 获取首页商品设置
   def self.get_home_product
-    SettingsService.get_settings(Setting.where(setting_type: Settings.SETTING.HOME_PRODUCT, is_deleted: false))
+    SettingsService.get_settings(Setting.where(setting_type: Settings.SETTING.HOME_PRODUCT.VALUE, is_deleted: false))
   end
 
 end
