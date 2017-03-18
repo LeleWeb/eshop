@@ -528,7 +528,8 @@
                       false,
                       now,
                       now).each do |group_buying|
-      group_buyings << group_buying.as_json.merge("product" => self.find_product_data(group_buying.product))
+      product = Product.find_by(id: group_buying.product_id)
+      group_buyings << group_buying.as_json.merge("product" => self.find_product_data(product))
     end
 
     {"single_setmeal" => single_setmeal,
