@@ -84,7 +84,7 @@
         begin
           if !data.blank?
             data.each do |item|
-              if !item["products"].empty?
+              if item.key?("products") && !item["products"].empty?
                 begin
                   setting = Setting.find_by(setting_type: Settings.SETTING.HOME_PRODUCT.VALUE, position: item["category"])
                   setting.products.clear
