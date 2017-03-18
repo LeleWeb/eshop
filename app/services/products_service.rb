@@ -463,7 +463,7 @@
 
     # 查询团队套餐
     team_setmeal = []
-    Product.where(categroy: Settings.PRODUCT_CATEGORY.TEAM_SETMEAL, is_deleted: false).each do |product|
+    Product.where(category_id: Settings.PRODUCT_CATEGORY.TEAM_SETMEAL, is_deleted: false).each do |product|
       team_setmeal << self.find_product_data(product)
     end
 
