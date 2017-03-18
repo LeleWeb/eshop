@@ -529,7 +529,7 @@
         if product.group_buying.is_deleted == false &&
             product.group_buying.begin_time <= now &&
             product.group_buying.end_time >= now
-          group_buyings << self.get_products_no_count(product)
+          group_buyings << self.find_product_data(product)
         end
       end
     end
