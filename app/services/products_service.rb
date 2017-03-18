@@ -523,7 +523,7 @@
     # 团购商品
     now = Time.now
     Setting.where(setting_type: Settings.SETTING.HOME_PRODUCT.VALUE,
-                  position: Settings.SETTING.HOME_PRODUCT.TEAM_SETMEAL,
+                  position: Settings.SETTING.HOME_PRODUCT.GROUP_PRODUCT,
                   is_deleted: false).each do |item|
       item.products.each do |product|
         if product.group_buying.is_deleted == false &&
