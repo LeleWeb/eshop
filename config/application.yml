@@ -235,7 +235,11 @@ defaults: &defaults
 
   # 设置类别常量定义
   SETTING:
-    HOME_PRODUCT: 1  # 首页商品显示设置
+    HOME_PRODUCT:  # 首页商品显示设置
+      VALUE: 1
+      SINGLE_SETMEAL: 1   # 单品
+      PERSONAL_SETMEAL: 2 # 果切
+      GROUP_PRODUCT: 3    # 团购商品
 
 development:
   <<: *defaults

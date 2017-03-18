@@ -463,9 +463,8 @@
 
     # 查询团队套餐
     team_setmeal = []
-    Setting.where(setting_type: Settings.SETTING.HOME_PRODUCT,
-                  position: Settings.PRODUCT_CATEGORY.TEAM_SETMEAL).each do |item|
-      team_setmeal = self.get_products_no_count(item.products)
+    Product.where(categroy: Settings.PRODUCT_CATEGORY.TEAM_SETMEAL, is_deleted: false).each do |product|
+      team_setmeal << self.find_product_data(product)
     end
 
     # 首页商品列表数据(按照以下分类组织：单品，果切，团购商品)
@@ -508,29 +507,42 @@
     group_buyings = []
 
     # 查询单品
-    Setting.where(setting_type: Settings.SETTING.HOME_PRODUCT, position: Settings.PRODUCT_CATEGORY.SINGLE_SETMEAL).each do |item|
+    Setting.where(setting_type: Settings.SETTING.HOME_PRODUCT.VALUE,
+                  position: Settings.SETTING.HOME_PRODUCT.SINGLE_SETMEAL,
+                  is_deleted: false).each do |item|
       single_setmeal = self.get_products_no_count(item.products)
     end
 
     # 查询果切
-    Setting.where(setting_type: Settings.SETTING.HOME_PRODUCT, position: Settings.PRODUCT_CATEGORY.PERSONAL_SETMEAL).each do |item|
+    Setting.where(setting_type: Settings.SETTING.HOME_PRODUCT.VALUE,
+                  position: Settings.SETTING.HOME_PRODUCT.PERSONAL_SETMEAL,
+                  is_deleted: false).each do |item|
       personal_setmeal = self.get_products_no_count(item.products)
     end
 
-    # # 查询团队套餐
-    # Setting.where(setting_type: Settings.SETTING.HOME_PRODUCT, position: Settings.PRODUCT_CATEGORY.TEAM_SETMEAL).each do |item|
-    #   team_setmeal = self.get_products_no_count(item.products)
-    # end
-
     # 团购商品
     now = Time.now
-    GroupBuying.where("is_deleted = ? AND begin_time <= ? AND end_time >= ? ",
-                      false,
-                      now,
-                      now).each do |group_buying|
-      product = Product.find_by(id: group_buying.product_id)
-      group_buyings << group_buying.as_json.merge("product" => self.find_product_data(product))
+    Setting.where(setting_type: Settings.SETTING.HOME_PRODUCT.VALUE,
+                  position: Settings.SETTING.HOME_PRODUCT.TEAM_SETMEAL,
+                  is_deleted: false).each do |item|
+      item.products.each do |product|
+        if product.group_buying.is_deleted == false &&
+            product.group_buying.begin_time <= now &&
+            product.group_buying.end_time >= now
+          group_buyings << self.get_products_no_count(product)
+        end
+      end
     end
+
+    # # 团购商品
+    # now = Time.now
+    # GroupBuying.where("is_deleted = ? AND begin_time <= ? AND end_time >= ? ",
+    #                   false,
+    #                   now,
+    #                   now).each do |group_buying|
+    #   product = Product.find_by(id: group_buying.product_id)
+    #   group_buyings << group_buying.as_json.merge("product" => self.find_product_data(product))
+    # end
 
     {"single_setmeal" => single_setmeal,
      "personal_setmeal"=> personal_setmeal,
