@@ -8,7 +8,7 @@
 
   def create_setting(setting_params)
     LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
-                                                              setting_params: #{setting_params.inspect} }
+                                                             setting_params: #{setting_params.inspect} }
 
     setting = nil
 

@@ -472,7 +472,8 @@
     end
 
     # 首页商品列表数据(按照以下分类组织：单品，果切，团队)
-    home_products = self.get_products_no_count(store.products.where(property: Settings.PRODUCT_PROPERTY.COMMON_PRODUCT, is_deleted: false))
+    # home_products = self.get_products_no_count(store.products.where(property: Settings.PRODUCT_PROPERTY.COMMON_PRODUCT, is_deleted: false))
+    home_products = self.get_home_products_by_category
 
     # 购物车项
     carts = CartsService.get_customer_carts(customer_id)
@@ -501,6 +502,32 @@
                                     current_amount: current_amount)
       end
     end
+  end
+
+  # 查询首页商品列表数据(按照以下分类组织：单品，果切，团队)
+  def self.get_home_products_by_category
+    single_setmeal = []
+    personal_setmeal= []
+    team_setmeal = []
+
+    # 查询单品
+    Setting.where(setting_type: Settings.HOME_PRODUCT, position: Settings.PRODUCT_CATEGORY.SINGLE_SETMEAL).each do |item|
+      single_setmeal = self.get_products_no_count(item.products)
+    end
+
+    # 查询果切
+    Setting.where(setting_type: Settings.HOME_PRODUCT, position: Settings.PRODUCT_CATEGORY.PERSONAL_SETMEAL).each do |item|
+      personal_setmeal = self.get_products_no_count(item.products)
+    end
+
+    # 查询团队套餐
+    Setting.where(setting_type: Settings.HOME_PRODUCT, position: Settings.PRODUCT_CATEGORY.TEAM_SETMEAL).each do |item|
+      team_setmeal = self.get_products_no_count(item.products)
+    end
+
+    {"single_setmeal" => single_setmeal,
+     "personal_setmeal"=> personal_setmeal,
+     "team_setmeal" => team_setmeal}
   end
 
 end
