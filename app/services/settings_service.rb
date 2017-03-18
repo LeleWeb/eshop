@@ -86,7 +86,7 @@
             data.each do |item|
               if !item["products"].empty?
                 begin
-                  setting = Setting.find_by(setting_type: Settings.SETTING.HOME_PRODUCT, position: item["category"])
+                  setting = Setting.find_by(setting_type: Settings.SETTING.HOME_PRODUCT.VALUE, position: item["category"])
                   setting.products.clear
                   setting.products << Product.find(item["products"])
                 rescue Exception => e
