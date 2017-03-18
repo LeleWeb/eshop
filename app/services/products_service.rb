@@ -511,17 +511,17 @@
     team_setmeal = []
 
     # 查询单品
-    Setting.where(setting_type: Settings.HOME_PRODUCT, position: Settings.PRODUCT_CATEGORY.SINGLE_SETMEAL).each do |item|
+    Setting.where(setting_type: Settings.SETTING.HOME_PRODUCT, position: Settings.PRODUCT_CATEGORY.SINGLE_SETMEAL).each do |item|
       single_setmeal = self.get_products_no_count(item.products)
     end
 
     # 查询果切
-    Setting.where(setting_type: Settings.HOME_PRODUCT, position: Settings.PRODUCT_CATEGORY.PERSONAL_SETMEAL).each do |item|
+    Setting.where(setting_type: Settings.SETTING.HOME_PRODUCT, position: Settings.PRODUCT_CATEGORY.PERSONAL_SETMEAL).each do |item|
       personal_setmeal = self.get_products_no_count(item.products)
     end
 
     # 查询团队套餐
-    Setting.where(setting_type: Settings.HOME_PRODUCT, position: Settings.PRODUCT_CATEGORY.TEAM_SETMEAL).each do |item|
+    Setting.where(setting_type: Settings.SETTING.HOME_PRODUCT, position: Settings.PRODUCT_CATEGORY.TEAM_SETMEAL).each do |item|
       team_setmeal = self.get_products_no_count(item.products)
     end
 
