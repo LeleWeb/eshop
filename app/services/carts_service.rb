@@ -4,13 +4,14 @@ class CartsService < BaseService
                                          query_params: #{query_params.inspect} }
 
     carts = ShoppingCart.where(is_deleted: false, property: Settings.CART_OR_ITEM.PROPERTY.CART_ITEM)
+    LOG.info "111: #{carts.inspect}"
     total_count = nil
 
     # 查询指定消费者的所有购物车项
     if !query_params[:owner_type].blank? && !query_params[:owner_id].blank?
       carts = carts.where(owner_type: query_params[:owner_type], owner_id: query_params[:owner_id])
     end
-
+    LOG.info "222: #{carts.inspect}"
     # 如果存在分页参数,按照分页返回结果.
     if !query_params[:page].blank? && !query_params[:per_page].blank?
       carts = eval(carts.nil? ? "Cart" : "carts").
@@ -21,6 +22,8 @@ class CartsService < BaseService
       total_count = carts.size
     end
 
+    LOG.info "333: #{carts.inspect}"
+    LOG.info "444: #{CartsService.get_carts(carts, total_count)}"
     CommonService.response_format(ResponseCode.COMMON.OK, CartsService.get_carts(carts, total_count))
   end
 
