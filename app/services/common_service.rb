@@ -4,8 +4,12 @@ require 'json'
 
 class CommonService < BaseService
   def self.response_format(response_code, data=nil)
+    LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
+                                                        response_code: #{response_code.inspect},
+                                                        data: #{data.inspect} }
     response = response_code.as_json
     data.nil? ? response : response[:data] = data
+    LOG.info "Response: #{response}"
     response
   end
 
