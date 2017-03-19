@@ -271,7 +271,7 @@
 
         # 删除产品团购数据
         begin
-          product.group_buying.update!(is_deleted: true, deleted_at: Time.now)
+          product.group_buying.update!(is_deleted: true, deleted_at: Time.now) if !product.group_buying.nil?
         rescue Exception => e
           # TODO 删除产品团购数据失败，打印对应LOG
           LOG.error "Error: file: #{__FILE__} line:#{__LINE__} destroy product group buying failed! Details: #{e.message}"
