@@ -43,13 +43,14 @@
   end
 
   def create_advert(advert_params)
-    puts __FILE__,__LINE__,__method__,%Q{params:
-                                         advert_params: #{advert_params.inspect}}
+    LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
+                                                      advert_params: #{advert_params.inspect} }
 
     advert = nil
 
     # 参数合法性检查
     if advert_params.blank?
+      LOG.error "Error: file: #{__FILE__} line:#{__LINE__} invalid advert_params!"
       return CommonService.response_format(ResponseCode.COMMON.FAILED,
                                            "Error: file: #{__FILE__} line:#{__LINE__} advert_params:#{advert_params.inspect} is blank!")
     end
@@ -64,7 +65,7 @@
           advert = Advert.create!(advert_params)
         rescue Exception => e
           # TODO 创建广告失败，打印对应log
-          puts "Error: file: #{__FILE__} line:#{__LINE__} create advert failed! Details: #{e.message}"
+          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} create advert failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -77,7 +78,7 @@
           end
         rescue Exception => e
           # TODO 广告与商品建立关联失败，打印对应log
-          puts "Error: file: #{__FILE__} line:#{__LINE__} create advert and product relation failed! Details: #{e.message}"
+          LOG.error "Error: file: #{__FILE__} line:#{__LINE__} create advert and product relation failed! Details: #{e.message}"
 
           # 继续向上层抛出异常
           raise e
@@ -86,7 +87,7 @@
       end
     rescue Exception => e
       # TODO 打印log
-      puts "Error: file: #{__FILE__} line:#{__LINE__} 创建广告失败! Details: #{e.message}"
+      LOG.error "Error: file: #{__FILE__} line:#{__LINE__} 创建广告失败! Details: #{e.message}"
 
       return CommonService.response_format(ResponseCode.COMMON.FAILED, "Error: file: #{__FILE__} line:#{__LINE__} 创建广告失败!")
     end
