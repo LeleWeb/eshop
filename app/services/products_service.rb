@@ -477,8 +477,7 @@
                                    status: Settings.ADVERT.STATUS.PUTTING,
                                    is_deleted: false)
     product_adverts.each do |advert|
-      home_products << {"advert" => AdvertsService.get_advert(advert),
-                        "products" => self.get_products_no_count(advert.products)}
+      home_products << {"advert" => AdvertsService.get_advert(advert)}
     end
 
     # 购物车项
