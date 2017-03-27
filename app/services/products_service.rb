@@ -467,9 +467,19 @@
       team_setmeal << self.find_product_data(product)
     end
 
-    # 首页商品列表数据(按照以下分类组织：单品，果切，团购商品)
-    # home_products = self.get_products_no_count(store.products.where(property: Settings.PRODUCT_PROPERTY.COMMON_PRODUCT, is_deleted: false))
-    home_products = self.get_home_products_by_category
+    # # 首页商品列表数据(按照以下分类组织：单品，果切，团购商品)
+    # # home_products = self.get_products_no_count(store.products.where(property: Settings.PRODUCT_PROPERTY.COMMON_PRODUCT, is_deleted: false))
+    # home_products = self.get_home_products_by_category
+
+    # 首页商品按照广告组织
+    home_products = []
+    product_adverts = Advert.where(category: Settings.ADVERT.CATEGORY.HOME_PRODUCT,
+                                   status: Settings.ADVERT.STATUS.PUTTING,
+                                   is_deleted: false)
+    product_adverts.each do |advert|
+      home_products << {"advert" => AdvertsService.get_advert(advert),
+                        "products" => self.get_products_no_count(advert.products)}
+    end
 
     # 购物车项
     carts = CartsService.get_customer_carts(customer_id)
