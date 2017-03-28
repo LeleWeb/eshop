@@ -51,7 +51,8 @@ class Product < ApplicationRecord
   validates :category_id, inclusion: { in: [Settings.PRODUCT_CATEGORY.SINGLE_SETMEAL,
                                             Settings.PRODUCT_CATEGORY.PERSONAL_SETMEAL,
                                             Settings.PRODUCT_CATEGORY.TEAM_SETMEAL,
-                                            Settings.PRODUCT_CATEGORY.ABOUT] }
+                                            Settings.PRODUCT_CATEGORY.ABOUT,
+                                            Settings.PRODUCT_CATEGORY.GUOZHI] }
   validates :is_deleted, inclusion: { in: [true, false] }, allow_nil: true
 
 end
