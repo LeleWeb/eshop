@@ -181,6 +181,7 @@ defaults: &defaults
     PERSONAL_SETMEAL: 2 # 果切
     TEAM_SETMEAL: 3  # 团队套餐推荐
     ABOUT: 4
+    GUOZHI: 5
 
   # 定义商品状态
   PRODUCT_STATUS:
