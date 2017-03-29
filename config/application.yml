@@ -109,7 +109,7 @@ defaults: &defaults
         grant_type: "authorization_code"
 
     # 需要跟公众号服务器设置中的值一致
-    WECHAT_TOKEN: "eshop_token"
+    WECHAT_TOKEN: "shengxianxiaozhen_token"
     CREATE_QRCODE_URL: "https://api.weixin.qq.com/cgi-bin/qrcode/create"
     SHOW_QRCODE:
       URL: "https://mp.weixin.qq.com/cgi-bin/showqrcode"
