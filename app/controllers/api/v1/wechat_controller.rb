@@ -5,7 +5,7 @@ class Api::V1::WechatController < ApplicationController
   def index
     # render html: WechatService.new.get_wechat(wechat_params)
     WechatService.new.get_wechat(wechat_params)
-    redirect_to "http://www.dangxiaweb.com/"
+    # redirect_to "http://www.dangxiaweb.com/"
   end
 
   # POST /accounts
