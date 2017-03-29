@@ -49,9 +49,13 @@ class WechatService < BaseService
 
   # 微信统一下单接口
   def self.create_unifiedorder(order)
-    p '0'*10,order,eval(order.buyer_type).find(order.buyer_id).openid
+    LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
+                                                        order: #{order.inspect},
+                                                        openid: #{eval(order.buyer_type).find(order.buyer_id).openid} }
+
     # 组织统一下单参数
     params = LocalConfig.WECHAT.PAY.unifiedorder.as_json
+    LOG.info(params.inspect)
     params['nonce_str'] = self.generate_nonce_str
     # params['detail']['goods_detail'] = generate_detail(order)
     params['out_trade_no'] = order.order_number
@@ -60,11 +64,12 @@ class WechatService < BaseService
     # params['time_expire'] = order.time_expire
     params['openid'] = self.get_wx_openid(order)
     params['sign'] = self.generate_sign(params)
+    LOG.info(params.inspect)
 
     # 参数组织为xml格式
     xml_params = self.convert_unifiedorder_params_to_xml(params)
-    puts '1'*10
-    puts xml_params
+    LOG.info('1'*10)
+    LOG.info(xml_params)
 
     # 发送统一下单请求
     req_headers = [
@@ -76,8 +81,8 @@ class WechatService < BaseService
 
     # 统一支付接口调用返回xml结果转换为hash
     res_hash = Hash.from_xml(res_xml)["xml"]
-    puts '2'*10
-    puts res_hash
+    LOG.info '2'*10
+    LOG.info res_hash
 
     if res_hash["return_code"] != "SUCCESS" || res_hash["result_code"] != "SUCCESS"
       return {
@@ -91,8 +96,8 @@ class WechatService < BaseService
 
     # 网页端调起支付API所需参数生成
     prepay_data = self.generate_jsapi_params(res_hash)
-    puts '3'*10
-    puts prepay_data
+    LOG.info '3'*10
+    LOG.info prepay_data
     prepay_data
   end
   
