@@ -6,7 +6,7 @@ defaults: &defaults
   CUSTOMER_ACCOUNT:
     TRANSACTION_TYPE:
       COMMISSION: 0
-  HOME_URL: "http://www.yiyunma.com/#/home"
+  HOME_URL: "http://www.dangxiaweb.com/#/home"
   DISTRIBUTION_LEVEL: 3   # 设置分销等级
   DISTRIBUTOR_LEVEL:
     ZERO: 0
@@ -54,7 +54,7 @@ defaults: &defaults
       URL: "https://open.weixin.qq.com/connect/oauth2/authorize"
       QUERY_PARAMS:
         appid: ""
-        redirect_uri: "http%3a%2f%2fwww.yiyunma.com%2fapi%2fv1%2fwx_page_authorization"
+        redirect_uri: "http%3a%2f%2fwww.dangxiaweb.com%2fapi%2fv1%2fwx_page_authorization"
         response_type: "code"
         scope: "snsapi_base"
         state: ""
@@ -64,7 +64,7 @@ defaults: &defaults
       EVENT:
         SUBSCRIBE:
           KEY: "subscribe"
-          TEXT: "欢迎关注！熊笨熊商城，专注于为广大消费者提供能够放心，优质，无害的有机健康食品，100%专柜正品，七天退换，成为消费者于生产者之间的桥梁。"
+          TEXT: "欢迎关注！生鲜小镇。"
           XML:
             ToUserName: true
             FromUserName: true

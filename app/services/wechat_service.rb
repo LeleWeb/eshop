@@ -5,8 +5,9 @@ include REXML
 
 class WechatService < BaseService
   def get_wechat(wechat_params)
-    puts 'WechatService#get_wechat'
-    p wechat_params
+    LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
+                                                        wechat_params: #{wechat_params.inspect} }
+
     # 判断是否存必要的参数：signature,timestamp,nonce,echostr
     if wechat_params['signature'].blank? ||
         wechat_params['timestamp'].blank? ||
@@ -24,6 +25,9 @@ class WechatService < BaseService
   end
 
   def create_wechat(params)
+    LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
+                                                        params: #{params.inspect} }
+
     # TODO 验证微信服务器合法性
 
     params = params["xml"]
@@ -240,7 +244,7 @@ class WechatService < BaseService
     temp_str = self.generate_nonce_str
     signature_params = {}#Settings.WECHAT.JSAPI_PAY_SIGNATURE_PARAMS.as_json
     signature_params["jsapi_ticket"] = self.read_jsapi_ticket
-    signature_params["url"] = "http://www.yiyunma.com/"
+    signature_params["url"] = "http://www.dangxiaweb.com/"
     signature_params["timestamp"] = temp_time
     signature_params["noncestr"] = temp_str
     config_signature = self.generate_jsapi_sign(signature_params)
