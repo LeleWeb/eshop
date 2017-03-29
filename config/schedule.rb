@@ -21,7 +21,7 @@ set :output, "log/cron_log.log"
 # Learn more: http://github.com/javan/whenever
 
 # 获取微信获取access_token定时任务，间隔90分钟。
-every 90.minutes  do
+every 5.minutes  do
   rake "get_wx_access_token"
 end
 
