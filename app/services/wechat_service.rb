@@ -200,6 +200,7 @@ class WechatService < BaseService
       user_info_params["openid"] = access_token_res["openid"]
       user_info_res = JSON.parse(HttpService.get(Settings.WECHAT.PAGE_ACCESS_TOKEN.GET_USERINFO.URL,
                                                  user_info_params))
+      LOG.info %Q{zhangweitest: #{user_info_res.inspect} }
       if self.is_response_error?(user_info_res)
         # 拉去用户信息失败,打印log.
         return
@@ -207,7 +208,7 @@ class WechatService < BaseService
 
       # 更新微信用户信息到本地customer记录
       customer = CustomersService.update_customer_by_wechat(user_info_res)
-      p 'C'*10,customer
+      LOG.info %Q{ aaaa111,customer}
       customer
     end
 
