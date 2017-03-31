@@ -56,7 +56,7 @@ defaults: &defaults
         appid: ""
         redirect_uri: "http%3a%2f%2fwww.dangxiaweb.com%2fapi%2fv1%2fwx_page_authorization"
         response_type: "code"
-        scope: "snsapi_base"
+        scope: "snsapi_userinfo"  #snsapi_userinfo
         state: ""
 
     # 微信消息管理

@@ -194,7 +194,7 @@ class WechatService < BaseService
     # TODO 暂不需要
 
     # 拉取用户信息(需scope为 snsapi_userinfo)
-    # if access_token_res["scope"] == Settings.WECHAT.PAGE_ACCESS_TOKEN.SCOPE.snsapi_userinfo
+    if access_token_res["scope"] == Settings.WECHAT.PAGE_ACCESS_TOKEN.SCOPE.snsapi_userinfo
       user_info_params = Settings.WECHAT.PAGE_ACCESS_TOKEN.GET_USERINFO.QUERY_PARAMS.as_json
       user_info_params["access_token"] = access_token_res["access_token"]
       user_info_params["openid"] = access_token_res["openid"]
@@ -210,7 +210,7 @@ class WechatService < BaseService
       customer = CustomersService.update_customer_by_wechat(user_info_res)
       LOG.info %Q{ aaaa111,customer}
       customer
-    # end
+    end
 
     # 组成返回参数，id为当前登录的用户在本系统的id, parent_id为父级分销者的id
     {"account_id" => customer.account_id,
