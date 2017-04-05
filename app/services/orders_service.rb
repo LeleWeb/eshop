@@ -428,7 +428,7 @@ class OrdersService < BaseService
     content += "地址：丈八西路东滩社区31排5号<BR>"
     content += "电话：18161803190"
     # 二维码
-    content += "<QR>http://open.printcenter.cn</QR>"
+    content += "<QR>http://weixin.qq.com/r/sSg9JQ-EIFJfrUtG932j</QR>"
     content
   end
 
