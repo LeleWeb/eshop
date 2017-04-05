@@ -244,6 +244,13 @@ class OrdersService < BaseService
     end
 
     begin
+
+      if order_params["status"] == Settings.ORDER.STATUS.DELIVERED &&
+          (order.status == Settings.ORDER.STATUS.PAID || order.status == Settings.ORDER.STATUS.PREPAY)
+        # 打印订单小票
+        OrdersService.print_order(order)
+      end
+
       order.update!(status: order_params["status"])
 
       CommonService.response_format(ResponseCode.COMMON.OK, OrdersService.get_order(order))
