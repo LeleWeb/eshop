@@ -377,7 +377,7 @@ class OrdersService < BaseService
 
     content =  ""
     # 头部信息
-    content += "<CB>舌尖生鲜</CB>"
+    content += "<CB>生鲜小镇</CB>"
     content += "<C>Fresh Town</C>"
     content += "--------------------------------<BR>"
     content += "订单编号：#{order["order_number"]}<BR>"
