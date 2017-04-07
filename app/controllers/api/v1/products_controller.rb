@@ -39,7 +39,8 @@ class Api::V1::ProductsController < Api::V1::BaseController
                   :customer,
                   :type,
                   :page,
-                  :per_page)
+                  :per_page,
+                  :search)
   end
 
   def set_account

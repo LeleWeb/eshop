@@ -22,6 +22,12 @@
       products = eval(products.blank? ? "Product" : "products").where(property: query_params[:property])
     end
 
+    # 按照产品产品名称关键字检索
+    if !query_params[:search].blank?
+      products = eval(products.blank? ? "Product" : "products").where("name LIKE :name",
+                                                                      {name: "%#{query_params[:search]}%"})
+    end
+
     # 如果存在分页参数,按照分页返回结果.
     if !query_params[:page].blank? && !query_params[:per_page].blank?
       products = eval(products.blank? ? "Product" : "products").
