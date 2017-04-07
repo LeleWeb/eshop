@@ -10,6 +10,9 @@
   end
 
   def compute_team_setmeal(compute_params)
+    LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
+                                                        compute_params: #{compute_params.inspect} }
+
     plans = []
 
     # 参数合法性检查
@@ -23,11 +26,13 @@
       # 遍历所有在售水果种类，计算每种水果满足当前人数的数量和金额。SINGLE商品，按个计算。TINY,BIG商品根据cms预设区间计算。
       # products = ProductsService.get_products_no_count(Product.where(is_deleted: false))
       products = Product.where(category_id: Settings.PRODUCT_CATEGORY.SINGLE_SETMEAL, is_deleted: false)
+      LOG.info %Q{11111#{products.inspect}}
       products.each do |product|
         # 根据商品价格规格计算满足当前人数的所需要的数量和价格
 
         # 先遍历该商品所有的团队套餐推荐策略
         product.compute_strategies.where(classify: Settings.COMPUTE.CATEGORY.TEAM_SETMEAL).each do |compute_strategy|
+          LOG.info %Q{22222#{compute_strategy.inspect}}
           # 根据平均每人食量单位分别计算每个计算策略所需总量和总金额
           single_product_plan = self.compute_quantity_price(product,
                                                             compute_params[:money],
@@ -64,8 +69,15 @@
   end
 
   def compute_quantity_price(product, money, number, compute_strategy)
+    LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
+                                                        product: #{product.inspect},
+                                                        money: #{money.inspect},
+                                                        number: #{number.inspect},
+                                                        compute_strategy: #{compute_strategy.inspect} }
+
     # 根据设置的计量规格，查找对应规格的商品价格。
     if (price = product.prices.where(unit: compute_strategy.average_unit).first).blank?
+    LOG.error %Q{Error: file: #{__FILE__} line:#{__LINE__} product prices is nil!}
       return nil
     end
 
@@ -78,6 +90,7 @@
     data["product"] = product.name
     # data["price"] = data["quantity"].to_f * price.real_price
     # data["price"].to_f > money.to_f ? nil : data
+    LOG.info %Q{33333#{data.inspect}}
     data["total_price"].to_f > money.to_f ? nil : data
   end
 
