@@ -42,11 +42,15 @@
         end
       end
 
+      LOG.info %Q{44444#{plans.inspect}}
+
       # 组合所有水果种类，并按照总价格,合理的组合水果种类，库存进行过滤，选出满足条件的方案。
       total_plans = []
       for i in 1..plans.size
         total_plans += plans.combination(i).to_a
       end
+
+      LOG.info %Q{55555#{total_plans.inspect}}
 
       # 计算组合推荐项的总金额
       total_plans.map! do |plan|
@@ -55,14 +59,22 @@
         {"plans" => plan , "sum_price" => total_price}
       end
 
+      LOG.info %Q{66666#{total_plans.inspect}}
+
       # 过滤无效推荐项
       total_plans.select!{|plan| plan["sum_price"].to_f < compute_params[:money].to_f + compute_params[:money].to_f * 0.1 && plan["sum_price"].to_f >= compute_params[:money].to_f}
+
+      LOG.info %Q{77777#{total_plans.inspect}}
+
       # 按照总金额升序排列,限制返回四种推荐.
       total_plans = total_plans.sort{|x,y| x["sum_price"].to_f <=> y["sum_price"].to_f}[0..4]
+
+      LOG.info %Q{77777#{total_plans.inspect}}
+
       total_plans
     rescue Exception => e
       # TODO 自动推荐套餐失败，打印对应log
-      puts "Error: file: #{__FILE__} line:#{__LINE__} compute team setmeal failed! Details: #{e.message}"
+      LOG.error "Error: file: #{__FILE__} line:#{__LINE__} compute team setmeal failed! Details: #{e.message}"
 
       return []
     end
@@ -90,7 +102,6 @@
     data["product"] = product.name
     # data["price"] = data["quantity"].to_f * price.real_price
     # data["price"].to_f > money.to_f ? nil : data
-    LOG.info %Q{33333#{data.inspect}}
     data["total_price"].to_f > money.to_f ? nil : data
   end
 
