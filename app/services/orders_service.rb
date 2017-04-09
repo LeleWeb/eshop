@@ -46,7 +46,7 @@ class OrdersService < BaseService
     end
 
     # 默认按照支付时间将序排列
-    orders = Order.where(query_condition).order(payment_time: :desc)
+    orders = Order.where(query_condition).order(created_at: :desc)
 
     # 如果存在分页参数,按照分页返回结果.
     if !query_params[:page].blank? && !query_params[:per_page].blank?
