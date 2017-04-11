@@ -227,7 +227,12 @@ class CartsService < BaseService
 
     carts = customer.shopping_carts.where(is_deleted: false,
                                           property: Settings.CART_OR_ITEM.PROPERTY.CART_ITEM)
-    self.get_carts(carts, carts.size)
+
+    # 20170411 修改购物车显示数量为每个购物车项数量总和
+    cart_number = 0
+    carts.map{|x| cart_number += x.amount}
+
+    self.get_carts(carts, cart_number)
   end
 
 end
