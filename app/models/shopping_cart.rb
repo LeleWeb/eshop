@@ -12,7 +12,7 @@ class ShoppingCart < ApplicationRecord
   validates :product_id, :amount, :price_id, :total_price, :property, presence: true, on: :create
   validates :product_id, :price_id, :amount, numericality: { only_integer: true, greater_than: 0 }
   validates :order_id, :owner_id, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
-  validates :total_price, numericality: { greater_than: 0 }
+  validates :total_price, numericality: { greater_than_or_equal_to: 0 }
   validates :property, inclusion: { in: [Settings.CART_OR_ITEM.PROPERTY.CART_ITEM, Settings.CART_OR_ITEM.PROPERTY.ORDER_DETAILS_ITEM] }
   validates :is_deleted, inclusion: { in: [true, false] }
   validates :owner_type, inclusion: { in: ['Customer'] }, allow_nil: true
