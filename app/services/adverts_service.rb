@@ -213,8 +213,8 @@
     {"total_count" => total_count.nil? ? adverts.length : total_count, "adverts" => data}
   end
 
-  def self.get_advert(advert)
-    self.advert_data_format(advert, ProductsService.get_products_no_count(advert.products.where(property: Settings.PRODUCT_PROPERTY.ADVERT_PRODUCT)))
+  def self.get_advert(advert, customer_id=nil)
+    self.advert_data_format(advert, ProductsService.get_products_no_count(advert.products.where(property: Settings.PRODUCT_PROPERTY.ADVERT_PRODUCT), customer_id))
   end
 
 end

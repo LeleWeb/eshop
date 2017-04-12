@@ -417,18 +417,27 @@
       picture_data[value] = documents #pictures.where(category: value).collect{|image| image.as_json.merge(:pictures => image.documents)}
     end
 
-    # 如果存在指定的用户,则判断用户是否收藏了该商品.
+    # 如果存在指定的用户,处理收藏和首页商品已经添加购物车功能.
     is_collected = false
-    customer = nil
+    shopping_cart = nil
     if !customer_id.blank? && !(customer = Customer.find_by(id: customer_id)).nil?
+      # 如果存在指定的用户,则判断用户是否收藏了该商品.
       collection = customer.collections.where(object_type: 'Product', object_id: product.id)
       is_collected = true if !collection.nil?
+
+      # 首页商品已经添加购物车项时进行关联
+    shopping_cart = ShoppingCart.where(owner_type: 'Customer',
+                                       owner_id: customer_id,
+                                       product_id: product.id)
     end
 
     # 添加价格属性
     product_data = ProductsService.product_data_format(product)
 
-    product_data.merge(:categories => categories, :pictures => picture_data, :is_collected => is_collected)
+    product_data.merge(:categories => categories,
+                       :pictures => picture_data,
+                       :is_collected => is_collected,
+                       :shopping_cart => shopping_cart)
   end
 
   # 格式化产品返回数据为指定格式
@@ -445,8 +454,8 @@
     {"total_count" => total_count.nil? ? products.length : total_count, "products" => data}
   end
 
-  def self.get_products_no_count(products)
-    products.collect{|product| self.find_product_data(product)}
+  def self.get_products_no_count(products, customer_id=nil)
+    products.collect{|product| self.find_product_data(product, customer_id)}
   end
 
   def self.get_home_products(store, customer_id)
@@ -483,7 +492,7 @@
                                    status: Settings.ADVERT.STATUS.PUTTING,
                                    is_deleted: false)
     product_adverts.each do |advert|
-      home_products << {"advert" => AdvertsService.get_advert(advert)}
+      home_products << {"advert" => AdvertsService.get_advert(advert, customer_id)}
     end
 
     # 购物车项
