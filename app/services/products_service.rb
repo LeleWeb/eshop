@@ -426,9 +426,11 @@
       is_collected = true if !collection.nil?
 
       # 首页商品已经添加购物车项时进行关联
-    shopping_cart = ShoppingCart.where(owner_type: 'Customer',
+    shopping_cart = ShoppingCart.where(is_deleted: false,
+                                       property: Settings.CART_OR_ITEM.PROPERTY.CART_ITEM,
+                                       owner_type: 'Customer',
                                        owner_id: customer_id,
-                                       product_id: product.id)
+                                       product_id: product.id).first
     end
 
     # 添加价格属性
