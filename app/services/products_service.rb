@@ -54,7 +54,7 @@
     LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
                                                         product: #{product.inspect},
                                                         query_params: #{query_params.inspect} }
-    CommonService.response_format(ResponseCode.COMMON.OK, ProductsService.find_product_data(product, query_params[:customer_id]))
+    CommonService.response_format(ResponseCode.COMMON.OK, ProductsService.find_product_data(product, query_params[:customer]))
   end
 
   def create_product(store, product_params)
