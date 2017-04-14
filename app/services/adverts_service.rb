@@ -214,7 +214,15 @@
   end
 
   def self.get_advert(advert, customer_id=nil)
-    self.advert_data_format(advert, ProductsService.get_products_no_count(advert.products.where(property: Settings.PRODUCT_PROPERTY.ADVERT_PRODUCT), customer_id))
+    self.get_advert_products(advert, customer_id)
+    # self.advert_data_format(advert, ProductsService.get_products_no_count(advert.products.where(property: Settings.PRODUCT_PROPERTY.ADVERT_PRODUCT), customer_id))
+  end
+
+  def self.get_advert_products(advert, customer_id=nil)
+    ProductsService.get_products_no_count(advert.products.where(is_deleted: false,
+                                                                status: Settings.PRODUCT_STATUS.UNDERCARRIAGE,
+                                                                property: Settings.PRODUCT_PROPERTY.ADVERT_PRODUCT),
+                                          customer_id)
   end
 
 end
