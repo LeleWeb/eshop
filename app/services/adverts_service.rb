@@ -214,7 +214,7 @@
   end
 
   def self.get_advert(advert, customer_id=nil)
-    self.get_advert_products(advert, customer_id)
+    AdvertsService.get_advert_products(advert, customer_id)
     # self.advert_data_format(advert, ProductsService.get_products_no_count(advert.products.where(property: Settings.PRODUCT_PROPERTY.ADVERT_PRODUCT), customer_id))
   end
 
