@@ -85,7 +85,7 @@
     # 收集新建购物车所需字段
     data["price_id"] = price.id
     data["amount"] = compute_strategy.average_quantity * number
-    data["total_price"] = data["amount"].to_f * price.real_price
+    data["total_price"] = format("%.2f", data["amount"].to_f * price.real_price).to_f
 
     data["product"] = product.name
     # data["price"] = data["quantity"].to_f * price.real_price
