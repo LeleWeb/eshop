@@ -9,7 +9,8 @@
       return ProductsService.get_home_products(store, query_params["customer"])
     end
 
-    products = store.products.where(is_deleted: false)
+    products = store.products.where(is_deleted: false,
+                                    status: Settings.PRODUCT_STATUS.UNDERCARRIAGE)
     total_count = nil
 
     # 按照产品分类检索
@@ -469,7 +470,7 @@
                            is_deleted: false)
     adverts.each do |advert|
       home_adverts << {"advert" => AdvertsService.get_advert(advert),
-                       "products" => self.get_products_no_count(advert.products)}
+                       "products" => self.get_products_no_count(advert.products.where(is_deleted: false, status: Settings.PRODUCT_STATUS.UNDERCARRIAGE))}
     end
 
     # 限时抢购商品(根据限时抢购是否处于有效状态返回当前的限时抢购商品列表)
