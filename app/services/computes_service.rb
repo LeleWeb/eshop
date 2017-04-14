@@ -84,7 +84,7 @@
     data = compute_strategy.as_json
     # 收集新建购物车所需字段
     data["price_id"] = price.id
-    data["amount"] = compute_strategy.average_quantity * number
+    data["amount"] = format("%.2f", compute_strategy.average_quantity * number).to_f
     data["total_price"] = format("%.2f", data["amount"].to_f * price.real_price).to_f
 
     data["product"] = product.name
