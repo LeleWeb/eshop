@@ -243,7 +243,7 @@ class OrdersService < BaseService
                                            "Error: file: #{__FILE__} line:#{__LINE__} invalid order status params!")
     end
 
-    begin
+    # begin
 
       if order_params["status"] == Settings.ORDER.STATUS.DELIVERED &&
           (order.status == Settings.ORDER.STATUS.PAID || order.status == Settings.ORDER.STATUS.PREPAY)
@@ -254,13 +254,13 @@ class OrdersService < BaseService
       order.update!(status: order_params["status"])
 
       CommonService.response_format(ResponseCode.COMMON.OK, OrdersService.get_order(order))
-    rescue Exception => e
-      # TODO 修改订单状态失败，打印log
-      LOG.error "Error: file: #{__FILE__} line:#{__LINE__} update order status failed! Details: #{e.message}"
-
-      return CommonService.response_format(ResponseCode.COMMON.FAILED,
-                                           "Error: file: #{__FILE__} line:#{__LINE__} 修改订单状态失败! Details: #{e.message}")
-    end
+    # rescue Exception => e
+    #   # TODO 修改订单状态失败，打印log
+    #   LOG.error "Error: file: #{__FILE__} line:#{__LINE__} update order status failed! Details: #{e.message}"
+    #
+    #   return CommonService.response_format(ResponseCode.COMMON.FAILED,
+    #                                        "Error: file: #{__FILE__} line:#{__LINE__} 修改订单状态失败! Details: #{e.message}")
+    # end
 
   end
 
