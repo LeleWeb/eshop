@@ -187,20 +187,20 @@
             # # 新建参数传入的价格
             # product.prices.create!(price_params)
 
-            # 先修改,新增
+            # 先删除
+            price_ids = price_params.collect{|x| x["id"].to_i}
+            product.prices.each do |price|
+              if !price_ids.include?(price.id)
+                price.destroy
+              end
+            end
+
+            # 再修改,新增
             price_params.each do |price|
               if price["id"].blank?
                 product.prices.create!(price)
               else
                 product.prices.find(price["id"]).update!(price.extract!("id"))
-              end
-            end
-
-            # 再删除
-            price_ids = price_params.collect{|x| x["id"].to_i}
-            product.prices.each do |price|
-              if !price_ids.include?(price.id)
-                price.destroy
               end
             end
           end
