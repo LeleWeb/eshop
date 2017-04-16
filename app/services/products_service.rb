@@ -9,10 +9,11 @@
       return ProductsService.get_home_products(store, query_params["customer"])
     end
 
+    products = store.products.where(is_deleted: false)
+
     # 如果是cms端查询，则不过滤下架商品。
     if query_params["type"] != "cms"
-      products = store.products.where(is_deleted: false,
-                                      status: Settings.PRODUCT_STATUS.UNDERCARRIAGE)
+      products = eval(products.blank? ? "Product" : "products").where(status: Settings.PRODUCT_STATUS.UNDERCARRIAGE)
     end
 
     total_count = nil
