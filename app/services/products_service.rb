@@ -181,11 +181,14 @@
         # 如果有价格列表，则删除原来的价格，新增参数中的价格。
         begin
           if !price_params.blank?
-            # 先删除已有价格
-            product.prices.map{|x| x.destroy }
-
-            # 新建参数传入的价格
-            product.prices.create!(price_params)
+            # # 先删除已有价格
+            # product.prices.map{|x| x.destroy }
+            #
+            # # 新建参数传入的价格
+            # product.prices.create!(price_params)
+            price_params.each do |price|
+              product.prices.find(price.id).update!(price.as_json.extract!("id"))
+            end
           end
         rescue Exception => e
           # TODO 更新商品价格失败，打印对应LOG
