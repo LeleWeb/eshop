@@ -65,7 +65,7 @@ class Api::V1::ProductsController < Api::V1::BaseController
                                     :property,
                                     :category_id,
                                     :remark,
-                                    :prices => [:price,:real_price,:unit,:is_default,:display_quantity,:display_unit],
+                                    :prices => [:id,:price,:real_price,:unit,:is_default,:display_quantity,:display_unit],
                                     :compute_strategies => [:classify,:average_quantity,:average_unit,:remark],
                                     :group_buying => [:target_amount, :begin_time, :end_time, :limit_min, :limit_max])
   end
