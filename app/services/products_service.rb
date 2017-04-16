@@ -187,9 +187,13 @@
             # # 新建参数传入的价格
             # product.prices.create!(price_params)
 
-            # 先修改
+            # 先修改,新增
             price_params.each do |price|
-              product.prices.find(price["id"]).update!(price.extract!("id"))
+              if price["id"].blank?
+                product.prices.create!(price)
+              else
+                product.prices.find(price["id"]).update!(price.extract!("id"))
+              end
             end
 
             # 再删除
