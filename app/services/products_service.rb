@@ -193,8 +193,11 @@
             end
 
             # 再删除
-            (product.prices.collect{|x| x.id.to_i} - price_params.collect{|x| x["id"].to_i}).each do |delete_price_id|
-              Price.find(delete_price_id).destroy
+            price_ids = price_params.collect{|x| x["id"].to_i}
+            product.prices.each do |price|
+              if !price_ids.include?(price.id)
+                price.destroy
+              end
             end
           end
         rescue Exception => e
