@@ -186,8 +186,15 @@
             #
             # # 新建参数传入的价格
             # product.prices.create!(price_params)
+
+            # 先修改
             price_params.each do |price|
               product.prices.find(price["id"]).update!(price.extract!("id"))
+            end
+
+            # 再删除
+            (product.prices.collect{|x| x.id.to_i} - price_params.collect{|x| x["id"].to_i}).each do |delete_price_id|
+              Price.find(delete_price_id).destroy
             end
           end
         rescue Exception => e
