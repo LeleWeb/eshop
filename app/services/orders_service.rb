@@ -244,7 +244,6 @@ class OrdersService < BaseService
     end
 
     # begin
-
       if order_params["status"] == Settings.ORDER.STATUS.DELIVERED &&
           (order.status == Settings.ORDER.STATUS.PAID || order.status == Settings.ORDER.STATUS.PREPAY)
         # 打印订单小票
@@ -320,6 +319,9 @@ class OrdersService < BaseService
   end
 
   def self.get_order(order)
+    LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
+                                                        order: #{order.inspect} }
+
     order.as_json.merge("order_details" => CartsService.get_carts_no_count(order.shopping_carts))
   end
 

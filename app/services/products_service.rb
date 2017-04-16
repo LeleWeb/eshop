@@ -9,8 +9,12 @@
       return ProductsService.get_home_products(store, query_params["customer"])
     end
 
-    products = store.products.where(is_deleted: false,
-                                    status: Settings.PRODUCT_STATUS.UNDERCARRIAGE)
+    # 如果是cms端查询，则不过滤下架商品。
+    if query_params["type"] != "cms"
+      products = store.products.where(is_deleted: false,
+                                      status: Settings.PRODUCT_STATUS.UNDERCARRIAGE)
+    end
+
     total_count = nil
 
     # 按照产品分类检索
