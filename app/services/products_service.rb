@@ -187,7 +187,7 @@
             # # 新建参数传入的价格
             # product.prices.create!(price_params)
             price_params.each do |price|
-              product.prices.find(price.id).update!(price.as_json.extract!("id"))
+              product.prices.find(price["id"]).update!(price.extract!("id"))
             end
           end
         rescue Exception => e
