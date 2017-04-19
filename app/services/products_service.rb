@@ -200,7 +200,7 @@
               if price["id"].blank?
                 product.prices.create!(price)
               else
-                price_id = price.extract!("id")
+                price_id = price.extract!("id")["id"]
                 product.prices.find(price_id).update!(price)
               end
             end
