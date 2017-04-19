@@ -220,7 +220,7 @@
   def self.get_advert_products(advert, customer_id=nil)
     ProductsService.get_products_no_count(advert.products.where(is_deleted: false,
                                                                 status: Settings.PRODUCT_STATUS.UNDERCARRIAGE,
-                                                                property: Settings.PRODUCT_PROPERTY.ADVERT_PRODUCT),
+                                                                property: Settings.PRODUCT_PROPERTY.ADVERT_PRODUCT).order(created_at: :desc),
                                           customer_id)
   end
 
