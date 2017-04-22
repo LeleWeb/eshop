@@ -235,4 +235,13 @@ class CartsService < BaseService
     self.get_carts(carts, cart_number)
   end
 
+  def self.get_customer_carts_num(customer_id)
+    if (customer = Customer.find_by(id: customer_id)).nil?
+      return 0
+    end
+
+    customer.shopping_carts.where(is_deleted: false,
+                                  property: Settings.CART_OR_ITEM.PROPERTY.CART_ITEM).size
+  end
+
 end

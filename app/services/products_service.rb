@@ -492,8 +492,7 @@
                            status: Settings.ADVERT.STATUS.PUTTING,
                            is_deleted: false)
     adverts.each do |advert|
-      home_adverts << {"advert" => AdvertsService.get_advert(advert),
-                       "products" => AdvertsService.get_advert_products(advert, customer_id)}
+      home_adverts << {"advert" => AdvertsService.get_advert(advert), "products" => []}
     end
 
     # 限时抢购商品(根据限时抢购是否处于有效状态返回当前的限时抢购商品列表)
