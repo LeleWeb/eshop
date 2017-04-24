@@ -5,8 +5,9 @@ class Api::V1::WxPageAuthorizationController < ApplicationController
   def index
     # 公众号网页授权后重定向的回调链接地址
     res = WechatService.get_wx_page_authorization_userinfo(@query_params)
-    p 'O'*10,res,"http://www.dangxiaweb.com/#/home" +  "?id=#{res["account_id"]}&parent_id=#{res["parent_account_id"]}"
-    redirect_to "http://www.dangxiaweb.com/#/home" +  "?id=#{res["account_id"]}&parent_id=#{res["parent_account_id"]}"
+    LOG.info "Error: file: #{__FILE__} line:#{__LINE__} res: #{res}"
+    LOG.info "http://www.dangxiaweb.com/#/home" + "?id=#{res["account_id"]}&parent_id=#{res["parent_account_id"]}"
+    redirect_to "http://www.dangxiaweb.com/#/home" + "?id=#{res["account_id"]}&parent_id=#{res["parent_account_id"]}"
   end
 
   private
