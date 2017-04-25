@@ -42,7 +42,11 @@ class CustomersService < BaseService
       customer = res["customer"]
     else
       # 更新customer
-      customer.update(access_token)
+      begin
+        customer.update(access_token)
+      rescue Exception => e
+        LOG.error "Error: file: #{__FILE__} line:#{__LINE__} Update customer failed! Details: #{e.message}"
+      end
     end
     customer
   end

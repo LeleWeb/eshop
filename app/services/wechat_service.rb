@@ -155,7 +155,9 @@ class WechatService < BaseService
 
   # 网页授权获取用户基本信息
   def self.get_wx_page_authorization_userinfo(query_params)
-    p 'A'*10,query_params
+    LOG.info %Q{#{__FILE__},#{__LINE__},#{__method__},params:
+                                                        query_params: #{query_params.inspect} }
+
     # 用户同意授权，获取code
     code = query_params[:code]
     state = query_params[:state]
@@ -169,7 +171,7 @@ class WechatService < BaseService
                                                   access_token_params))
     if self.is_response_error?(access_token_res)
       # 获取网页授权access_token失败，打印log
-      puts "ERROR: access_token_res: #{access_token_res}!"
+      LOG.error "Error: file: #{__FILE__} line:#{__LINE__} access_token_res: #{access_token_res}!"
       return
     end
 
@@ -181,13 +183,12 @@ class WechatService < BaseService
                                           check_access_token_params))
     if auth_res["errcode"] != 0 && auth_res["errmsg"] != "ok"
       # 检验授权凭证失败,打印log.
-      puts "ERROR: auth_res: #{auth_res}!"
+      LOG.error "Error: file: #{__FILE__} line:#{__LINE__} auth_res: #{auth_res}!"
       return
     end
     
     # 微信授权登录成功后本系统自动创建customer
     customer = CustomersService.update_customer_by_wechat(access_token_res)
-    p 'B'*10,customer
     customer
 
     # 刷新access_token（如果需要）
