@@ -515,7 +515,7 @@
     home_products = []
     product_adverts = Advert.where(category: Settings.ADVERT.CATEGORY.HOME_PRODUCT,
                                    status: Settings.ADVERT.STATUS.PUTTING,
-                                   is_deleted: false)
+                                   is_deleted: false).order(level: :asc)
     product_adverts.each do |advert|
       home_products << {"advert" => AdvertsService.get_advert(advert, customer_id)}
     end
